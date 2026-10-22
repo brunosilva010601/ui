@@ -1,0 +1,93 @@
+:root,
+.light {
+    --color-background: var(--color-zinc-100);
+    --color-foreground: var(--color-zinc-900);
+    --color-foreground-soft: var(--color-zinc-600);
+    --color-foreground-muted: var(--color-zinc-500);
+    --color-foreground-faint: var(--color-zinc-400);
+    --color-border: var(--color-zinc-200);
+    --color-surface: var(--color-zinc-50);
+    --color-surface-raised: var(--color-zinc-200);
+    --color-control: var(--color-white);
+    --color-primary: var(--color-blue-600);
+    --color-primary-foreground: var(--color-white);
+    --color-primary-text: var(--color-blue-600);
+    --color-success: var(--color-emerald-600);
+    --color-success-foreground: var(--color-white);
+    --color-warning: var(--color-amber-500);
+    --color-warning-foreground: var(--color-amber-950);
+    --color-danger: var(--color-red-600);
+    --color-danger-foreground: var(--color-white);
+    --color-overlay: color-mix(
+        in oklch,
+        var(--color-zinc-950) 10%,
+        transparent
+    );
+    --color-focus: var(--color-primary);
+    color-scheme: light;
+}
+
+.dark {
+    --color-background: color-mix(
+        in oklab,
+        var(--color-zinc-900) 55%,
+        var(--color-zinc-950)
+    );
+    --color-foreground: var(--color-zinc-50);
+    --color-foreground-soft: var(--color-zinc-300);
+    --color-foreground-muted: var(--color-zinc-400);
+    --color-foreground-faint: var(--color-zinc-600);
+    --color-border: color-mix(
+        in oklab,
+        var(--color-zinc-800) 60%,
+        var(--color-zinc-700)
+    );
+    --color-surface: color-mix(
+        in oklab,
+        var(--color-zinc-900) 60%,
+        var(--color-zinc-800)
+    );
+    --color-surface-raised: color-mix(
+        in oklab,
+        var(--color-zinc-800) 50%,
+        var(--color-zinc-700)
+    );
+    --color-control: var(--color-zinc-800);
+    --color-primary: var(--color-blue-500);
+    --color-primary-foreground: var(--color-white);
+    --color-primary-text: var(--color-blue-400);
+    --color-success: var(--color-emerald-400);
+    --color-success-foreground: var(--color-emerald-950);
+    --color-warning: var(--color-amber-400);
+    --color-warning-foreground: var(--color-amber-950);
+    --color-danger: var(--color-red-400);
+    --color-danger-foreground: var(--color-red-950);
+    --color-overlay: color-mix(in oklch, var(--color-black) 25%, transparent);
+    --color-focus: var(--color-primary);
+    color-scheme: dark;
+}
+
+:root,
+.light,
+.dark {
+    --color-surface-hover: color-mix(
+        in oklab,
+        var(--color-surface) 94%,
+        var(--color-foreground)
+    );
+    --color-control-hover: color-mix(
+        in oklab,
+        var(--color-control) 92%,
+        var(--color-foreground)
+    );
+    --color-primary-hover: color-mix(
+        in oklab,
+        var(--color-primary) 88%,
+        var(--color-foreground)
+    );
+    --color-danger-hover: color-mix(
+        in oklab,
+        var(--color-danger) 88%,
+        var(--color-foreground)
+    );
+}

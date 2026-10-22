@@ -1,0 +1,115 @@
+@property --fade-start {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
+}
+
+@property --fade-end {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes fade-out {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes overlay-in {
+    from {
+        background-color: transparent;
+        backdrop-filter: blur(0);
+    }
+}
+
+@keyframes overlay-out {
+    to {
+        background-color: transparent;
+        backdrop-filter: blur(0);
+    }
+}
+
+@keyframes pop-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+}
+
+@keyframes pop-out {
+    to {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        transform: translateX(calc(100% + var(--drawer-gap)));
+    }
+}
+
+@keyframes slide-out-right {
+    to {
+        transform: translateX(calc(100% + var(--drawer-gap)));
+    }
+}
+
+@keyframes slide-in-left {
+    from {
+        transform: translateX(calc(-100% - var(--drawer-gap)));
+    }
+}
+
+@keyframes slide-out-left {
+    to {
+        transform: translateX(calc(-100% - var(--drawer-gap)));
+    }
+}
+
+@keyframes slide-in-bottom {
+    from {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes slide-out-bottom {
+    to {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes pane-in {
+    from {
+        width: 0;
+    }
+}
+
+@keyframes pane-out {
+    to {
+        width: 0;
+    }
+}
+
+:root[data-motion]::view-transition-old(root),
+:root[data-motion]::view-transition-new(root) {
+    animation: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    :root[data-motion='forward']::view-transition-new(root) {
+        animation: var(--animate-slide-in-right);
+    }
+
+    :root[data-motion='back']::view-transition-old(root) {
+        z-index: 1;
+        animation: var(--animate-slide-out-right);
+    }
+}

@@ -1,0 +1,9 @@
+@import './css/tokens.css';
+@import './css/animations.css';
+@import './css/palettes.css';
+@import './css/fonts.css';
+@import './css/base.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source './src';
