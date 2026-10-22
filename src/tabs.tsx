@@ -100,7 +100,7 @@ export function TabsList(props: TabsListProps) {
                 onClick={reveal}
                 className={cn(
                     'relative flex w-full [scrollbar-width:none] items-center gap-xs overflow-x-auto rounded-full',
-                    fit && 'sm:*:flex-none sm:*:px-md',
+                    fit && 'sm:*:flex-none sm:*:px-lg',
                     fade,
                 )}
                 {...rest}

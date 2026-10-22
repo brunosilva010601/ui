@@ -85,7 +85,6 @@ const buttonVariants = [
     'ghost',
     'danger',
     'link',
-    'inline',
 ] as const;
 
 const options = [
@@ -211,7 +210,7 @@ function ButtonDemo() {
                 variant="outlined"
                 title="Variants"
                 description="Each variant sets the weight of the action."
-                meta='variant="primary" | "outline" | "ghost" | "danger" | "link" | "inline"'
+                meta='variant="primary" | "outline" | "ghost" | "danger" | "link"'
                 collapsible
             >
                 <div className="flex flex-wrap items-center gap-md">
@@ -273,6 +272,21 @@ function ButtonDemo() {
                         <Bell />
                     </Button>
                 </div>
+            </Section>
+            <Section
+                variant="outlined"
+                title="Link in text"
+                description="Without an icon the link flows with the sentence and wraps like text."
+                meta='variant="link" · asChild'
+                collapsible
+            >
+                <p className="text-sm">
+                    Data provided by{' '}
+                    <Button variant="link" asChild>
+                        <a href="#components">a source with a fairly long name</a>
+                    </Button>
+                    , shown here inside a sentence.
+                </p>
             </Section>
             <Section
                 variant="outlined"

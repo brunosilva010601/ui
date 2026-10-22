@@ -16,13 +16,11 @@ const variants = {
     ghost: `border border-transparent text-foreground-muted ${ghostHoverClass} hover:text-foreground active:text-foreground cursor-pointer transition-colors`,
     danger: 'cursor-pointer transition border border-danger bg-danger text-danger-foreground hover:bg-danger-hover active:bg-danger-hover',
     link: 'text-primary-text cursor-pointer underline-offset-4 hover:underline active:underline',
-    inline: 'cursor-pointer underline underline-offset-4 transition-colors hover:text-primary-text active:text-primary-text',
 };
 
 const shapes = {
     box: 'inline-flex shrink-0 items-center justify-center gap-sm rounded-full whitespace-nowrap select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
-    link: 'inline-flex shrink-0 items-center gap-sm disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
-    inline: 'disabled:pointer-events-none disabled:opacity-50',
+    link: 'has-[svg]:inline-flex has-[svg]:shrink-0 has-[svg]:items-center has-[svg]:gap-sm disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
 };
 
 const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
@@ -31,7 +29,6 @@ const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
     ghost: 'box',
     danger: 'box',
     link: 'link',
-    inline: 'inline',
 };
 
 const bleedSides =
@@ -51,7 +48,7 @@ const sizes = {
         squareIcon: "[&_svg:not([class*='size-'])]:size-icon-md",
     },
     sm: {
-        text: '[--pad:var(--padding-md)] px-(--pad) py-sm text-xs',
+        text: '[--pad:var(--padding-lg)] px-(--pad) py-sm text-xs',
         textBleed: '-my-2.25',
         square: '[--pad:var(--padding-sm)] p-(--pad)',
         squareBleed: '-my-2.25',
@@ -87,25 +84,24 @@ type ButtonClassOptions = {
 
 export function buttonClass({
     variant = 'primary',
-    size = 'md',
+    size,
     square = false,
     bleed = false,
     className,
 }: ButtonClassOptions = {}) {
     const shape = variantShapes[variant];
     const isBox = shape === 'box';
+    const box = sizes[size ?? 'md'];
 
     return cn(
         shapes[shape],
         variants[variant],
-        isBox && square ? sizes[size].squareIcon : sizes[size].icon,
-        shape === 'link' && sizes[size].link,
-        isBox && (square ? sizes[size].square : sizes[size].text),
+        isBox && square ? box.squareIcon : box.icon,
+        shape === 'link' && size && sizes[size].link,
+        isBox && (square ? box.square : box.text),
         bleed && isBox && bleedSides,
         bleed && isBox && bleedBackdrop,
-        bleed &&
-            isBox &&
-            (square ? sizes[size].squareBleed : sizes[size].textBleed),
+        bleed && isBox && (square ? box.squareBleed : box.textBleed),
         className,
     );
 }
