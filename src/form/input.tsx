@@ -29,7 +29,6 @@ type Props = FieldProps & {
     onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
     onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
     onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
-    'aria-label'?: string;
 };
 
 export const plainTextField = touch

@@ -8,7 +8,6 @@ import { Field } from './field';
 
 type Props = {
     label: string;
-    noneLabel: string;
     value: PaletteColor | null;
     error?: string;
     onChange: (color: PaletteColor | null) => void;
@@ -23,7 +22,6 @@ export function ColorPicker(props: Props) {
             <div
                 id={id}
                 role="radiogroup"
-                aria-label={props.label}
                 className="flex flex-wrap gap-xs"
             >
                 {colors.map((color) => {
@@ -35,7 +33,6 @@ export function ColorPicker(props: Props) {
                             type="button"
                             role="radio"
                             aria-checked={chosen}
-                            aria-label={color ?? props.noneLabel}
                             onClick={() => props.onChange(color)}
                             className={cn(
                                 buttonClass({

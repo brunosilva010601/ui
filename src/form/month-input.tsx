@@ -125,7 +125,7 @@ function YearPicker(props: YearPickerProps) {
 
 export function MonthInput(props: Props) {
     const inputId = useId();
-    const { labels, locale } = useUi();
+    const { locale } = useUi();
     const [picking, setPicking] = useState(false);
     const unit = props.yearOnly ? MONTHS_IN_YEAR : 1;
     const current = useRef(index(props.value));
@@ -188,7 +188,6 @@ export function MonthInput(props: Props) {
                 <button
                     type="button"
                     tabIndex={-1}
-                    aria-label={labels.previous}
                     disabled={atMin}
                     className={stepButtonClass}
                     {...previous}
@@ -225,7 +224,6 @@ export function MonthInput(props: Props) {
                 <button
                     type="button"
                     tabIndex={-1}
-                    aria-label={labels.next}
                     disabled={atMax}
                     className={stepButtonClass}
                     {...next}

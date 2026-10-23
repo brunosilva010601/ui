@@ -149,7 +149,6 @@ function ChoiceModal(props: DropdownMenuProps) {
         <>
             <button
                 type="button"
-                aria-label={props.label}
                 aria-haspopup="dialog"
                 title={iconOnly[variant] ? props.label : undefined}
                 className={triggers[variant]}
@@ -190,7 +189,6 @@ function PopoverMenu(props: DropdownMenuProps) {
             ) : (
                 <PopoverTrigger
                     ref={setTarget}
-                    aria-label={props.label}
                     title={iconOnly[variant] ? props.label : undefined}
                     className={triggers[variant]}
                 >

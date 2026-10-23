@@ -14,7 +14,6 @@ import { backdropClass } from './backdrop';
 import { buttonClass } from './button';
 import { HeadingDescription, HeadingTitle, headingClass } from './heading';
 import { cn } from './lib/utils';
-import { useUiLabels } from './provider';
 
 export const ModalClose = DialogPrimitive.Close;
 
@@ -597,8 +596,6 @@ function ModalPanel(props: ModalProps) {
 }
 
 function BareBody(props: ModalProps) {
-    const labels = useUiLabels();
-
     return (
         <>
             <DialogPrimitive.Title className="sr-only">
@@ -608,7 +605,6 @@ function BareBody(props: ModalProps) {
                 {props.children}
             </div>
             <DialogPrimitive.Close
-                aria-label={labels.close}
                 className={cn(
                     buttonClass({ variant: 'outline', square: true }),
                     'pointer-events-auto absolute top-0 right-0',
@@ -629,11 +625,8 @@ type ModalCloseButtonProps = {
 };
 
 export function ModalCloseButton(props: ModalCloseButtonProps) {
-    const labels = useUiLabels();
-
     return (
         <DialogPrimitive.Close
-            aria-label={labels.close}
             className={cn(
                 buttonClass({ variant: 'ghost', square: true, bleed: true }),
                 props.className,

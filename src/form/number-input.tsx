@@ -3,7 +3,6 @@ import { useEffect, useId, useRef } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { buttonClass } from '../button';
 import { cn } from '../lib/utils';
-import { useUiLabels } from '../provider';
 import { Field } from './field';
 import type { FieldProps } from './field';
 import { plainTextField } from './input';
@@ -34,7 +33,6 @@ type Props = FieldProps & {
 
 export function NumberInput(props: Props) {
     const inputId = useId();
-    const labels = useUiLabels();
     const timer = useRef<number | undefined>(undefined);
     const current = useRef(0);
     const size = props.step ?? 1;
@@ -114,9 +112,6 @@ export function NumberInput(props: Props) {
         <button
             type="button"
             tabIndex={-1}
-            aria-label={
-                delta > 0 ? labels.increase : labels.decrease
-            }
             disabled={
                 !props.wrap &&
                 props.value !== '' &&

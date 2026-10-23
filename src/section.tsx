@@ -37,7 +37,6 @@ type SectionProps = {
     href?: string;
     headerHref?: string;
     onHeaderClick?: () => void;
-    label?: string;
     children?: ReactNode;
 };
 
@@ -79,7 +78,6 @@ function SectionText(props: SectionTextProps) {
 type CoverProps = {
     onClick?: () => void;
     href?: string;
-    label?: string;
 };
 
 function Cover(props: CoverProps) {
@@ -88,18 +86,9 @@ function Cover(props: CoverProps) {
         'rounded-[inherit] absolute inset-0 cursor-pointer focus-visible:outline-2';
 
     return props.href ? (
-        <Link
-            href={props.href}
-            aria-label={props.label}
-            className={className}
-        />
+        <Link href={props.href} className={className} />
     ) : (
-        <button
-            type="button"
-            aria-label={props.label}
-            onClick={props.onClick}
-            className={className}
-        />
+        <button type="button" onClick={props.onClick} className={className} />
     );
 }
 
@@ -143,7 +132,6 @@ function useOpen(props: SectionProps): [boolean, (next: boolean) => void] {
 type BandHeaderProps = {
     title: ReactNode;
     note?: ReactNode;
-    name?: string;
     open: boolean;
     onToggle: () => void;
     action?: ReactNode;
@@ -163,7 +151,6 @@ function BandHeader(props: BandHeaderProps) {
             <button
                 type="button"
                 aria-expanded={props.open}
-                aria-label={props.name}
                 onClick={props.onToggle}
                 className="absolute inset-0 cursor-pointer"
             />
@@ -203,9 +190,6 @@ export function Section(props: SectionProps) {
     const headerPadding = isOutlined && sectionPadding.all;
     const isClickable = Boolean(props.onClick || props.href);
     const hasText = Boolean(props.title || props.description || props.meta);
-    const name =
-        props.label ??
-        (typeof props.title === 'string' ? props.title : undefined);
     const action =
         props.action ??
         (props.hint && <Hint>{props.hint}</Hint>) ??
@@ -227,7 +211,6 @@ export function Section(props: SectionProps) {
         <BandHeader
             title={props.title}
             note={props.note}
-            name={name}
             open={open}
             onToggle={() => setOpen(!open)}
             action={props.action}
@@ -247,13 +230,11 @@ export function Section(props: SectionProps) {
                     (props.headerHref ? (
                         <Link
                             href={props.headerHref}
-                            aria-label={name}
                             className={headerLinkClass}
                         />
                     ) : (
                         <button
                             type="button"
-                            aria-label={name}
                             onClick={props.onHeaderClick}
                             className={headerLinkClass}
                         />
@@ -263,7 +244,6 @@ export function Section(props: SectionProps) {
                         <button
                             type="button"
                             aria-expanded={open}
-                            aria-label={name}
                             onClick={() => setOpen(!open)}
                             className="absolute inset-0 cursor-pointer rounded-t-[inherit]"
                         />
@@ -347,7 +327,7 @@ export function Section(props: SectionProps) {
             )}
 
             {isClickable && (
-                <Cover onClick={props.onClick} href={props.href} label={name} />
+                <Cover onClick={props.onClick} href={props.href} />
             )}
         </section>
     );

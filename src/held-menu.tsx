@@ -48,7 +48,7 @@ export function HeldMenu(props: Props) {
                     variant={props.hover ? 'outline' : 'ghost'}
                     size="sm"
                     square
-                    aria-label={props.label}
+                    title={props.label}
                     className={
                         props.hover
                             ? 'absolute top-1/2 right-3 hidden -translate-y-1/2 [@media(hover:hover)]:group-hover:inline-flex'

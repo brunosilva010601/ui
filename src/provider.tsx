@@ -3,24 +3,17 @@ import type { ComponentType, ReactNode } from 'react';
 
 export type UiLabels = {
     optional: string;
-    previous: string;
-    next: string;
-    today: string;
     cancel: string;
-    close: string;
-    loading: string;
-    moreInfo: string;
     chooseFile: string;
-    clearSearch: string;
-    increase: string;
-    decrease: string;
+    light: string;
+    dark: string;
+    system: string;
 };
 
 export type UiLinkProps = {
     href: string;
     className?: string;
     onClick?: () => void;
-    'aria-label'?: string;
     'data-test'?: string;
     children?: ReactNode;
 };
@@ -36,17 +29,11 @@ type UiConfig = {
 const defaults: UiConfig = {
     labels: {
         optional: 'opcional',
-        previous: 'Anterior',
-        next: 'Próximo',
-        today: 'Hoje',
         cancel: 'Cancelar',
-        close: 'Fechar',
-        loading: 'Carregando',
-        moreInfo: 'Mais informações',
         chooseFile: 'Escolher arquivo',
-        clearSearch: 'Limpar busca',
-        increase: 'Aumentar',
-        decrease: 'Diminuir',
+        light: 'Claro',
+        dark: 'Escuro',
+        system: 'Sistema',
     },
     link: (props) => <a {...props} />,
     locale: 'pt-BR',

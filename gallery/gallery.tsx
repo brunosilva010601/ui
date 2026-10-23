@@ -124,17 +124,11 @@ const animations = [
 
 const labels: UiLabels = {
     optional: 'optional',
-    previous: 'Previous',
-    next: 'Next',
-    today: 'Today',
     cancel: 'Cancel',
-    close: 'Close',
-    loading: 'Loading',
-    moreInfo: 'More info',
     chooseFile: 'Choose file',
-    clearSearch: 'Clear search',
-    increase: 'Increase',
-    decrease: 'Decrease',
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System',
 };
 
 const schemes: { value: Scheme; label: string }[] = [

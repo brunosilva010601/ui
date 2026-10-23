@@ -1,6 +1,5 @@
 import { cn } from './lib/utils';
 import { staticRowClass } from './list';
-import { useUiLabels } from './provider';
 
 const shapes = {
     fill: '',
@@ -27,12 +26,9 @@ export function Skeleton(props: Props) {
 }
 
 export function SectionSkeleton() {
-    const labels = useUiLabels();
-
     return (
         <div
             role="status"
-            aria-label={labels.loading}
             className={cn(
                 staticRowClass,
                 'rounded border border-border bg-surface',

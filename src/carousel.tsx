@@ -2,7 +2,6 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode, RefObject } from 'react';
 import { Button } from './button';
-import { useUiLabels } from './provider';
 
 const SLIDE_MS = 320;
 
@@ -128,7 +127,6 @@ type CarouselFrameProps = {
 };
 
 export function CarouselFrame(props: CarouselFrameProps) {
-    const labels = useUiLabels();
     const go = (by: number) => props.control.page(by);
 
     return (
@@ -140,7 +138,6 @@ export function CarouselFrame(props: CarouselFrameProps) {
                         variant="outline"
                         square
                         className={`${arrowClass} start-2`}
-                        aria-label={labels.previous}
                         onClick={() => go(-1)}
                     >
                         <ArrowLeft />
@@ -149,7 +146,6 @@ export function CarouselFrame(props: CarouselFrameProps) {
                         variant="outline"
                         square
                         className={`${arrowClass} end-2`}
-                        aria-label={labels.next}
                         onClick={() => go(1)}
                     >
                         <ArrowRight />
