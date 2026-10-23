@@ -2,6 +2,8 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode, RefObject } from 'react';
 import { Button } from './button';
+import { useEdgeFade } from './lib/edge-fade';
+import { cn } from './lib/utils';
 
 const SLIDE_MS = 320;
 
@@ -37,6 +39,29 @@ type CarouselControl = {
     element: HTMLDivElement | null;
     page: (by: number) => void;
 };
+
+type CarouselTrackProps = {
+    control: CarouselControl;
+    className?: string;
+    children: ReactNode;
+};
+
+export function CarouselTrack(props: CarouselTrackProps) {
+    const fade = useEdgeFade(props.control.element);
+
+    return (
+        <div
+            ref={props.control.track}
+            className={cn(
+                'relative flex snap-x [scrollbar-width:none] overflow-x-auto *:shrink-0 *:snap-start',
+                fade,
+                props.className,
+            )}
+        >
+            {props.children}
+        </div>
+    );
+}
 
 export function useCarousel(): CarouselControl {
     const node = useRef<HTMLDivElement>(null);

@@ -25,6 +25,7 @@ import {
     ButtonGroup,
     ButtonGroupItem,
     CarouselFrame,
+    CarouselTrack,
     cn,
     CodeBlock,
     CodeInput,
@@ -1440,33 +1441,49 @@ function TabsDemo() {
 }
 
 function CarouselDemo() {
-    const control = useCarousel();
-    const overflowing = useOverflowing(control);
+    const many = useCarousel();
+    const manyOverflowing = useOverflowing(many);
+    const raised = useCarousel();
+    const raisedOverflowing = useOverflowing(raised);
+    const few = useCarousel();
+    const fewOverflowing = useOverflowing(few);
+
+    const slides = (count: number) =>
+        Array.from({ length: count }, (_, index) => (
+            <div
+                key={index}
+                className="flex h-28 w-40 items-center justify-center rounded border border-border bg-control"
+            >
+                <Image className="size-icon-lg text-foreground-faint" />
+            </div>
+        ));
 
     return (
         <Section
             variant="outlined"
-            title="CarouselFrame"
-            description="Horizontal scroller with arrows on hover, only when the content overflows."
-            meta="useCarousel · useOverflowing · control · arrows"
+            title="Carousel"
+            description="Horizontal scroller with arrows on hover when the content overflows. The track fades the edges that hide content, on any background, since the fade is a mask and not a painted gradient."
+            meta="useCarousel · useOverflowing · CarouselFrame arrows · CarouselTrack"
             collapsible
             collapsed
             remember="docs:carousel"
         >
-            <CarouselFrame control={control} arrows={overflowing}>
-                <div
-                    ref={control.track}
-                    className="flex snap-x gap-sm overflow-x-auto [scrollbar-width:none]"
-                >
-                    {Array.from({ length: 10 }, (_, index) => (
-                        <div
-                            key={index}
-                            className="flex h-28 w-40 shrink-0 snap-start items-center justify-center rounded border border-border bg-surface"
-                        >
-                            <Image className="size-icon-lg text-foreground-faint" />
-                        </div>
-                    ))}
-                </div>
+            <CarouselFrame control={many} arrows={manyOverflowing}>
+                <CarouselTrack control={many} className="gap-sm">
+                    {slides(10)}
+                </CarouselTrack>
+            </CarouselFrame>
+            <div className="rounded bg-surface-raised p-md">
+                <CarouselFrame control={raised} arrows={raisedOverflowing}>
+                    <CarouselTrack control={raised} className="gap-sm">
+                        {slides(10)}
+                    </CarouselTrack>
+                </CarouselFrame>
+            </div>
+            <CarouselFrame control={few} arrows={fewOverflowing}>
+                <CarouselTrack control={few} className="gap-sm">
+                    {slides(2)}
+                </CarouselTrack>
             </CarouselFrame>
         </Section>
     );

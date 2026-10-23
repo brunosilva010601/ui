@@ -30,3 +30,4 @@ O que muda em relação aos componentes atuais dele:
 - Os links de crédito com `variant="inline"` passam a usar `variant="link"`.
 - O `RemoveButton` saiu do pacote. Cada uso vira um `Button` ghost, quadrado, com `bleed` e o ícone de lixeira.
 - As cores de avaliação continuam no CSS do próprio Loremy.
+- As faixas dos carrosséis (prateleira de itens e colaboradores) passam a ser `CarouselTrack`, que já esmaece as bordas. Hoje só a prateleira esmaece, por conta própria.
