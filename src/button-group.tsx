@@ -11,11 +11,7 @@ const layouts = {
     fill: 'flex gap-xs *:min-w-0 *:flex-1',
 };
 
-type GroupVariant = 'outline' | 'ghost';
-
-const GroupContext = createContext<{ variant: GroupVariant; size: ButtonSize }>(
-    { variant: 'outline', size: 'md' },
-);
+const SizeContext = createContext<ButtonSize>('md');
 
 type ButtonGroupItemProps = {
     value: string;
@@ -27,11 +23,11 @@ type ButtonGroupItemProps = {
 
 export function ButtonGroupItem(props: ButtonGroupItemProps) {
     const { value, ...rest } = props;
-    const group = useContext(GroupContext);
+    const size = useContext(SizeContext);
 
     return (
         <ToggleGroupPrimitive.Item value={value} asChild>
-            <Button variant={group.variant} size={group.size} {...rest} />
+            <Button variant="outline" size={size} {...rest} />
         </ToggleGroupPrimitive.Item>
     );
 }
@@ -47,7 +43,6 @@ export type ButtonGroupOption<T extends string> = {
 type ButtonGroupProps<T extends string> = {
     options?: ButtonGroupOption<T>[];
     layout?: keyof typeof layouts;
-    variant?: GroupVariant;
     size?: ButtonSize;
     iconOnly?: boolean;
     children?: ReactNode;
@@ -66,10 +61,6 @@ type ButtonGroupProps<T extends string> = {
 
 export function ButtonGroup<T extends string>(props: ButtonGroupProps<T>) {
     const layout = layouts[props.layout ?? 'wrap'];
-    const context = {
-        variant: props.variant ?? 'outline',
-        size: props.size ?? 'md',
-    };
     const items =
         props.children ??
         props.options?.map((option) => (
@@ -91,7 +82,7 @@ export function ButtonGroup<T extends string>(props: ButtonGroupProps<T>) {
         const onChange = props.onChange;
 
         return (
-            <GroupContext value={context}>
+            <SizeContext value={props.size ?? 'md'}>
                 <ToggleGroupPrimitive.Root
                     type="multiple"
                     className={layout}
@@ -100,14 +91,14 @@ export function ButtonGroup<T extends string>(props: ButtonGroupProps<T>) {
                 >
                     {items}
                 </ToggleGroupPrimitive.Root>
-            </GroupContext>
+            </SizeContext>
         );
     }
 
     const onChange = props.onChange;
 
     return (
-        <GroupContext value={context}>
+        <SizeContext value={props.size ?? 'md'}>
             <ToggleGroupPrimitive.Root
                 type="single"
                 className={layout}
@@ -116,6 +107,6 @@ export function ButtonGroup<T extends string>(props: ButtonGroupProps<T>) {
             >
                 {items}
             </ToggleGroupPrimitive.Root>
-        </GroupContext>
+        </SizeContext>
     );
 }

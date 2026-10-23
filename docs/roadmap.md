@@ -22,7 +22,7 @@ O que muda em relação aos componentes atuais dele:
 - Links soltos que dependiam do tamanho pequeno padrão precisam de `size`.
 - Botões, chips, linhas de menu e avisos mudaram de tamanho para seguir a escala.
 - A escolha de tema nas preferências passa a ser o `AppearancePicker`. O mesmo vale para o Loremy.
-- `ChipGroup` vira `ButtonGroup` (variantes `outline` e `ghost`), com as mesmas `options`, `value`, `onChange` e `multiple`. Itens personalizados usam `ButtonGroupItem`.
+- `ChipGroup` vira `ButtonGroup`, sempre com botões outline, com as mesmas `options`, `value`, `onChange` e `multiple`. Grupos que usavam `variant="ghost"` ou `variant="icon"` passam a ser outline. Itens personalizados usam `ButtonGroupItem`.
 - `Chip` sai. Etiqueta estática vira `Badge` (tons `neutral`, `primary`, `success`, `warning`, `danger`), e chip clicável vira `Button`. Vale para o Loremy também.
 
 ## Adoção pelo Loremy
@@ -30,4 +30,5 @@ O que muda em relação aos componentes atuais dele:
 - Os links de crédito com `variant="inline"` passam a usar `variant="link"`.
 - O `RemoveButton` saiu do pacote. Cada uso vira um `Button` ghost, quadrado, com `bleed` e o ícone de lixeira.
 - As cores de avaliação continuam no CSS do próprio Loremy.
+- A modal do trailer troca `width="lg"` por `className="max-w-4xl"`.
 - As faixas dos carrosséis (prateleira de itens e colaboradores) passam a ser `CarouselTrack`, que já esmaece as bordas. Hoje só a prateleira esmaece, por conta própria.

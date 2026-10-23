@@ -471,11 +471,6 @@ function formatOf(props: ModalProps) {
         : drawers[props.mobile ?? 'sheet'][props.side ?? 'right'];
 }
 
-const widths = {
-    md: 'max-w-lg',
-    lg: 'max-w-4xl',
-};
-
 type ModalProps = {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
@@ -483,7 +478,7 @@ type ModalProps = {
     format?: Format;
     side?: 'left' | 'right' | 'top';
     mobile?: 'sheet' | 'panel';
-    width?: keyof typeof widths;
+    className?: string;
     bare?: boolean;
     fit?: boolean;
     top?: boolean;
@@ -572,10 +567,10 @@ function ModalPanel(props: ModalProps) {
                                       props.fit &&
                                       'max-sm:h-auto max-sm:max-h-full max-sm:min-h-1/3',
                                   format.motion,
-                                  formatName === 'dialog' &&
-                                      widths[props.width ?? 'md'],
+                                  formatName === 'dialog' && 'max-w-lg',
                               ],
                         format.panel,
+                        props.className,
                     )}
                 >
                     <DialogPrimitive.Close

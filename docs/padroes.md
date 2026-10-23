@@ -10,9 +10,10 @@
 
 - Nenhum componente depende de roteador nem dos textos de um app. Link, textos, idioma e navegação chegam pelo `UiProvider` ou por props.
 - Em cada tamanho, o botão de texto e o botão quadrado de ícone têm a mesma altura. Mudar o padding de um exige ajustar o outro, em geral pelo tamanho do ícone.
-- Tudo que é clicável é `Button`. Escolha entre opções é um `ButtonGroup` (uma opção que troca, ou várias com `multiple`), e o botão selecionado usa a prop `selected`. `Badge` é só etiqueta estática, nunca clicável.
+- Tudo que é clicável é `Button`. Escolha entre opções é um `ButtonGroup` (uma opção que troca, ou várias com `multiple`), e o botão selecionado usa a prop `selected`, que só existe no `outline` e tem o visual invertido (fundo da cor do texto), igual à aba ativa. A cor principal fica para ação, nunca para seleção. `Badge` é só etiqueta estática, nunca clicável.
 - Link tem uma variante só (`variant="link"`). Sem `size`, ele herda o tamanho do texto em volta e quebra linha junto com a frase.
 - A `Section` aceita uma terceira linha no cabeçalho (`meta`), em fonte de código, depois da descrição.
+- Controles que se repetem com o mesmo papel (botão, campo) têm tamanhos fixos com nome. Modal, gaveta e menus têm uma largura padrão e mudam pelo `className` quando o conteúdo pede, porque cada caso tem um conteúdo diferente.
 - O gesto de segurar ou clicar com o botão direito é uma peça própria (`useHold`), aplicável a qualquer elemento. O menu de linha (`HeldMenu`) é montado em cima dela.
 
 ## Galeria

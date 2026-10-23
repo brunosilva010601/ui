@@ -367,13 +367,13 @@ function ButtonDemo() {
             {sizes.map((size) => (
                 <div
                     key={size}
-                    className="grid grid-cols-5 items-center justify-items-start gap-md"
+                    className="grid grid-cols-5 items-center justify-items-center gap-md"
                 >
                     <span className={caption}>size="{size}"</span>
                     <span className={caption}>with icon</span>
-                    <span className={caption}>square</span>
                     <span className={caption}>selected</span>
                     <span className={caption}>disabled</span>
+                    <span className={caption}>square</span>
                     {buttonVariants.map((variant) => (
                         <Fragment key={variant}>
                             <Button variant={variant} size={size}>
@@ -383,15 +383,8 @@ function ButtonDemo() {
                                 <Plus />
                                 {variant}
                             </Button>
-                            {variant === 'link' ? (
-                                <span />
-                            ) : (
-                                <Button variant={variant} size={size} square>
-                                    <Plus />
-                                </Button>
-                            )}
-                            {variant === 'outline' || variant === 'ghost' ? (
-                                <Button variant={variant} size={size} selected>
+                            {variant === 'outline' ? (
+                                <Button variant="outline" size={size} selected>
                                     {variant}
                                 </Button>
                             ) : (
@@ -400,6 +393,13 @@ function ButtonDemo() {
                             <Button variant={variant} size={size} disabled>
                                 {variant}
                             </Button>
+                            {variant === 'link' ? (
+                                <span />
+                            ) : (
+                                <Button variant={variant} size={size} square>
+                                    <Plus />
+                                </Button>
+                            )}
                         </Fragment>
                     ))}
                 </div>
@@ -466,8 +466,8 @@ function ButtonGroupDemo() {
         <Section
             variant="outlined"
             title="ButtonGroup"
-            description="A set of buttons where one is selected, switching on click, or several with multiple, each turning on and off. Every variant in both sizes, then the layouts and custom items."
-            meta="variant · size · iconOnly · layout · multiple · ButtonGroupItem"
+            description="Outline buttons where one is selected, switching on click, or several with multiple, each turning on and off. Text, icon and text, and icon only in both sizes, then the layouts and custom items."
+            meta="size · iconOnly · layout · multiple · ButtonGroupItem"
             collapsible
             collapsed
             remember="docs:button-group"
@@ -476,18 +476,10 @@ function ButtonGroupDemo() {
                 <div key={size} className="flex flex-col gap-sm">
                     <span className={caption}>size="{size}"</span>
                     <ButtonGroup
-                        variant="outline"
                         size={size}
                         options={options}
-                        value={valueOf(`outline-${size}`)}
-                        onChange={choose(`outline-${size}`)}
-                    />
-                    <ButtonGroup
-                        variant="ghost"
-                        size={size}
-                        options={options}
-                        value={valueOf(`ghost-${size}`)}
-                        onChange={choose(`ghost-${size}`)}
+                        value={valueOf(`text-${size}`)}
+                        onChange={choose(`text-${size}`)}
                     />
                     <ButtonGroup
                         size={size}
@@ -496,7 +488,6 @@ function ButtonGroupDemo() {
                         onChange={choose(`icon-text-${size}`)}
                     />
                     <ButtonGroup
-                        variant="ghost"
                         size={size}
                         iconOnly
                         options={iconOptions}
@@ -1497,8 +1488,8 @@ function ModalDemo() {
         <Section
             variant="outlined"
             title="Modal"
-            description="Dialog or drawer in every format. Closes with the back button and by dragging on phones."
-            meta="format · width · side · mobile · fit · title · description · ModalFooter"
+            description="Dialog or drawer in every format. The dialog has a default width, changed with a max-w class when the content needs it. Closes with the back button and by dragging on phones."
+            meta="format · className · side · mobile · fit · title · description · ModalFooter"
             collapsible
             collapsed
             remember="docs:modal"
@@ -1508,7 +1499,7 @@ function ModalDemo() {
                     dialog
                 </Button>
                 <Button variant="outline" onClick={() => setOpen('wide')}>
-                    dialog lg
+                    dialog max-w-4xl
                 </Button>
                 <Button variant="outline" onClick={() => setOpen('right')}>
                     drawer
@@ -1531,7 +1522,12 @@ function ModalDemo() {
                     <Button onClick={close}>Ok</Button>
                 </ModalFooter>
             </Modal>
-            <Modal open={open === 'wide'} onClose={close} width="lg" title="Title">
+            <Modal
+                open={open === 'wide'}
+                onClose={close}
+                className="max-w-4xl"
+                title="Title"
+            >
                 <p className="text-sm">Content.</p>
             </Modal>
             <Modal
