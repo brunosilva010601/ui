@@ -152,7 +152,6 @@ const caption = 'font-mono text-xs text-foreground-faint';
 export function ComponentsPage() {
     return (
         <div className="flex flex-col gap-lg">
-            <HeightComparison />
             <Section title="Actions" collapsible remember="docs:actions">
                 <ButtonDemo />
             </Section>
@@ -214,145 +213,6 @@ export function ComponentsPage() {
     );
 }
 
-const comparisons = [
-    {
-        title: 'Side by side, md',
-        render: (proposed: boolean) => (
-            <div className="flex items-start gap-sm *:shrink-0 *:outline *:outline-1 *:outline-primary *:outline-dashed">
-                <Input
-                    label="Label"
-                    hideLabel
-                    placeholder="Field"
-                    className={cn('w-28', proposed && 'min-h-control-md')}
-                />
-                <Button className={cn(proposed && 'min-h-control-md')}>
-                    Button
-                </Button>
-                <Button
-                    variant="outline"
-                    square
-                    className={cn(
-                        proposed && 'min-h-control-md min-w-control-md',
-                    )}
-                >
-                    <Settings />
-                </Button>
-                {proposed ? (
-                    <div className="flex min-h-control-md rounded-full border border-border bg-control p-xs text-sm text-foreground-soft">
-                        <span className="inline-flex items-center rounded-full bg-foreground px-md py-2xs text-background">
-                            Tab A
-                        </span>
-                        <span className="inline-flex items-center rounded-full px-md py-2xs">
-                            Tab B
-                        </span>
-                    </div>
-                ) : (
-                    <Tabs value="a">
-                        <TabsList fit>
-                            <TabsTrigger value="a">Tab A</TabsTrigger>
-                            <TabsTrigger value="b">Tab B</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                )}
-            </div>
-        ),
-    },
-    {
-        title: 'Side by side, sm',
-        render: (proposed: boolean) => (
-            <div className="flex items-start gap-sm *:shrink-0 *:outline *:outline-1 *:outline-primary *:outline-dashed">
-                <Button size="sm" className={cn(proposed && 'min-h-control-sm')}>
-                    Button
-                </Button>
-                <Button
-                    size="sm"
-                    variant="outline"
-                    square
-                    className={cn(
-                        proposed && 'min-h-control-sm min-w-control-sm',
-                    )}
-                >
-                    <Settings />
-                </Button>
-                <Badge size="md">Badge md</Badge>
-                <Badge>Badge sm</Badge>
-            </div>
-        ),
-    },
-    {
-        title: 'Big icon',
-        render: (proposed: boolean) => (
-            <div className="flex items-start gap-sm *:shrink-0 *:outline *:outline-1 *:outline-primary *:outline-dashed">
-                <Button className={cn(proposed && 'min-h-control-md')}>
-                    <Plus className="size-10" />
-                    Button
-                </Button>
-                <Button
-                    variant="outline"
-                    square
-                    className={cn(
-                        proposed && 'min-h-control-md min-w-control-md',
-                    )}
-                >
-                    <Settings className="size-10" />
-                </Button>
-                <Button className={cn(proposed && 'min-h-control-md')}>
-                    Normal
-                </Button>
-            </div>
-        ),
-    },
-    {
-        title: 'Wrapping text',
-        render: (proposed: boolean) => (
-            <div className="flex items-start gap-sm *:shrink-0 *:outline *:outline-1 *:outline-primary *:outline-dashed">
-                <Button
-                    className={cn(
-                        'max-w-40 whitespace-normal',
-                        proposed && 'min-h-control-md',
-                    )}
-                >
-                    A longer label that wraps onto two lines
-                </Button>
-                <Button className={cn(proposed && 'min-h-control-md')}>
-                    Normal
-                </Button>
-            </div>
-        ),
-    },
-];
-
-function HeightComparison() {
-    return (
-        <Section
-            variant="outlined"
-            title="Height comparison (temporary)"
-            description="Left: today, height from padding only. Right: the same padding plus a minimum height of 32 or 40 px."
-            collapsible
-            remember="docs:height-comparison"
-        >
-            {comparisons.map((comparison) => (
-                <div key={comparison.title} className="flex flex-col gap-sm">
-                    <span className={caption}>{comparison.title}</span>
-                    {[false, true].map((proposed) => (
-                        <div
-                            key={String(proposed)}
-                            className="flex items-center gap-md overflow-x-auto"
-                        >
-                            <span className={cn(caption, 'w-16 shrink-0')}>
-                                {proposed ? 'proposed' : 'today'}
-                            </span>
-                            <div className="w-fit shrink-0 border border-dashed border-danger">
-                                {comparison.render(proposed)}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            ))}
-        </Section>
-    );
-}
-
 function ButtonDemo() {
     return (
         <Section
@@ -367,15 +227,28 @@ function ButtonDemo() {
             {sizes.map((size) => (
                 <div
                     key={size}
-                    className="grid grid-cols-5 items-center justify-items-center gap-md"
+                    className="flex flex-col gap-md sm:grid sm:grid-cols-5 sm:items-center sm:justify-items-center"
                 >
-                    <span className={caption}>size="{size}"</span>
-                    <span className={caption}>with icon</span>
-                    <span className={caption}>selected</span>
-                    <span className={caption}>disabled</span>
-                    <span className={caption}>square</span>
+                    <div className="sm:contents">
+                        <span className={caption}>size="{size}"</span>
+                        <span className={cn(caption, 'max-sm:hidden')}>
+                            with icon
+                        </span>
+                        <span className={cn(caption, 'max-sm:hidden')}>
+                            selected
+                        </span>
+                        <span className={cn(caption, 'max-sm:hidden')}>
+                            disabled
+                        </span>
+                        <span className={cn(caption, 'max-sm:hidden')}>
+                            square
+                        </span>
+                    </div>
                     {buttonVariants.map((variant) => (
-                        <Fragment key={variant}>
+                        <div
+                            key={variant}
+                            className="flex flex-wrap items-center gap-sm sm:contents"
+                        >
                             <Button variant={variant} size={size}>
                                 {variant}
                             </Button>
@@ -388,19 +261,19 @@ function ButtonDemo() {
                                     {variant}
                                 </Button>
                             ) : (
-                                <span />
+                                <span className="max-sm:hidden" />
                             )}
                             <Button variant={variant} size={size} disabled>
                                 {variant}
                             </Button>
                             {variant === 'link' ? (
-                                <span />
+                                <span className="max-sm:hidden" />
                             ) : (
                                 <Button variant={variant} size={size} square>
                                     <Plus />
                                 </Button>
                             )}
-                        </Fragment>
+                        </div>
                     ))}
                 </div>
             ))}
@@ -429,13 +302,22 @@ function BadgeDemo() {
             {sizes.map((size) => (
                 <div
                     key={size}
-                    className="grid grid-cols-3 items-center justify-items-start gap-md"
+                    className="flex flex-col gap-md sm:grid sm:grid-cols-3 sm:items-center sm:justify-items-start"
                 >
-                    <span className={caption}>size="{size}"</span>
-                    <span className={caption}>with icon</span>
-                    <span className={caption}>count</span>
+                    <div className="sm:contents">
+                        <span className={caption}>size="{size}"</span>
+                        <span className={cn(caption, 'max-sm:hidden')}>
+                            with icon
+                        </span>
+                        <span className={cn(caption, 'max-sm:hidden')}>
+                            count
+                        </span>
+                    </div>
                     {badgeTones.map((tone) => (
-                        <Fragment key={tone}>
+                        <div
+                            key={tone}
+                            className="flex flex-wrap items-center gap-sm sm:contents"
+                        >
                             <Badge tone={tone} size={size}>
                                 {tone}
                             </Badge>
@@ -446,7 +328,7 @@ function BadgeDemo() {
                             <Badge tone={tone} size={size} count>
                                 12
                             </Badge>
-                        </Fragment>
+                        </div>
                     ))}
                 </div>
             ))}

@@ -1,5 +1,10 @@
+import { Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import {
+    Badge,
+    Button,
+    ButtonGroup,
+    Input,
     Section,
     Tabs,
     TabsList,
@@ -122,6 +127,18 @@ const animations = [
     'animate-slide-in-left',
 ];
 
+const sampleText = 'Ação Último ÉÃÇ gjpqy @#%&()[]{}| 1234 🍎';
+
+const outlineClass = 'outline outline-1 outline-dashed outline-primary';
+
+const heightRowClass =
+    'flex flex-wrap items-start gap-sm *:shrink-0 *:outline *:outline-1 *:outline-dashed *:outline-primary';
+
+const choices = [
+    { value: 'a', label: 'Option A' },
+    { value: 'b', label: 'Option B' },
+];
+
 const labels: UiLabels = {
     optional: 'optional',
     cancel: 'Cancel',
@@ -160,10 +177,10 @@ export function Gallery() {
 
     return (
         <UiProvider labels={labels} locale="en-US">
-            <div className="mx-auto flex min-h-screen max-w-3xl flex-col gap-xl p-lg">
-                <header className="flex flex-wrap items-center justify-between gap-md">
-                    <div className="flex flex-wrap items-center gap-md">
-                        <h1 className="text-2xl font-semibold">ui</h1>
+            <div className="mx-auto flex min-h-screen max-w-3xl flex-col gap-xl px-md pb-xl sm:px-lg">
+                <header className="sticky top-0 z-40 -mx-md flex flex-col gap-sm border-b border-border bg-background/90 px-md py-sm backdrop-blur-md sm:-mx-lg sm:flex-row sm:items-center sm:gap-md sm:px-lg">
+                    <h1 className="text-xl font-semibold">ui</h1>
+                    <div className="flex flex-1 items-center gap-sm sm:justify-between">
                         <Tabs value={page} onValueChange={changePage}>
                             <TabsList fit>
                                 {pages.map((option) => (
@@ -176,19 +193,19 @@ export function Gallery() {
                                 ))}
                             </TabsList>
                         </Tabs>
+                        <Tabs value={scheme} onValueChange={setScheme}>
+                            <TabsList fit>
+                                {schemes.map((option) => (
+                                    <TabsTrigger
+                                        key={option.value}
+                                        value={option.value}
+                                    >
+                                        {option.label}
+                                    </TabsTrigger>
+                                ))}
+                            </TabsList>
+                        </Tabs>
                     </div>
-                    <Tabs value={scheme} onValueChange={setScheme}>
-                        <TabsList fit>
-                            {schemes.map((option) => (
-                                <TabsTrigger
-                                    key={option.value}
-                                    value={option.value}
-                                >
-                                    {option.label}
-                                </TabsTrigger>
-                            ))}
-                        </TabsList>
-                    </Tabs>
                 </header>
                 {page === 'theme' ? <ThemePage /> : <ComponentsPage />}
                 <Toaster scheme={scheme} />
@@ -199,6 +216,7 @@ export function Gallery() {
 
 function ThemePage() {
     const [runs, setRuns] = useState<Record<string, number>>({});
+    const [choice, setChoice] = useState('a');
 
     return (
         <div className="flex flex-col gap-lg">
@@ -260,6 +278,146 @@ function ThemePage() {
                                 {weight}
                             </span>
                         ))}
+                    </div>
+                </Section>
+            </Section>
+            <Section title="Text box" collapsible remember="docs:text-box">
+                <Section
+                    variant="outlined"
+                    title="Single line"
+                    description="Each line is outlined. The box should be exactly the font size, with accents, descenders and symbols allowed to overflow it."
+                    meta="text-box: trim-both text"
+                    collapsible
+                >
+                    <div className="flex flex-col gap-md">
+                        {textSizes.map((size) => (
+                            <div key={size} className="flex items-center gap-md">
+                                <span className="w-16 shrink-0 font-mono text-xs text-foreground-muted">
+                                    {size}
+                                </span>
+                                <p className={`${size} ${outlineClass}`}>
+                                    {sampleText}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </Section>
+                <Section
+                    variant="outlined"
+                    title="Clipping"
+                    description="The same text inside elements that hide overflow, like truncated labels. Anything cut here is cut in the apps too."
+                    meta="truncate · overflow-hidden"
+                    collapsible
+                >
+                    <div className="flex flex-col gap-md">
+                        {['text-sm', 'text-base', 'text-2xl'].map((size) => (
+                            <p
+                                key={size}
+                                className={`${size} max-w-full truncate ${outlineClass}`}
+                            >
+                                {sampleText}
+                            </p>
+                        ))}
+                    </div>
+                </Section>
+                <Section
+                    variant="outlined"
+                    title="One line and a paragraph"
+                    description="The first and last lines are trimmed to the font size, while the lines inside keep their normal spacing."
+                    collapsible
+                >
+                    <div className="flex flex-wrap items-start gap-lg">
+                        <p className={`text-sm ${outlineClass}`}>
+                            Só uma linha com acentuação.
+                        </p>
+                        <p className={`max-w-xs text-sm ${outlineClass}`}>
+                            Um parágrafo mais longo, com acentuação e
+                            pontuação, que quebra em várias linhas para mostrar
+                            o espaço entre elas. Ação, coração, último, índice
+                            e pão.
+                        </p>
+                    </div>
+                </Section>
+                <Section
+                    variant="outlined"
+                    title="Inside components"
+                    description="Accented and descending text in the components that hold a single line."
+                    collapsible
+                >
+                    <div className="flex flex-wrap items-start gap-sm *:shrink-0 *:outline *:outline-1 *:outline-dashed *:outline-primary">
+                        <Button>Ação Éjg</Button>
+                        <Button variant="outline" size="sm">
+                            Ação Éjg
+                        </Button>
+                        <Badge size="md">Ação Éjg</Badge>
+                        <Badge>Ação Éjg</Badge>
+                        <Input
+                            label="Field"
+                            hideLabel
+                            defaultValue="Ação Éjg"
+                            className="w-36"
+                        />
+                    </div>
+                </Section>
+            </Section>
+            <Section title="Control heights" collapsible remember="docs:heights">
+                <Section
+                    variant="outlined"
+                    title="Side by side"
+                    description="Every control is outlined, aligned at the top, so the bottoms show any difference in height. Height comes from padding, font size and a 1 px border, which is transparent when it is not visible."
+                    meta="padding + font size + border"
+                    collapsible
+                >
+                    <span className="font-mono text-xs text-foreground-muted">
+                        md
+                    </span>
+                    <div className={heightRowClass}>
+                        <Input
+                            label="Field"
+                            hideLabel
+                            placeholder="Field"
+                            className="w-28"
+                        />
+                        <Button>Button</Button>
+                        <Button variant="outline" square>
+                            <Settings />
+                        </Button>
+                        <Tabs value="a">
+                            <TabsList fit>
+                                <TabsTrigger value="a">Tab A</TabsTrigger>
+                                <TabsTrigger value="b">Tab B</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    </div>
+                    <span className="font-mono text-xs text-foreground-muted">
+                        sm
+                    </span>
+                    <div className={heightRowClass}>
+                        <Button size="sm">Button</Button>
+                        <Button size="sm" variant="outline" square>
+                            <Settings />
+                        </Button>
+                        <ButtonGroup
+                            size="sm"
+                            options={choices}
+                            value={choice}
+                            onChange={setChoice}
+                        />
+                        <Badge size="md">Badge md</Badge>
+                        <Badge>Badge sm</Badge>
+                    </div>
+                    <span className="font-mono text-xs text-foreground-muted">
+                        big icon and wrapping text
+                    </span>
+                    <div className={heightRowClass}>
+                        <Button>
+                            <Plus className="size-10" />
+                            Big icon
+                        </Button>
+                        <Button className="max-w-40 whitespace-normal">
+                            A longer label that wraps onto two lines
+                        </Button>
+                        <Button>Normal</Button>
                     </div>
                 </Section>
             </Section>

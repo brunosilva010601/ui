@@ -5,6 +5,10 @@
 - Cor sempre pelo papel (`primary`, `surface`, `foreground-muted`), nunca por uma cor fixa do Tailwind. A exceção é a paleta de cores que o usuário escolhe para itens (`src/palette.ts`).
 - Padding, gap e margem sempre pela escala com nome de `css/tokens.css`. Número só para o que não é espaçamento, como alturas, larguras e as margens negativas de sangria.
 - O recuo de linha (`--row-inset`) é o mesmo padding das seções outlined. É isso que faz uma lista com `bleed` encostar na borda do card.
+- A linha de texto tem a altura exata da fonte: a métrica da Outfit é ajustada para somar 100% (`css/fonts.css`) e todo elemento corta o espaço extra da primeira e da última linha (`text-box` em `css/base.css`). Texto em várias linhas mantém o espaçamento normal entre elas. Acentos e descendentes passam um pouco da caixa, então elementos que escondem o que transborda precisam de folga.
+- A altura de um controle é a soma do padding, do tamanho da fonte e da borda. Não há altura fixa nem mínima, para o controle crescer com o conteúdo.
+- Todo controle tem borda de 1 px, transparente quando não aparece, para trocar de variante nunca mudar a altura.
+- Cada tamanho define fonte e ícone, e o ícone nunca passa do tamanho da fonte, para não mudar a altura: `md` usa fonte 16 e ícone 16, `sm` usa fonte 14 e ícone 14. Campos usam fonte 16 porque, abaixo disso, o iPhone dá zoom ao tocar no campo.
 
 ## Componentes
 

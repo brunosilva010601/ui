@@ -39,22 +39,20 @@ const bleedBackdrop =
 
 const sizes = {
     md: {
-        text: '[--pad:var(--padding-lg)] px-(--pad) py-sm text-sm',
+        text: '[--pad:var(--padding-lg)] px-(--pad) py-sm text-base',
         textBleed: '-my-2.25',
         square: '[--pad:var(--padding-sm)] p-(--pad)',
         squareBleed: '-my-2.25',
-        link: 'text-sm',
+        link: 'text-base',
         icon: "[&_svg:not([class*='size-'])]:size-icon-sm",
-        squareIcon: "[&_svg:not([class*='size-'])]:size-icon-md",
     },
     sm: {
-        text: '[--pad:var(--padding-lg)] px-(--pad) py-sm text-xs',
-        textBleed: '-my-2.25',
-        square: '[--pad:var(--padding-sm)] p-(--pad)',
-        squareBleed: '-my-2.25',
-        link: 'text-xs',
+        text: '[--pad:var(--padding-lg)] px-(--pad) py-xs text-sm',
+        textBleed: '-my-1.25',
+        square: '[--pad:var(--padding-xs)] p-(--pad)',
+        squareBleed: '-my-1.25',
+        link: 'text-sm',
         icon: "[&_svg:not([class*='size-'])]:size-icon-xs",
-        squareIcon: "[&_svg:not([class*='size-'])]:size-icon-sm",
     },
 };
 
@@ -101,7 +99,7 @@ export function buttonClass({
     return cn(
         shapes[shape],
         variants[variant],
-        isBox && square ? box.squareIcon : box.icon,
+        box.icon,
         shape === 'link' && size && sizes[size].link,
         isBox && (square ? box.square : box.text),
         bleed && isBox && bleedSides,

@@ -70,7 +70,11 @@ export function Input(props: Props) {
                 aria-invalid={error ? true : undefined}
                 autoComplete="off"
                 {...(plain ? plainTextField : {})}
-                className={cn(bare ? bareFieldClass : fieldClass, className)}
+                className={cn(
+                    bare ? bareFieldClass : fieldClass,
+                    'leading-none',
+                    className,
+                )}
                 {...rest}
             />
         </Field>

@@ -82,5 +82,6 @@ function exampleCode(): Plugin {
 
 export default defineConfig({
     root: 'gallery',
+    server: { host: true },
     plugins: [exampleCode(), react(), tailwindcss()],
 });

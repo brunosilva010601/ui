@@ -2,8 +2,3 @@
 @import '../theme.css';
 
 @source './';
-
-@theme {
-    --spacing-control-sm: calc(var(--spacing) * 8);
-    --spacing-control-md: calc(var(--spacing) * 10);
-}

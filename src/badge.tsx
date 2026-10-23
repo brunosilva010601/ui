@@ -10,8 +10,8 @@ const tones = {
 };
 
 const sizes = {
-    sm: 'gap-2xs px-sm py-2xs text-xs [&_svg]:size-icon-xs',
-    md: 'gap-xs px-sm py-xs text-sm [&_svg]:size-icon-sm',
+    sm: 'gap-2xs px-sm py-2xs text-xs [&_svg]:size-3',
+    md: 'gap-xs px-sm py-xs text-sm [&_svg]:size-icon-xs',
 };
 
 type Props = {
@@ -28,7 +28,7 @@ export function Badge(props: Props) {
         <span
             title={props.title}
             className={cn(
-                'inline-flex w-fit shrink-0 items-center rounded-full font-semibold whitespace-nowrap [&_svg]:shrink-0',
+                'inline-flex w-fit shrink-0 items-center rounded-full border border-transparent font-semibold whitespace-nowrap [&_svg]:shrink-0',
                 tones[props.tone ?? 'neutral'],
                 sizes[props.size ?? 'sm'],
                 props.count && 'tabular-nums',
