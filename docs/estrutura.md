@@ -7,17 +7,23 @@
 - `src/`: os componentes, todos exportados por `src/index.ts`.
 - `gallery/`: página de consulta do tema e dos componentes. Não vai para os apps.
 
-O pacote é publicado como código TypeScript, sem etapa de build, com duas entradas: `ui` (componentes) e `ui/theme.css` (tema).
+O pacote se chama `@brunosilva010601/ui` e é publicado como código TypeScript, sem etapa de build, com duas entradas: `@brunosilva010601/ui` (componentes) e `@brunosilva010601/ui/theme.css` (tema). Só `src/`, `css/` e `theme.css` vão no pacote publicado.
+
+## Publicar
+
+O pacote fica privado no GitHub Packages, ligado ao repositório `brunosilva010601/ui`. Para uma versão nova: subir o número em `package.json`, fazer o commit e rodar `bun publish`. O `.npmrc` do repositório lê o token da variável `GITHUB_PACKAGES_TOKEN`, que precisa de permissão `write:packages`.
 
 ## Instalar
 
-O pacote vive no repositório privado `brunosilva010601/ui`, e cada versão é uma tag do git. O app aponta para uma tag no `package.json` e sobe de versão trocando a tag:
+Cada app tem um `.npmrc` igual ao do pacote, apontando o escopo `@brunosilva010601` para o GitHub Packages e lendo o token de `GITHUB_PACKAGES_TOKEN`. O pacote entra no `package.json` por versão:
 
 ```json
-"ui": "github:brunosilva010601/ui#v0.1.0"
+"@brunosilva010601/ui": "^0.1.0"
 ```
 
-Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no pacote aparecem na hora. Como o repositório é privado, o ambiente de deploy de cada app precisa de acesso a ele (chave ou token do GitHub).
+O token é um token clássico do GitHub com `read:packages`, e precisa existir em todo lugar que instala o app: no terminal local, nas variáveis de ambiente do deploy (Laravel Cloud) e nos secrets do GitHub Actions.
+
+Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no pacote aparecem na hora.
 
 ## Ligar num app
 

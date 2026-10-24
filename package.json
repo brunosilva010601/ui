@@ -1,8 +1,19 @@
 {
-    "name": "ui",
+    "name": "@brunosilva010601/ui",
     "version": "0.1.0",
-    "private": true,
     "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/brunosilva010601/ui.git"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
+    "files": [
+        "src",
+        "css",
+        "theme.css"
+    ],
     "scripts": {
         "dev": "vite",
         "types:check": "tsc --noEmit"
