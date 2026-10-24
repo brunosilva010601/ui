@@ -39,18 +39,18 @@ const bleedBackdrop =
 
 const sizes = {
     md: {
-        text: '[--pad:var(--padding-lg)] px-(--pad) py-md text-sm leading-4',
-        textBleed: '-my-3.25',
-        square: '[--pad:var(--padding-md)] p-(--pad)',
+        text: '[--pad:--spacing(4)] px-(--pad) py-2.5 text-sm',
+        textBleed: '-my-2.75',
+        square: '[--pad:--spacing(3)] p-(--pad)',
         squareBleed: '-my-3.25',
         link: 'text-sm',
         icon: "[&_svg:not([class*='size-'])]:size-icon-sm",
     },
     sm: {
-        text: '[--pad:var(--padding-lg)] px-(--pad) py-sm text-xs leading-3.5',
-        textBleed: '-my-2.25',
-        square: '[--pad:var(--padding-sm)] p-(--pad)',
-        squareBleed: '-my-2.25',
+        text: '[--pad:--spacing(3)] px-(--pad) py-1.5 text-xs',
+        textBleed: '-my-1.75',
+        square: '[--pad:--spacing(1.5)] p-(--pad)',
+        squareBleed: '-my-1.75',
         link: 'text-xs',
         icon: "[&_svg:not([class*='size-'])]:size-icon-xs",
     },

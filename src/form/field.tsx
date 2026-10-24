@@ -4,7 +4,7 @@ import { cn } from '../lib/utils';
 import { useUiLabels } from '../provider';
 
 export const fieldClass =
-    'border border-border rounded bg-control text-foreground placeholder:text-foreground-muted w-full min-w-0 px-md py-md transition-shadow outline-none focus-visible:border-primary focus-visible:ring-primary focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger aria-invalid:focus-visible:ring-danger';
+    'border border-border rounded bg-control text-foreground placeholder:text-foreground-muted w-full min-w-0 px-md py-sm transition-shadow outline-none focus-visible:border-primary focus-visible:ring-primary focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger aria-invalid:focus-visible:ring-danger';
 
 export const bareFieldClass =
     'w-full min-w-0 bg-transparent outline-none [text-decoration:inherit] placeholder:text-foreground-muted disabled:cursor-not-allowed disabled:opacity-50';

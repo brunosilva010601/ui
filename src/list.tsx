@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn } from './lib/utils';
+import { useUi } from './provider';
 
 const rowPadding = 'p-md';
 
@@ -23,6 +24,88 @@ export const staticRowClass = cn(
     'flex items-center gap-md',
     rowPadding,
 );
+
+type ListRowProps = {
+    leading?: ReactNode;
+    actions?: ReactNode;
+    onClick?: () => void;
+    href?: string;
+    className?: string;
+    children: ReactNode;
+};
+
+export function ListRow(props: ListRowProps) {
+    const { link: Link } = useUi();
+    const clickable = Boolean(props.onClick || props.href);
+    const content = (
+        <>
+            {props.leading && (
+                <span className="flex shrink-0 items-center">
+                    {props.leading}
+                </span>
+            )}
+            <div className="min-w-0 flex-1">{props.children}</div>
+        </>
+    );
+    const actions = props.actions && (
+        <div className="relative flex shrink-0 items-center gap-xs">
+            {props.actions}
+        </div>
+    );
+
+    if (!clickable) {
+        return (
+            <li className={cn(staticRowClass, props.className)}>
+                {content}
+                {actions}
+            </li>
+        );
+    }
+
+    if (!actions) {
+        return (
+            <li>
+                {props.href ? (
+                    <Link
+                        href={props.href}
+                        className={cn(coverRowClass, props.className)}
+                    >
+                        {content}
+                    </Link>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={props.onClick}
+                        className={cn(coverRowClass, props.className)}
+                    >
+                        {content}
+                    </button>
+                )}
+            </li>
+        );
+    }
+
+    const layer = 'absolute inset-0 cursor-pointer focus-visible:-outline-offset-2';
+
+    return (
+        <li className={cn(layerRowClass, 'relative items-center', props.className)}>
+            {props.href ? (
+                <Link href={props.href} data-layer className={layer} />
+            ) : (
+                <button
+                    type="button"
+                    data-layer
+                    onClick={props.onClick}
+                    className={layer}
+                />
+            )}
+            <div className="pointer-events-none relative flex min-w-0 flex-1 items-center gap-md">
+                {content}
+            </div>
+            {actions}
+        </li>
+    );
+}
 
 type ListProps = {
     bleed?: boolean;

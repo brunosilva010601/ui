@@ -15,6 +15,7 @@ export type UiLinkProps = {
     className?: string;
     onClick?: () => void;
     'data-test'?: string;
+    'data-layer'?: boolean;
     children?: ReactNode;
 };
 

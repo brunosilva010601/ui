@@ -72,7 +72,7 @@ export function Input(props: Props) {
                 {...(plain ? plainTextField : {})}
                 className={cn(
                     bare ? bareFieldClass : fieldClass,
-                    'leading-4',
+                    'leading-5',
                     className,
                 )}
                 {...rest}

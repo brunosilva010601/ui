@@ -204,7 +204,7 @@ export function MonthInput(props: Props) {
                             aria-valuetext={text}
                             aria-invalid={props.error ? true : undefined}
                             onKeyDown={arrowKeys}
-                            className="cursor-pointer py-md text-center leading-4 font-semibold text-foreground outline-none [text-box:normal]"
+                            className="cursor-pointer py-sm text-center leading-5 font-semibold text-foreground outline-none [text-box:normal]"
                         >
                             {text}
                         </button>

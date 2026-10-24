@@ -49,6 +49,7 @@ import {
     Input,
     layerRowClass,
     List,
+    ListRow,
     Markdown,
     Modal,
     ModalFooter,
@@ -63,7 +64,6 @@ import {
     Skeleton,
     Spinner,
     Stat,
-    staticRowClass,
     Switch,
     Tabs,
     TabsList,
@@ -1231,37 +1231,75 @@ function ListDemo() {
         <Section
             variant="outlined"
             title="List"
-            description="Divided rows, in columns on wide screens, or horizontal."
-            meta="columns · horizontal · bleed · staticRowClass · layerRowClass · coverRowClass"
+            description="Divided rows. Each ListRow has a leading slot, free content and actions at the end; the package sets padding, spacing, hover and click, the content is the app's. Rows can be static, clickable, or clickable with actions, in columns on wide screens or horizontal."
+            meta="List columns · horizontal · bleed · ListRow leading · actions · onClick · href"
             collapsible
             collapsed
             remember="docs:list"
         >
             <div className="rounded border border-border bg-surface">
                 <List>
-                    {items.slice(0, 3).map((item) => (
-                        <li key={item} className={staticRowClass}>
-                            <ColorDot color="sky" />
-                            <span className="text-sm">{item}</span>
-                        </li>
-                    ))}
+                    <ListRow leading={<ColorDot color="sky" />}>
+                        <span className="text-sm">Static row</span>
+                    </ListRow>
+                    <ListRow
+                        leading={<IconBadge icon={Inbox} size="sm" />}
+                        onClick={() => notify({ title: 'Row clicked' })}
+                    >
+                        <span className="text-sm">Clickable row</span>
+                    </ListRow>
+                    <ListRow
+                        leading={<Avatar name="Example" size="sm" />}
+                        onClick={() => notify({ title: 'Row clicked' })}
+                        actions={
+                            <>
+                                <Badge>3</Badge>
+                                <Button variant="ghost" size="sm" square bleed>
+                                    <Pencil />
+                                </Button>
+                                <Button variant="ghost" size="sm" square bleed>
+                                    <Trash2 />
+                                </Button>
+                            </>
+                        }
+                    >
+                        <span className="text-sm">Clickable with actions</span>
+                    </ListRow>
+                    <ListRow
+                        leading={<ColorDot color="rose" />}
+                        actions={
+                            <Button variant="outline" size="sm">
+                                Action
+                            </Button>
+                        }
+                    >
+                        <div className="flex flex-col gap-xs">
+                            <span className="text-sm font-semibold">
+                                Two lines of content
+                            </span>
+                            <span className="text-sm text-foreground-muted">
+                                A longer description that may wrap onto more
+                                lines when the row is narrow.
+                            </span>
+                        </div>
+                    </ListRow>
                 </List>
             </div>
             <div className="overflow-hidden rounded border border-border bg-surface">
                 <List columns>
                     {items.map((item) => (
-                        <li key={item} className={staticRowClass}>
+                        <ListRow key={item}>
                             <span className="text-sm">{item}</span>
-                        </li>
+                        </ListRow>
                     ))}
                 </List>
             </div>
             <div className="rounded border border-border bg-surface">
                 <List horizontal>
                     {items.slice(0, 3).map((item) => (
-                        <li key={item} className={staticRowClass}>
+                        <ListRow key={item}>
                             <span className="text-sm">{item}</span>
-                        </li>
+                        </ListRow>
                     ))}
                 </List>
             </div>

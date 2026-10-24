@@ -20,6 +20,7 @@ O que muda em relação aos componentes atuais dele:
 - `DropdownItem` não tem mais a opção de virar botão do Inertia.
 - Mês e dias da semana vêm do idioma do `UiProvider`, não dos textos do Mylo.
 - Links soltos que dependiam do tamanho pequeno padrão precisam de `size`.
+- Linhas de lista montadas com `staticRowClass`, `coverRowClass` e `layerRowClass` passam a ser `ListRow`. Vale para o Loremy também.
 - Botões, chips, linhas de menu e avisos mudaram de tamanho para seguir a escala.
 - Texto dos botões médios passa de 14 para 16, e a linha de todo texto passa a ter a altura da fonte. Telas com espaçamento ajustado à mão em volta de texto precisam ser revistas.
 - A escolha de tema nas preferências passa a ser o `AppearancePicker`. O mesmo vale para o Loremy.
