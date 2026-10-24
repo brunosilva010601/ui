@@ -127,8 +127,6 @@ const animations = [
     'animate-slide-in-left',
 ];
 
-const sampleText = 'Ação Último ÉÃÇ gjpqy @#%&()[]{}| 1234 🍎';
-
 const heightRowClass = 'flex flex-wrap items-start gap-sm *:shrink-0';
 
 const choices = [
@@ -275,85 +273,6 @@ function ThemePage() {
                                 {weight}
                             </span>
                         ))}
-                    </div>
-                </Section>
-            </Section>
-            <Section title="Text box" collapsible remember="docs:text-box">
-                <Section
-                    variant="outlined"
-                    title="Single line"
-                    description="The box of each line is exactly the font size, with accents, descenders and symbols allowed to overflow it."
-                    meta="text-box: trim-both text"
-                    collapsible
-                >
-                    <div className="flex flex-col gap-md">
-                        {textSizes.map((size) => (
-                            <div key={size} className="flex items-center gap-md">
-                                <span className="w-16 shrink-0 font-mono text-xs text-foreground-muted">
-                                    {size}
-                                </span>
-                                <p className={size}>
-                                    {sampleText}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </Section>
-                <Section
-                    variant="outlined"
-                    title="Clipping"
-                    description="The same text inside elements that hide overflow, like truncated labels. Anything cut here is cut in the apps too."
-                    meta="truncate · overflow-hidden"
-                    collapsible
-                >
-                    <div className="flex flex-col gap-md">
-                        {['text-sm', 'text-base', 'text-2xl'].map((size) => (
-                            <p
-                                key={size}
-                                className={`${size} max-w-full truncate`}
-                            >
-                                {sampleText}
-                            </p>
-                        ))}
-                    </div>
-                </Section>
-                <Section
-                    variant="outlined"
-                    title="One line and a paragraph"
-                    description="The first and last lines are trimmed to the font size, while the lines inside keep their normal spacing."
-                    collapsible
-                >
-                    <div className="flex flex-wrap items-start gap-lg">
-                        <p className="text-sm">
-                            Só uma linha com acentuação.
-                        </p>
-                        <p className="max-w-xs text-sm">
-                            Um parágrafo mais longo, com acentuação e
-                            pontuação, que quebra em várias linhas para mostrar
-                            o espaço entre elas. Ação, coração, último, índice
-                            e pão.
-                        </p>
-                    </div>
-                </Section>
-                <Section
-                    variant="outlined"
-                    title="Inside components"
-                    description="Accented and descending text in the components that hold a single line."
-                    collapsible
-                >
-                    <div className={heightRowClass}>
-                        <Button>Ação Éjg</Button>
-                        <Button variant="outline" size="sm">
-                            Ação Éjg
-                        </Button>
-                        <Badge size="md">Ação Éjg</Badge>
-                        <Badge>Ação Éjg</Badge>
-                        <Input
-                            label="Field"
-                            hideLabel
-                            defaultValue="Ação Éjg"
-                            className="w-36"
-                        />
                     </div>
                 </Section>
             </Section>

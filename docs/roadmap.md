@@ -22,7 +22,6 @@ O que muda em relação aos componentes atuais dele:
 - Links soltos que dependiam do tamanho pequeno padrão precisam de `size`.
 - Linhas de lista montadas com `staticRowClass`, `coverRowClass` e `layerRowClass` passam a ser `ListRow`. Vale para o Loremy também.
 - Botões, chips, linhas de menu e avisos mudaram de tamanho para seguir a escala.
-- Texto dos botões médios passa de 14 para 16, e a linha de todo texto passa a ter a altura da fonte. Telas com espaçamento ajustado à mão em volta de texto precisam ser revistas.
 - A escolha de tema nas preferências passa a ser o `AppearancePicker`. O mesmo vale para o Loremy.
 - `ChipGroup` vira `ButtonGroup`, sempre com botões outline, com as mesmas `options`, `value`, `onChange` e `multiple`. Grupos que usavam `variant="ghost"` ou `variant="icon"` passam a ser outline. Itens personalizados usam `ButtonGroupItem`.
 - `Chip` sai. Etiqueta estática vira `Badge` (tons `neutral`, `primary`, `success`, `warning`, `danger`), e chip clicável vira `Button`. Vale para o Loremy também.

@@ -10,8 +10,8 @@ const tones = {
 };
 
 const sizes = {
-    sm: 'gap-2xs px-sm py-2xs text-xs leading-none [&_svg]:size-3',
-    md: 'gap-xs px-sm py-xs text-sm leading-none [&_svg]:size-icon-xs',
+    sm: 'gap-2xs px-sm py-2xs text-xs [&_svg]:size-3',
+    md: 'gap-xs px-sm py-xs text-sm [&_svg]:size-icon-xs',
 };
 
 type Props = {

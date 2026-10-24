@@ -163,7 +163,7 @@ export function NumberInput(props: Props) {
                         props.value !== '' && props.onChange(clamp(props.value))
                     }
                     onKeyDown={arrowKeys}
-                    className="min-w-0 bg-transparent py-sm text-center leading-5 font-semibold text-foreground tabular-nums outline-none"
+                    className="min-w-0 bg-transparent py-sm text-center font-semibold text-foreground tabular-nums outline-none"
                 />
                 {stepButton(size)}
             </div>

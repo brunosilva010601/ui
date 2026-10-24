@@ -41,7 +41,7 @@ const triggers = {
     row: `${menuRowClass} ${ghostHoverClass} w-full cursor-pointer text-left transition-colors`,
     listRow:
         'flex w-full cursor-pointer items-center gap-md p-md text-left text-sm transition-colors hover:bg-surface-hover focus-visible:-outline-offset-2 active:bg-surface-hover',
-    field: `${fieldClass} flex cursor-pointer items-center gap-sm text-left leading-5 **:[text-box:normal]`,
+    field: `${fieldClass} flex cursor-pointer items-center gap-sm text-left`,
     bar: 'flex min-w-0 flex-1 cursor-pointer flex-col items-center gap-xs px-xs py-sm text-xs font-semibold whitespace-nowrap text-foreground-muted transition-colors hover:text-foreground active:text-foreground',
 };
 
