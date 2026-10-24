@@ -39,19 +39,19 @@ const bleedBackdrop =
 
 const sizes = {
     md: {
-        text: '[--pad:var(--padding-lg)] px-(--pad) py-sm text-base',
-        textBleed: '-my-2.25',
-        square: '[--pad:var(--padding-sm)] p-(--pad)',
-        squareBleed: '-my-2.25',
-        link: 'text-base',
+        text: '[--pad:var(--padding-lg)] px-(--pad) py-md text-sm leading-4',
+        textBleed: '-my-3.25',
+        square: '[--pad:var(--padding-md)] p-(--pad)',
+        squareBleed: '-my-3.25',
+        link: 'text-sm',
         icon: "[&_svg:not([class*='size-'])]:size-icon-sm",
     },
     sm: {
-        text: '[--pad:var(--padding-lg)] px-(--pad) py-xs text-sm',
-        textBleed: '-my-1.25',
-        square: '[--pad:var(--padding-xs)] p-(--pad)',
-        squareBleed: '-my-1.25',
-        link: 'text-sm',
+        text: '[--pad:var(--padding-lg)] px-(--pad) py-sm text-xs leading-3.5',
+        textBleed: '-my-2.25',
+        square: '[--pad:var(--padding-sm)] p-(--pad)',
+        squareBleed: '-my-2.25',
+        link: 'text-xs',
         icon: "[&_svg:not([class*='size-'])]:size-icon-xs",
     },
 };

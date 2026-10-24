@@ -52,7 +52,7 @@ export function CodeInput(props: Props) {
                             <div
                                 key={index}
                                 className={cn(
-                                    'relative flex w-11 items-center justify-center rounded border border-border bg-control py-sm font-bold transition-shadow',
+                                    'relative flex w-11 items-center justify-center rounded border border-border bg-control py-md leading-4 font-bold transition-shadow',
                                     slot.isActive &&
                                         'border-primary ring-1 ring-primary',
                                     props.error && 'border-danger',

@@ -129,10 +129,7 @@ const animations = [
 
 const sampleText = 'Ação Último ÉÃÇ gjpqy @#%&()[]{}| 1234 🍎';
 
-const outlineClass = 'outline outline-1 outline-dashed outline-primary';
-
-const heightRowClass =
-    'flex flex-wrap items-start gap-sm *:shrink-0 *:outline *:outline-1 *:outline-dashed *:outline-primary';
+const heightRowClass = 'flex flex-wrap items-start gap-sm *:shrink-0';
 
 const choices = [
     { value: 'a', label: 'Option A' },
@@ -285,7 +282,7 @@ function ThemePage() {
                 <Section
                     variant="outlined"
                     title="Single line"
-                    description="Each line is outlined. The box should be exactly the font size, with accents, descenders and symbols allowed to overflow it."
+                    description="The box of each line is exactly the font size, with accents, descenders and symbols allowed to overflow it."
                     meta="text-box: trim-both text"
                     collapsible
                 >
@@ -295,7 +292,7 @@ function ThemePage() {
                                 <span className="w-16 shrink-0 font-mono text-xs text-foreground-muted">
                                     {size}
                                 </span>
-                                <p className={`${size} ${outlineClass}`}>
+                                <p className={size}>
                                     {sampleText}
                                 </p>
                             </div>
@@ -313,7 +310,7 @@ function ThemePage() {
                         {['text-sm', 'text-base', 'text-2xl'].map((size) => (
                             <p
                                 key={size}
-                                className={`${size} max-w-full truncate ${outlineClass}`}
+                                className={`${size} max-w-full truncate`}
                             >
                                 {sampleText}
                             </p>
@@ -327,10 +324,10 @@ function ThemePage() {
                     collapsible
                 >
                     <div className="flex flex-wrap items-start gap-lg">
-                        <p className={`text-sm ${outlineClass}`}>
+                        <p className="text-sm">
                             Só uma linha com acentuação.
                         </p>
-                        <p className={`max-w-xs text-sm ${outlineClass}`}>
+                        <p className="max-w-xs text-sm">
                             Um parágrafo mais longo, com acentuação e
                             pontuação, que quebra em várias linhas para mostrar
                             o espaço entre elas. Ação, coração, último, índice
@@ -344,7 +341,7 @@ function ThemePage() {
                     description="Accented and descending text in the components that hold a single line."
                     collapsible
                 >
-                    <div className="flex flex-wrap items-start gap-sm *:shrink-0 *:outline *:outline-1 *:outline-dashed *:outline-primary">
+                    <div className={heightRowClass}>
                         <Button>Ação Éjg</Button>
                         <Button variant="outline" size="sm">
                             Ação Éjg
@@ -364,7 +361,7 @@ function ThemePage() {
                 <Section
                     variant="outlined"
                     title="Side by side"
-                    description="Every control is outlined, aligned at the top, so the bottoms show any difference in height. Height comes from padding, font size and a 1 px border, which is transparent when it is not visible."
+                    description="Controls aligned at the top, so the bottoms show any difference in height. Height comes from padding, line height and a 1 px border, which is transparent when it is not visible."
                     meta="padding + font size + border"
                     collapsible
                 >

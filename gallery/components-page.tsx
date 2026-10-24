@@ -277,6 +277,19 @@ function ButtonDemo() {
                     ))}
                 </div>
             ))}
+            <div className="flex flex-col gap-sm">
+                <span className={caption}>edge cases</span>
+                <div className="flex flex-wrap items-start gap-sm">
+                    <Button>
+                        <Plus className="size-10" />
+                        Big icon
+                    </Button>
+                    <Button className="max-w-40 whitespace-normal">
+                        A longer label that wraps onto two lines
+                    </Button>
+                    <Button>Normal</Button>
+                </div>
+            </div>
             <p className="text-sm">
                 A link inside a sentence:{' '}
                 <Button variant="link" asChild>
