@@ -9,6 +9,16 @@
 
 O pacote é publicado como código TypeScript, sem etapa de build, com duas entradas: `ui` (componentes) e `ui/theme.css` (tema).
 
+## Instalar
+
+O pacote vive no repositório privado `brunosilva010601/ui`, e cada versão é uma tag do git. O app aponta para uma tag no `package.json` e sobe de versão trocando a tag:
+
+```json
+"ui": "github:brunosilva010601/ui#v0.1.0"
+```
+
+Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no pacote aparecem na hora. Como o repositório é privado, o ambiente de deploy de cada app precisa de acesso a ele (chave ou token do GitHub).
+
 ## Ligar num app
 
 1. No CSS do app, importar o Tailwind e depois o tema. Em seguida, sobrescrever as variáveis da cor principal no claro (`:root, .light`) e no escuro (`.dark`).

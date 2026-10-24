@@ -2,7 +2,6 @@
 
 ## Pacote
 
-- Criar o repositório no GitHub e definir como os apps instalam o pacote.
 - Escolher o nome definitivo do pacote, hoje `ui`.
 - Renomear a pasta `gallery`, provavelmente para `docs`.
 - O espaço livre no topo das gavetas que sobem de baixo no celular está fora da escala (`src/modal.tsx`).

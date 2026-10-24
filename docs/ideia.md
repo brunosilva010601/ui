@@ -12,4 +12,4 @@ A cor principal é de cada projeto, sobrescrita no CSS do próprio app. Superfí
 
 ## Adoção
 
-Os apps só passam a usar o pacote quando ele estiver pronto, e pronto não significa igual ao Mylo. Até lá, ajustes, limpezas e extrações acontecem aqui. Depois, a adoção é feita devagar, um projeto por vez.
+A adoção começa já, um projeto por vez. Os ajustes, limpezas e extrações continuam acontecendo aqui, conforme os problemas aparecem no uso, e chegam aos apps a cada nova versão.
