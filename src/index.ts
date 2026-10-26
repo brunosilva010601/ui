@@ -47,6 +47,7 @@ export * from './progress-bar';
 export * from './provider';
 export * from './section';
 export * from './skeleton';
+export * from './sortable';
 export * from './spinner';
 export * from './stat';
 export * from './tabs';

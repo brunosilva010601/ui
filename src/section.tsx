@@ -9,6 +9,7 @@ import { Hint } from './hint';
 import { IconBadge } from './icon-badge';
 import { cn } from './lib/utils';
 import { useUi } from './provider';
+import { SortHandle, sortItemClass } from './sortable';
 
 const variants = {
     flat: 'flex flex-col gap-md [--row-surface:var(--color-background)]',
@@ -32,6 +33,7 @@ type SectionProps = {
     collapsed?: boolean;
     remember?: string;
     menu?: { label: string; items: ReactNode };
+    sortId?: string;
     flush?: boolean;
     onClick?: () => void;
     href?: string;
@@ -136,6 +138,7 @@ type BandHeaderProps = {
     onToggle: () => void;
     action?: ReactNode;
     menu?: SectionProps['menu'];
+    sortable: boolean;
 };
 
 function BandHeader(props: BandHeaderProps) {
@@ -144,7 +147,7 @@ function BandHeader(props: BandHeaderProps) {
     return (
         <div
             className={cn(
-                'group/band relative -mx-(--row-inset) flex items-center gap-sm py-sm',
+                'group/band group/sort relative -mx-(--row-inset) flex items-center gap-sm py-sm',
                 sectionPadding.x,
             )}
         >
@@ -154,6 +157,7 @@ function BandHeader(props: BandHeaderProps) {
                 onClick={props.onToggle}
                 className="absolute inset-0 cursor-pointer"
             />
+            {props.sortable && <SortHandle />}
             <Chevron className="pointer-events-none relative size-icon-sm shrink-0 text-foreground-muted" />
             <h2 className="pointer-events-none relative min-w-0 truncate font-semibold">
                 {props.title}
@@ -215,6 +219,7 @@ export function Section(props: SectionProps) {
             onToggle={() => setOpen(!open)}
             action={props.action}
             menu={props.menu}
+            sortable={props.sortId !== undefined}
         />
     ) : (
         hasHeader && (
@@ -298,8 +303,13 @@ export function Section(props: SectionProps) {
 
     return (
         <section
+            data-sort-id={props.sortId}
             className={cn(
                 band ? bandClass : variants[variant],
+                props.sortId !== undefined && [
+                    sortItemClass,
+                    'data-[dragging]:bg-background',
+                ],
                 isOutlined && props.flush && 'overflow-clip',
                 isClickable &&
                     'relative transition-colors hover:bg-surface-hover active:bg-surface-hover',

@@ -6,6 +6,7 @@ import { DropdownMenu } from './dropdown-menu';
 import { useHold } from './hold';
 import { cn } from './lib/utils';
 import { useUi } from './provider';
+import { SortHandle, SortProvider, sortItemClass, useSortable } from './sortable';
 
 const variants = {
     divided: 'divide-y divide-border',
@@ -73,6 +74,7 @@ function ItemLayer(props: ItemLayerProps) {
 }
 
 type ListItemProps = ItemLayerProps & {
+    sortId?: string;
     selected?: boolean;
     active?: boolean;
     menu?: ListItemMenu;
@@ -111,7 +113,7 @@ export function ListItem(props: ListItemProps) {
     const body = (
         <div
             className={cn(
-                'group relative flex items-center transition-colors',
+                'group group/sort relative flex items-center transition-colors',
                 itemVariants[variant],
                 props.selected
                     ? 'bg-primary/20'
@@ -129,6 +131,7 @@ export function ListItem(props: ListItemProps) {
                 href={props.href}
                 external={props.external}
             />
+            {props.sortId !== undefined && <SortHandle />}
             <div
                 className={cn(
                     'relative flex min-w-0 flex-1 items-center gap-md',
@@ -144,7 +147,10 @@ export function ListItem(props: ListItemProps) {
     );
 
     return (
-        <li>
+        <li
+            data-sort-id={props.sortId}
+            className={props.sortId !== undefined ? sortItemClass : undefined}
+        >
             {menu ? (
                 <DropdownMenu
                     label={menu.label}
@@ -166,15 +172,22 @@ type ListProps = {
     bleed?: boolean;
     columns?: boolean;
     horizontal?: boolean;
+    organizing?: boolean;
+    onReorder?: (ids: string[]) => void;
     children: ReactNode;
 };
 
+function keepOrder() {}
+
 export function List(props: ListProps) {
     const variant = props.variant ?? 'divided';
+    const sortable = useSortable(props.onReorder ?? keepOrder);
 
     return (
         <VariantContext value={variant}>
+            <SortProvider organizing={props.organizing ?? false}>
             <ul
+                ref={props.onReorder ? sortable : undefined}
                 className={cn(
                     props.bleed &&
                         '-mx-(--row-inset) [--row-inset:var(--bleed,var(--padding-md))]',
@@ -187,6 +200,7 @@ export function List(props: ListProps) {
             >
                 {props.children}
             </ul>
+            </SortProvider>
         </VariantContext>
     );
 }

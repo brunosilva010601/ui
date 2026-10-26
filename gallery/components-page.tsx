@@ -1239,6 +1239,8 @@ function SectionDemo() {
 
 function ListDemo() {
     const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+    const [sorted, setSorted] = useState(items);
+    const [organizing, setOrganizing] = useState(false);
     const menuItems = (
         <>
             <DropdownItem asChild>
@@ -1261,7 +1263,7 @@ function ListDemo() {
             variant="outlined"
             title="List"
             description="The list is only the frame: padding, dividers or cards, hover, the active and selected states, the click of the whole row and the row menu. What goes inside each item is free and belongs to the app. Divided, cards or bare; the menu opens by holding, right clicking or the ellipsis, which sits at the end of the row or floats over it on hover."
-            meta="List variant · bleed · columns · horizontal · ListItem onClick · href · external · active · selected · menu"
+            meta="List variant · bleed · columns · horizontal · onReorder · organizing · ListItem onClick · href · external · active · selected · menu · sortId"
             collapsible
             collapsed
             remember="docs:list"
@@ -1312,6 +1314,26 @@ function ListDemo() {
                     >
                         <span className="text-sm">Selected item</span>
                     </ListItem>
+                </List>
+            </div>
+            <span className={caption}>onReorder · organizing · sortId</span>
+            <div>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    selected={organizing}
+                    onClick={() => setOrganizing(!organizing)}
+                >
+                    organizing
+                </Button>
+            </div>
+            <div className="overflow-hidden rounded border border-border bg-surface">
+                <List organizing={organizing} onReorder={setSorted}>
+                    {sorted.map((item) => (
+                        <ListItem key={item} sortId={item}>
+                            <span className="text-sm">{item}</span>
+                        </ListItem>
+                    ))}
                 </List>
             </div>
             <span className={caption}>variant="cards"</span>
