@@ -41,15 +41,13 @@ import {
     Form,
     FormActions,
     Heading,
-    HeldMenu,
     Hint,
     IconBadge,
     IconToggle,
     ImageViewer,
     Input,
-    layerRowClass,
     List,
-    ListRow,
+    ListItem,
     Markdown,
     Modal,
     ModalFooter,
@@ -199,7 +197,6 @@ export function ComponentsPage() {
                 <ModalDemo />
                 <ConfirmDialogDemo />
                 <DropdownMenuDemo />
-                <HeldMenuDemo />
                 <HintDemo />
                 <ImageViewerDemo />
                 <BackdropDemo />
@@ -1237,80 +1234,115 @@ function SectionDemo() {
 
 function ListDemo() {
     const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+    const menuItems = (
+        <>
+            <DropdownItem asChild>
+                <button type="button">
+                    <Pencil />
+                    Edit
+                </button>
+            </DropdownItem>
+            <DropdownItem asChild>
+                <button type="button">
+                    <Trash2 />
+                    Delete
+                </button>
+            </DropdownItem>
+        </>
+    );
 
     return (
         <Section
             variant="outlined"
             title="List"
-            description="Divided rows. Each ListRow has a leading slot, free content and actions at the end; the package sets padding, spacing, hover and click, the content is the app's. Rows can be static, clickable, or clickable with actions, in columns on wide screens or horizontal."
-            meta="List columns · horizontal · bleed · ListRow leading · actions · onClick · href"
+            description="The list is only the frame: padding, dividers or cards, hover, the active and selected states, the click of the whole row and the row menu. What goes inside each item is free and belongs to the app. Divided, cards or bare; the menu opens by holding, right clicking or the ellipsis, which sits at the end of the row or floats over it on hover."
+            meta="List variant · bleed · columns · horizontal · ListItem onClick · href · external · active · selected · menu"
             collapsible
             collapsed
             remember="docs:list"
         >
-            <div className="rounded border border-border bg-surface">
+            <div className="overflow-hidden rounded border border-border bg-surface">
                 <List>
-                    <ListRow leading={<ColorDot color="sky" />}>
-                        <span className="text-sm">Static row</span>
-                    </ListRow>
-                    <ListRow
-                        leading={<IconBadge icon={Inbox} size="sm" />}
-                        onClick={() => notify({ title: 'Row clicked' })}
+                    <ListItem>
+                        <span className="text-sm">Static item</span>
+                    </ListItem>
+                    <ListItem onClick={() => notify({ title: 'Item clicked' })}>
+                        <IconBadge icon={Inbox} size="sm" />
+                        <span className="flex-1 text-sm">Clickable item</span>
+                        <Badge>3</Badge>
+                    </ListItem>
+                    <ListItem
+                        onClick={() => notify({ title: 'Item clicked' })}
+                        menu={{ label: 'Options', items: menuItems }}
                     >
-                        <span className="text-sm">Clickable row</span>
-                    </ListRow>
-                    <ListRow
-                        leading={<Avatar name="Example" size="sm" />}
-                        onClick={() => notify({ title: 'Row clicked' })}
-                        actions={
-                            <>
-                                <Badge>3</Badge>
-                                <Button variant="ghost" size="sm" square bleed>
-                                    <Pencil />
-                                </Button>
-                                <Button variant="ghost" size="sm" square bleed>
-                                    <Trash2 />
-                                </Button>
-                            </>
-                        }
+                        <Avatar name="Example" size="sm" />
+                        <span className="flex-1 text-sm">With a menu</span>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            square
+                            bleed
+                            onClick={() => notify({ title: 'Button clicked' })}
+                        >
+                            <Pencil />
+                        </Button>
+                    </ListItem>
+                    <ListItem
+                        onClick={() => notify({ title: 'Item clicked' })}
+                        menu={{ label: 'Options', items: menuItems, hover: true }}
                     >
-                        <span className="text-sm">Clickable with actions</span>
-                    </ListRow>
-                    <ListRow
-                        leading={<ColorDot color="rose" />}
-                        actions={
-                            <Button variant="outline" size="sm">
-                                Action
-                            </Button>
-                        }
+                        <span className="flex-1 text-sm">
+                            Menu on hover
+                        </span>
+                    </ListItem>
+                    <ListItem
+                        active
+                        onClick={() => notify({ title: 'Item clicked' })}
                     >
-                        <div className="flex flex-col gap-xs">
-                            <span className="text-sm font-semibold">
-                                Two lines of content
-                            </span>
-                            <span className="text-sm text-foreground-muted">
-                                A longer description that may wrap onto more
-                                lines when the row is narrow.
-                            </span>
-                        </div>
-                    </ListRow>
+                        <span className="text-sm">Active item</span>
+                    </ListItem>
+                    <ListItem
+                        selected
+                        onClick={() => notify({ title: 'Item clicked' })}
+                    >
+                        <span className="text-sm">Selected item</span>
+                    </ListItem>
                 </List>
             </div>
+            <span className={caption}>variant="cards"</span>
+            <List variant="cards">
+                {items.map((item) => (
+                    <ListItem
+                        key={item}
+                        onClick={() => notify({ title: item })}
+                    >
+                        <span className="text-sm">{item}</span>
+                    </ListItem>
+                ))}
+            </List>
+            <span className={caption}>variant="bare"</span>
+            <List variant="bare">
+                {items.slice(0, 2).map((item) => (
+                    <ListItem key={item}>
+                        <span className="text-sm">{item}</span>
+                    </ListItem>
+                ))}
+            </List>
             <div className="overflow-hidden rounded border border-border bg-surface">
                 <List columns>
                     {items.map((item) => (
-                        <ListRow key={item}>
+                        <ListItem key={item}>
                             <span className="text-sm">{item}</span>
-                        </ListRow>
+                        </ListItem>
                     ))}
                 </List>
             </div>
             <div className="rounded border border-border bg-surface">
                 <List horizontal>
                     {items.slice(0, 3).map((item) => (
-                        <ListRow key={item}>
+                        <ListItem key={item}>
                             <span className="text-sm">{item}</span>
-                        </ListRow>
+                        </ListItem>
                     ))}
                 </List>
             </div>
@@ -1607,72 +1639,6 @@ function DropdownMenuDemo() {
                     <button type="button">Item 2</button>
                 </DropdownItem>
             </DropdownMenu>
-        </Section>
-    );
-}
-
-function HeldMenuDemo() {
-    return (
-        <Section
-            variant="outlined"
-            title="HeldMenu"
-            description="Row menu opened by holding, right clicking or the ellipsis. The ellipsis sits at the end of the row, or floats over it on hover."
-            meta="label · row · hover · bare · onHold"
-            collapsible
-            collapsed
-            remember="docs:held-menu"
-        >
-            <div className="rounded border border-border bg-surface">
-                <List>
-                    <li>
-                        <HeldMenu
-                            label="Options"
-                            row={
-                                <div className={layerRowClass}>
-                                    <span className="text-sm">Row</span>
-                                </div>
-                            }
-                        >
-                            <DropdownItem asChild>
-                                <button type="button">
-                                    <Pencil />
-                                    Edit
-                                </button>
-                            </DropdownItem>
-                            <DropdownItem asChild>
-                                <button type="button">
-                                    <Trash2 />
-                                    Delete
-                                </button>
-                            </DropdownItem>
-                        </HeldMenu>
-                    </li>
-                    <li>
-                        <HeldMenu
-                            label="Options"
-                            hover
-                            row={
-                                <div className={layerRowClass}>
-                                    <span className="text-sm">Row with hover</span>
-                                </div>
-                            }
-                        >
-                            <DropdownItem asChild>
-                                <button type="button">
-                                    <Pencil />
-                                    Edit
-                                </button>
-                            </DropdownItem>
-                            <DropdownItem asChild>
-                                <button type="button">
-                                    <Trash2 />
-                                    Delete
-                                </button>
-                            </DropdownItem>
-                        </HeldMenu>
-                    </li>
-                </List>
-            </div>
         </Section>
     );
 }

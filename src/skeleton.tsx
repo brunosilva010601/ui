@@ -1,5 +1,4 @@
 import { cn } from './lib/utils';
-import { staticRowClass } from './list';
 
 const shapes = {
     fill: '',
@@ -30,8 +29,7 @@ export function SectionSkeleton() {
         <div
             role="status"
             className={cn(
-                staticRowClass,
-                'rounded border border-border bg-surface',
+                'flex items-center gap-md rounded border border-border bg-surface px-(--row-inset) py-md',
             )}
         >
             <Skeleton shape="avatar" />

@@ -14,13 +14,12 @@
 O Mylo já usa o pacote. O que ele tinha e o pacote ainda não tem:
 
 - A gaveta curta (`fit`) abrindo como janela no centro no computador (`Modal`), do commit `64ae37b` do Mylo.
-- `ListRow` não cobre as linhas do Mylo que ficam dentro de um `HeldMenu`, que abrem link externo ou que levam `aria-expanded`; elas continuam com `coverRowClass`, `layerRowClass` e `staticRowClass`.
 - O `Markdown` traz o realce de código para todo app que o usa. Na troca, o JavaScript do Mylo cresceu cerca de 57 kB.
 
 ## Adoção pelo Loremy
 
 - A escolha de tema nas preferências passa a ser o `AppearancePicker`.
-- Linhas de lista montadas com `staticRowClass`, `coverRowClass` e `layerRowClass` passam a ser `ListRow`.
+- Linhas de lista montadas com `staticRowClass`, `coverRowClass` e `layerRowClass` passam a ser `ListItem`, com o conteúdo de cada linha montado no próprio Loremy.
 - `Chip` sai. Etiqueta estática vira `Badge` (tons `neutral`, `primary`, `success`, `warning`, `danger`), e chip clicável vira `Button`.
 
 - Os links de crédito com `variant="inline"` passam a usar `variant="link"`.

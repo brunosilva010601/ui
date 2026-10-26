@@ -31,7 +31,6 @@ export * from './form/select';
 export * from './form/switch';
 export * from './form/textarea';
 export * from './heading';
-export * from './held-menu';
 export * from './hint';
 export * from './hold';
 export * from './icon-badge';
