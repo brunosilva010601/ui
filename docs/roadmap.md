@@ -13,7 +13,6 @@
 
 O Mylo já usa o pacote. O que ele tinha e o pacote ainda não tem:
 
-- O ⋯ da linha com menu fazendo parte do realce e do destaque da linha (`HeldMenu`), do commit `c8ffa7f` do Mylo.
 - A gaveta curta (`fit`) abrindo como janela no centro no computador (`Modal`), do commit `64ae37b` do Mylo.
 - `ListRow` não cobre as linhas do Mylo que ficam dentro de um `HeldMenu`, que abrem link externo ou que levam `aria-expanded`; elas continuam com `coverRowClass`, `layerRowClass` e `staticRowClass`.
 - O `Markdown` traz o realce de código para todo app que o usa. Na troca, o JavaScript do Mylo cresceu cerca de 57 kB.

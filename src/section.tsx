@@ -223,7 +223,6 @@ export function Section(props: SectionProps) {
                     'flex items-center gap-md',
                     headerPadding,
                     (headerLink || collapsible) && 'relative',
-                    props.menu && 'bg-surface',
                 )}
             >
                 {headerLink &&
