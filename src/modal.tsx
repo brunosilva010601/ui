@@ -407,81 +407,94 @@ function usePullToClose(
     }, [element, active]);
 }
 
-const formats = {
+export type ModalMobile = 'dialog' | 'top' | 'left' | 'right' | 'sheet' | 'full';
+
+export type ModalDesktop = 'dialog' | 'top' | 'left' | 'right';
+
+type Layout = {
+    overlay: string;
+    panel: string;
+};
+
+const desktopFor: Record<ModalMobile, ModalDesktop> = {
+    dialog: 'dialog',
+    top: 'top',
+    left: 'left',
+    right: 'right',
+    sheet: 'dialog',
+    full: 'right',
+};
+
+const mobileLayouts: Record<ModalMobile, Layout> = {
     dialog: {
         overlay:
-            'data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in items-center justify-center p-md pt-[max(var(--padding-md),env(safe-area-inset-top))] pb-[max(var(--padding-md),env(safe-area-inset-bottom))]',
-        panel: 'max-h-full w-full',
-        motion: 'data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in',
+            'max-sm:items-center max-sm:justify-center max-sm:p-md max-sm:pt-[max(var(--padding-md),env(safe-area-inset-top))] max-sm:pb-[max(var(--padding-md),env(safe-area-inset-bottom))] max-sm:data-[state=closed]:animate-fade-out max-sm:data-[state=open]:animate-fade-in',
+        panel: 'max-sm:max-h-full max-sm:w-full max-sm:data-[state=closed]:animate-pop-out max-sm:data-[state=open]:animate-pop-in',
     },
-};
-
-type Format = 'dialog' | 'drawer';
-
-const drawerOverlay =
-    'data-[state=closed]:animate-drawer-overlay-out data-[state=open]:animate-drawer-overlay-in';
-
-const drawers = {
+    top: {
+        overlay:
+            'max-sm:items-start max-sm:justify-center max-sm:p-md max-sm:pt-[max(var(--padding-md),env(safe-area-inset-top))] max-sm:pb-[max(var(--padding-md),env(safe-area-inset-bottom))] max-sm:data-[state=closed]:animate-fade-out max-sm:data-[state=open]:animate-fade-in',
+        panel: 'max-sm:max-h-full max-sm:w-full max-sm:data-[state=closed]:animate-pop-out max-sm:data-[state=open]:animate-pop-in',
+    },
+    left: {
+        overlay:
+            'max-sm:justify-start max-sm:p-(--drawer-gap) max-sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] max-sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
+        panel: 'max-sm:h-full max-sm:w-full max-sm:max-w-xs max-sm:data-[state=closed]:animate-slide-out-left max-sm:data-[state=open]:animate-slide-in-left',
+    },
+    right: {
+        overlay:
+            'max-sm:justify-end max-sm:p-(--drawer-gap) max-sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] max-sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
+        panel: 'max-sm:h-full max-sm:w-full max-sm:max-w-xs max-sm:data-[state=closed]:animate-slide-out-right max-sm:data-[state=open]:animate-slide-in-right',
+    },
     sheet: {
-        right: {
-            overlay: `${drawerOverlay} flex-col justify-end pt-[max(--spacing(14),env(safe-area-inset-top))] sm:flex-row sm:p-(--drawer-gap) sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))]`,
-            panel: 'h-full w-full rounded-b-none border-b-0 sm:max-w-md sm:rounded-b sm:border-b',
-            motion: 'data-[state=closed]:animate-slide-out-bottom data-[state=open]:animate-slide-in-bottom sm:data-[state=closed]:animate-slide-out-right sm:data-[state=open]:animate-slide-in-right',
-        },
-        left: {
-            overlay: `${drawerOverlay} flex-col justify-end pt-[max(--spacing(14),env(safe-area-inset-top))] sm:flex-row sm:justify-start sm:p-(--drawer-gap) sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))]`,
-            panel: 'h-full w-full rounded-b-none border-b-0 sm:max-w-md sm:rounded-b sm:border-b',
-            motion: 'data-[state=closed]:animate-slide-out-bottom data-[state=open]:animate-slide-in-bottom sm:data-[state=closed]:animate-slide-out-left sm:data-[state=open]:animate-slide-in-left',
-        },
+        overlay:
+            'max-sm:flex-col max-sm:justify-end max-sm:pt-[max(--spacing(14),env(safe-area-inset-top))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
+        panel: 'max-sm:max-h-full max-sm:min-h-1/3 max-sm:w-full max-sm:rounded-b-none max-sm:border-b-0 max-sm:data-[state=closed]:animate-slide-out-bottom max-sm:data-[state=open]:animate-slide-in-bottom',
     },
-    panel: {
-        right: {
-            overlay: `${drawerOverlay} flex-row justify-end p-(--drawer-gap) pt-[max(var(--drawer-gap),env(safe-area-inset-top))] pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))]`,
-            panel: 'h-full w-full max-w-xs sm:max-w-md',
-            motion: 'data-[state=closed]:animate-slide-out-right data-[state=open]:animate-slide-in-right',
-        },
-        left: {
-            overlay: `${drawerOverlay} flex-row justify-start p-(--drawer-gap) pt-[max(var(--drawer-gap),env(safe-area-inset-top))] pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))]`,
-            panel: 'h-full w-full max-w-xs sm:max-w-md',
-            motion: 'data-[state=closed]:animate-slide-out-left data-[state=open]:animate-slide-in-left',
-        },
+    full: {
+        overlay:
+            'max-sm:flex-col max-sm:justify-end max-sm:pt-[max(--spacing(14),env(safe-area-inset-top))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
+        panel: 'max-sm:h-full max-sm:w-full max-sm:rounded-b-none max-sm:border-b-0 max-sm:data-[state=closed]:animate-slide-out-bottom max-sm:data-[state=open]:animate-slide-in-bottom',
     },
 };
 
-const topDrawer = {
-    overlay: `${drawerOverlay} flex-col justify-end pt-[max(--spacing(14),env(safe-area-inset-top))] sm:items-center sm:justify-start sm:p-md sm:pt-[12vh]`,
-    panel: 'h-full w-full rounded-b-none border-b-0 sm:h-auto sm:max-w-lg sm:rounded-b sm:border-b',
-    motion: 'data-[state=closed]:animate-slide-out-bottom data-[state=open]:animate-slide-in-bottom sm:data-[state=closed]:animate-pop-out sm:data-[state=open]:animate-pop-in',
+const desktopLayouts: Record<ModalDesktop, Layout> = {
+    dialog: {
+        overlay:
+            'sm:items-center sm:justify-center sm:p-md sm:pt-[max(var(--padding-md),env(safe-area-inset-top))] sm:pb-[max(var(--padding-md),env(safe-area-inset-bottom))] sm:data-[state=closed]:animate-fade-out sm:data-[state=open]:animate-fade-in',
+        panel: 'sm:max-h-full sm:w-full sm:data-[state=closed]:animate-pop-out sm:data-[state=open]:animate-pop-in',
+    },
+    top: {
+        overlay:
+            'sm:items-start sm:justify-center sm:p-md sm:pt-[12vh] sm:data-[state=closed]:animate-fade-out sm:data-[state=open]:animate-fade-in',
+        panel: 'sm:max-h-full sm:w-full sm:data-[state=closed]:animate-pop-out sm:data-[state=open]:animate-pop-in',
+    },
+    left: {
+        overlay:
+            'sm:justify-start sm:p-(--drawer-gap) sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))] sm:data-[state=closed]:animate-drawer-overlay-out sm:data-[state=open]:animate-drawer-overlay-in',
+        panel: 'sm:h-full sm:w-full sm:max-w-md sm:data-[state=closed]:animate-slide-out-left sm:data-[state=open]:animate-slide-in-left',
+    },
+    right: {
+        overlay:
+            'sm:justify-end sm:p-(--drawer-gap) sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))] sm:data-[state=closed]:animate-drawer-overlay-out sm:data-[state=open]:animate-drawer-overlay-in',
+        panel: 'sm:h-full sm:w-full sm:max-w-md sm:data-[state=closed]:animate-slide-out-right sm:data-[state=open]:animate-slide-in-right',
+    },
 };
+
+const centered: ModalDesktop[] = ['dialog', 'top'];
 
 function isSheet(props: ModalProps): boolean {
-    return (
-        props.format === 'drawer' &&
-        (props.side === 'top' || props.mobile !== 'panel')
-    );
-}
-
-function formatOf(props: ModalProps) {
-    if (props.format !== 'drawer') {
-        return formats.dialog;
-    }
-
-    return props.side === 'top'
-        ? topDrawer
-        : drawers[props.mobile ?? 'sheet'][props.side ?? 'right'];
+    return props.mobile === 'sheet' || props.mobile === 'full';
 }
 
 type ModalProps = {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     trigger?: ReactNode;
-    format?: Format;
-    side?: 'left' | 'right' | 'top';
-    mobile?: 'sheet' | 'panel';
+    mobile?: ModalMobile;
+    desktop?: ModalDesktop;
     className?: string;
     bare?: boolean;
-    fit?: boolean;
-    top?: boolean;
     actions?: ReactNode;
     hideClose?: boolean;
     title?: ReactNode;
@@ -513,8 +526,10 @@ export function Modal(props: ModalProps) {
 }
 
 function ModalPanel(props: ModalProps) {
-    const formatName = props.format ?? 'dialog';
-    const format = formatOf(props);
+    const mobile = props.mobile ?? 'dialog';
+    const desktop = props.desktop ?? desktopFor[mobile];
+    const small = mobileLayouts[mobile];
+    const wide = desktopLayouts[desktop];
     const sheet = isSheet(props);
     const closeButton = useRef<HTMLButtonElement>(null);
     const content = useRef<HTMLDivElement>(null);
@@ -534,9 +549,9 @@ function ModalPanel(props: ModalProps) {
                 className={cn(
                     'fixed inset-0 z-50 flex',
                     backdropClass,
-                    format.overlay,
+                    small.overlay,
+                    wide.overlay,
                     props.bare && 'backdrop-blur-md lg:p-xl',
-                    props.top && 'items-start sm:pt-[12vh]',
                 )}
             >
                 <DialogPrimitive.Content
@@ -563,13 +578,13 @@ function ModalPanel(props: ModalProps) {
                             ? 'pointer-events-none! h-full data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in'
                             : [
                                   'overflow-hidden rounded border border-border bg-background shadow-xl transition-transform duration-200 ease-drawer',
-                                  sheet &&
-                                      props.fit &&
-                                      'max-sm:h-auto max-sm:max-h-full max-sm:min-h-1/3',
-                                  format.motion,
-                                  formatName === 'dialog' && 'max-w-lg',
+                                  small.panel,
+                                  wide.panel,
+                                  (centered.includes(desktop) ||
+                                      mobile === 'dialog' ||
+                                      mobile === 'top') &&
+                                      'max-w-lg',
                               ],
-                        format.panel,
                         props.className,
                     )}
                 >
@@ -582,7 +597,7 @@ function ModalPanel(props: ModalProps) {
                     {props.bare ? (
                         <BareBody {...props} />
                     ) : (
-                        <FramedBody {...props} format={formatName} />
+                        <FramedBody {...props} />
                     )}
                 </DialogPrimitive.Content>
             </DialogPrimitive.Overlay>
@@ -611,10 +626,6 @@ function BareBody(props: ModalProps) {
     );
 }
 
-type FramedBodyProps = ModalProps & {
-    format: Format;
-};
-
 type ModalCloseButtonProps = {
     className?: string;
 };
@@ -632,7 +643,7 @@ export function ModalCloseButton(props: ModalCloseButtonProps) {
     );
 }
 
-function FramedBody(props: FramedBodyProps) {
+function FramedBody(props: ModalProps) {
     const isDrawer = isSheet(props);
     const [footer, setFooter] = useState<HTMLDivElement | null>(null);
     const close = !props.hideClose && (

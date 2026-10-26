@@ -13,7 +13,6 @@
 
 O Mylo já usa o pacote. O que ele tinha e o pacote ainda não tem:
 
-- A gaveta curta (`fit`) abrindo como janela no centro no computador (`Modal`), do commit `64ae37b` do Mylo.
 - O `Markdown` traz o realce de código para todo app que o usa. Na troca, o JavaScript do Mylo cresceu cerca de 57 kB.
 
 ## Adoção pelo Loremy
@@ -26,4 +25,5 @@ O Mylo já usa o pacote. O que ele tinha e o pacote ainda não tem:
 - O `RemoveButton` saiu do pacote. Cada uso vira um `Button` ghost, quadrado, com `bleed` e o ícone de lixeira.
 - As cores de avaliação continuam no CSS do próprio Loremy.
 - A modal do trailer troca `width="lg"` por `className="max-w-4xl"`.
+- As gavetas (`format="drawer"`) passam a ser `mobile="full"`: sobem de baixo no celular e viram painel à direita no computador.
 - As faixas dos carrosséis (prateleira de itens e colaboradores) passam a ser `CarouselTrack`, que já esmaece as bordas. Hoje só a prateleira esmaece, por conta própria.

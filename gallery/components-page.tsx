@@ -72,7 +72,12 @@ import {
     useHold,
     useOverflowing,
 } from '../src';
-import type { Appearance, PaletteColor } from '../src';
+import type {
+    Appearance,
+    ModalDesktop,
+    ModalMobile,
+    PaletteColor,
+} from '../src';
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -1456,6 +1461,23 @@ function CarouselDemo() {
     );
 }
 
+const modalCases: {
+    label: string;
+    mobile?: ModalMobile;
+    desktop?: ModalDesktop;
+}[] = [
+    { label: 'dialog' },
+    { label: 'top', mobile: 'top' },
+    { label: 'left', mobile: 'left' },
+    { label: 'right', mobile: 'right' },
+    { label: 'sheet', mobile: 'sheet' },
+    { label: 'full', mobile: 'full' },
+    { label: 'sheet · desktop right', mobile: 'sheet', desktop: 'right' },
+    { label: 'full · desktop dialog', mobile: 'full', desktop: 'dialog' },
+    { label: 'full · desktop left', mobile: 'full', desktop: 'left' },
+    { label: 'full · desktop top', mobile: 'full', desktop: 'top' },
+];
+
 function ModalDemo() {
     const [open, setOpen] = useState<string | null>(null);
     const close = () => setOpen(null);
@@ -1464,72 +1486,46 @@ function ModalDemo() {
         <Section
             variant="outlined"
             title="Modal"
-            description="Dialog or drawer in every format. The dialog has a default width, changed with a max-w class when the content needs it. Closes with the back button and by dragging on phones."
-            meta="format · className · side · mobile · fit · title · description · ModalFooter"
+            description="Each use says what the modal is on phones (mobile) and, when it differs from the default, on wider screens (desktop); the switch is CSS only. sheet rises from the bottom sized to its content and becomes a centered dialog on wider screens; full rises at full height and becomes a panel on the right. The dialog has a default width, changed with a max-w class. Closes with the back button and by dragging the sheets."
+            meta="mobile · desktop · className · title · description · ModalFooter"
             collapsible
             collapsed
             remember="docs:modal"
         >
             <div className="flex flex-wrap gap-md">
-                <Button variant="outline" onClick={() => setOpen('dialog')}>
-                    dialog
-                </Button>
+                {modalCases.map((each) => (
+                    <Button
+                        key={each.label}
+                        variant="outline"
+                        onClick={() => setOpen(each.label)}
+                    >
+                        {each.label}
+                    </Button>
+                ))}
                 <Button variant="outline" onClick={() => setOpen('wide')}>
                     dialog max-w-4xl
                 </Button>
-                <Button variant="outline" onClick={() => setOpen('right')}>
-                    drawer
-                </Button>
-                <Button variant="outline" onClick={() => setOpen('left')}>
-                    drawer left panel
-                </Button>
-                <Button variant="outline" onClick={() => setOpen('top')}>
-                    drawer top
-                </Button>
             </div>
-            <Modal
-                open={open === 'dialog'}
-                onClose={close}
-                title="Title"
-                description="Dialog description."
-            >
-                <p className="text-sm">Content.</p>
-                <ModalFooter>
-                    <Button onClick={close}>Ok</Button>
-                </ModalFooter>
-            </Modal>
+            {modalCases.map((each) => (
+                <Modal
+                    key={each.label}
+                    open={open === each.label}
+                    onClose={close}
+                    mobile={each.mobile}
+                    desktop={each.desktop}
+                    title="Title"
+                    description={each.label}
+                >
+                    <p className="text-sm">Content.</p>
+                    <ModalFooter>
+                        <Button onClick={close}>Ok</Button>
+                    </ModalFooter>
+                </Modal>
+            ))}
             <Modal
                 open={open === 'wide'}
                 onClose={close}
                 className="max-w-4xl"
-                title="Title"
-            >
-                <p className="text-sm">Content.</p>
-            </Modal>
-            <Modal
-                open={open === 'right'}
-                onClose={close}
-                format="drawer"
-                title="Title"
-            >
-                <p className="text-sm">Content.</p>
-            </Modal>
-            <Modal
-                open={open === 'left'}
-                onClose={close}
-                format="drawer"
-                side="left"
-                mobile="panel"
-                title="Title"
-            >
-                <p className="text-sm">Content.</p>
-            </Modal>
-            <Modal
-                open={open === 'top'}
-                onClose={close}
-                format="drawer"
-                side="top"
-                fit
                 title="Title"
             >
                 <p className="text-sm">Content.</p>
