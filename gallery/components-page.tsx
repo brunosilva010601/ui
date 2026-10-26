@@ -1227,6 +1227,9 @@ function SectionDemo() {
             <Section title="Flat collapsible" note={2} collapsible>
                 <p className="text-sm">Content.</p>
             </Section>
+            <Section description="Collapsible with a quiet label" collapsible>
+                <p className="text-sm">Content.</p>
+            </Section>
             <Section
                 title="Action on hover"
                 collapsible

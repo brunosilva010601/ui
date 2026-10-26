@@ -19,7 +19,7 @@ const variants = {
 const hoverClass =
     'focus-within:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/header:opacity-100';
 
-const bandClass ='flex flex-col [--row-surface:var(--color-background)]';
+const bandClass = 'flex flex-col [--row-surface:var(--color-background)]';
 
 export const sectionPadding = { all: 'p-md', x: 'px-md' };
 
@@ -136,7 +136,8 @@ function useOpen(props: SectionProps): [boolean, (next: boolean) => void] {
 }
 
 type BandHeaderProps = {
-    title: ReactNode;
+    title?: ReactNode;
+    description?: ReactNode;
     note?: ReactNode;
     open: boolean;
     onToggle: () => void;
@@ -164,9 +165,15 @@ function BandHeader(props: BandHeaderProps) {
             />
             {props.sortable && <SortHandle />}
             <Chevron className="pointer-events-none relative size-icon-sm shrink-0 text-foreground-muted" />
-            <h2 className="pointer-events-none relative min-w-0 truncate font-semibold">
-                {props.title}
-            </h2>
+            {props.title ? (
+                <h2 className="pointer-events-none relative min-w-0 truncate font-semibold">
+                    {props.title}
+                </h2>
+            ) : (
+                <p className="pointer-events-none relative min-w-0 truncate text-sm text-foreground-muted">
+                    {props.description}
+                </p>
+            )}
             {props.note !== undefined && (
                 <span className="pointer-events-none relative shrink-0 text-sm text-foreground-muted">
                     {props.note}
@@ -199,7 +206,10 @@ export function Section(props: SectionProps) {
     const collapsible = props.collapsible ?? false;
     const [open, setOpen] = useOpen(props);
     const variant = props.variant ?? 'flat';
-    const band = variant === 'flat' && collapsible && Boolean(props.title);
+    const band =
+        variant === 'flat' &&
+        collapsible &&
+        Boolean(props.title || props.description);
     const isOutlined = variant !== 'flat';
     const headerPadding = isOutlined && sectionPadding.all;
     const isClickable = Boolean(props.onClick || props.href);
@@ -224,6 +234,7 @@ export function Section(props: SectionProps) {
     const header = band ? (
         <BandHeader
             title={props.title}
+            description={props.description}
             note={props.note}
             open={open}
             onToggle={() => setOpen(!open)}
@@ -320,7 +331,7 @@ export function Section(props: SectionProps) {
                 band ? bandClass : variants[variant],
                 props.sortId !== undefined && [
                     sortItemClass,
-                    'data-[dragging]:bg-background',
+                    'data-[dragging]:-mx-[var(--bleed,var(--padding-md))] data-[dragging]:bg-background data-[dragging]:px-[var(--bleed,var(--padding-md))]',
                 ],
                 isOutlined && props.flush && 'overflow-clip',
                 isClickable &&
