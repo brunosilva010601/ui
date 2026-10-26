@@ -7,27 +7,41 @@
 - `src/`: os componentes, todos exportados por `src/index.ts`.
 - `gallery/`: página de consulta do tema e dos componentes. Não vai para os apps.
 
-O pacote se chama `@brunosilva010601/ui` e é publicado como código TypeScript, sem etapa de build, com duas entradas: `@brunosilva010601/ui` (componentes) e `@brunosilva010601/ui/theme.css` (tema). Só `src/`, `css/` e `theme.css` vão no pacote publicado.
+O pacote se chama `@brunosilva010601/ui` e vai como código TypeScript, sem etapa de build, com duas entradas: `@brunosilva010601/ui` (componentes) e `@brunosilva010601/ui/theme.css` (tema).
 
 ## Publicar
 
-O pacote fica privado no GitHub Packages, ligado ao repositório `brunosilva010601/ui`. Para uma versão nova: subir o número em `package.json`, fazer o commit e rodar `bun publish`. O `.npmrc` do repositório lê o token da variável `GITHUB_PACKAGES_TOKEN`, que precisa de permissão `write:packages`.
+O repositório `brunosilva010601/ui` é público, e os apps instalam direto dele, sem registro nem token. Para uma versão nova: subir o número em `package.json`, fazer o commit, criar a tag `vX.Y.Z` nesse commit e enviar a tag ao GitHub.
 
 ## Instalar
 
-Cada app tem um `.npmrc` igual ao do pacote, apontando o escopo `@brunosilva010601` para o GitHub Packages e lendo o token de `GITHUB_PACKAGES_TOKEN`. O pacote entra no `package.json` por versão:
+O pacote entra no `package.json` do app apontando para a tag:
 
 ```json
-"@brunosilva010601/ui": "^0.1.0"
+"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.2.0"
 ```
 
-O token é um token clássico do GitHub com `read:packages`, e precisa existir em todo lugar que instala o app: no terminal local, nas variáveis de ambiente do deploy (Laravel Cloud) e nos secrets do GitHub Actions.
+A tag `v0.1.0` aponta para um commit de antes do nome atual, então quem está na 0.1.0 aponta para o commit `ce43ce1` até sair a próxima versão.
 
 Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no pacote aparecem na hora.
 
+## Adotar num app
+
+1. Instalar o pacote como descrito em "Instalar".
+2. Ligar o pacote no código, como descrito abaixo, mantendo a cor principal atual do app.
+3. Trocar os componentes de interface do app pelos do pacote, um por um, apagando a cópia local de cada um. O TypeScript aponta o que mudou, e `roadmap.md` lista as diferenças em relação ao Mylo e ao Loremy.
+4. Componentes do produto, que não são interface genérica, continuam no app, montados em cima dos do pacote.
+5. Registrar nas docs do app o que foi trocado e o que ficou pendente.
+
+Regras da adoção:
+
+- Problema ou falta no pacote se corrige no próprio pacote, nunca com sobrescrita no app.
+- App com renderização no servidor ainda não funciona com o pacote (ver `roadmap.md`).
+- Nada de regra de negócio ou tela muda além do necessário para a troca.
+
 ## Ligar num app
 
-1. No CSS do app, importar o Tailwind e depois o tema. Em seguida, sobrescrever as variáveis da cor principal no claro (`:root, .light`) e no escuro (`.dark`).
+1. No CSS do app, importar o Tailwind e depois `@brunosilva010601/ui/theme.css`, e remover os arquivos de tema próprios que ele substitui (tokens, paletas, animações, fonte). Em seguida, sobrescrever as variáveis da cor principal no claro (`:root, .light`) e no escuro (`.dark`).
 2. O modo escuro é a classe `dark` no `html`.
 3. Envolver o app com `UiProvider`, que recebe o componente de link do roteador, os textos internos, o idioma, o início da semana e o aviso de saída de página (`onLeave`). Sem ele, tudo funciona com textos em português e links comuns.
 4. Montar o `Toaster` uma vez na raiz, passando claro ou escuro. Mensagens vindas do servidor ficam no app, chamando `notify`.

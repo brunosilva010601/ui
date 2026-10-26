@@ -9,23 +9,20 @@
 - Ideia: configurar o tema do app num bloco no CSS (`@plugin`), com só as chaves que o projeto pode mudar, como a cor principal.
 - Nome acessível: os `aria-label` foram removidos de todo o pacote, então botões só de ícone, setas, fechar e carregando não têm nome para leitor de tela. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
 
-## Adoção pelo Mylo
+## Vindo do Mylo, a discutir
 
-O que muda em relação aos componentes atuais dele:
+O Mylo já usa o pacote. O que ele tinha e o pacote ainda não tem:
 
-- `ConfirmDialog` espera a ação terminar quando `onConfirm` devolve uma promessa, em vez de observar o Inertia.
-- `Brand` recebe nome e logo por props.
-- `Toaster` recebe claro ou escuro, e a mensagem vinda do servidor fica no app.
-- `DropdownItem` não tem mais a opção de virar botão do Inertia.
-- Mês e dias da semana vêm do idioma do `UiProvider`, não dos textos do Mylo.
-- Links soltos que dependiam do tamanho pequeno padrão precisam de `size`.
-- Linhas de lista montadas com `staticRowClass`, `coverRowClass` e `layerRowClass` passam a ser `ListRow`. Vale para o Loremy também.
-- Botões, chips, linhas de menu e avisos mudaram de tamanho para seguir a escala.
-- A escolha de tema nas preferências passa a ser o `AppearancePicker`. O mesmo vale para o Loremy.
-- `ChipGroup` vira `ButtonGroup`, sempre com botões outline, com as mesmas `options`, `value`, `onChange` e `multiple`. Grupos que usavam `variant="ghost"` ou `variant="icon"` passam a ser outline. Itens personalizados usam `ButtonGroupItem`.
-- `Chip` sai. Etiqueta estática vira `Badge` (tons `neutral`, `primary`, `success`, `warning`, `danger`), e chip clicável vira `Button`. Vale para o Loremy também.
+- O ⋯ da linha com menu fazendo parte do realce e do destaque da linha (`HeldMenu`), do commit `c8ffa7f` do Mylo.
+- A gaveta curta (`fit`) abrindo como janela no centro no computador (`Modal`), do commit `64ae37b` do Mylo.
+- `ListRow` não cobre as linhas do Mylo que ficam dentro de um `HeldMenu`, que abrem link externo ou que levam `aria-expanded`; elas continuam com `coverRowClass`, `layerRowClass` e `staticRowClass`.
+- O `Markdown` traz o realce de código para todo app que o usa. Na troca, o JavaScript do Mylo cresceu cerca de 57 kB.
 
 ## Adoção pelo Loremy
+
+- A escolha de tema nas preferências passa a ser o `AppearancePicker`.
+- Linhas de lista montadas com `staticRowClass`, `coverRowClass` e `layerRowClass` passam a ser `ListRow`.
+- `Chip` sai. Etiqueta estática vira `Badge` (tons `neutral`, `primary`, `success`, `warning`, `danger`), e chip clicável vira `Button`.
 
 - Os links de crédito com `variant="inline"` passam a usar `variant="link"`.
 - O `RemoveButton` saiu do pacote. Cada uso vira um `Button` ghost, quadrado, com `bleed` e o ícone de lixeira.
