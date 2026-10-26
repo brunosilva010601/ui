@@ -361,8 +361,8 @@ function ButtonGroupDemo() {
         <Section
             variant="outlined"
             title="ButtonGroup"
-            description="Outline buttons where one is selected, switching on click, or several with multiple, each turning on and off. Text, icon and text, and icon only in both sizes, then the layouts and custom items."
-            meta="size · iconOnly · layout · multiple · ButtonGroupItem"
+            description="Outline or ghost buttons where one is selected, switching on click, or several with multiple, each turning on and off. Text, icon and text, and icon only in both sizes, then ghost, the layouts and custom items."
+            meta="variant · size · iconOnly · layout · multiple · ButtonGroupItem"
             collapsible
             collapsed
             remember="docs:button-group"
@@ -391,6 +391,17 @@ function ButtonGroupDemo() {
                     />
                 </div>
             ))}
+            <div className="flex flex-col gap-sm">
+                <span className={caption}>variant="ghost"</span>
+                <ButtonGroup
+                    variant="ghost"
+                    layout="fill"
+                    iconOnly
+                    options={iconOptions}
+                    value={valueOf('ghost')}
+                    onChange={choose('ghost')}
+                />
+            </div>
             <div className="flex flex-col gap-sm">
                 <span className={caption}>multiple</span>
                 <ButtonGroup
