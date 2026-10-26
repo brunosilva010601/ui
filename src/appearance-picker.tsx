@@ -52,14 +52,14 @@ export function AppearancePicker(props: Props) {
                             'max-sm:order-last max-sm:col-span-full',
                     )}
                 >
-                    <span className="flex gap-xs">
-                        {appearance === 'system' ? (
-                            <>
-                                <Preview scheme="light" />
+                    <span className="relative flex">
+                        <Preview
+                            scheme={appearance === 'system' ? 'light' : appearance}
+                        />
+                        {appearance === 'system' && (
+                            <span className="absolute inset-0 flex [clip-path:inset(0_0_0_50%)]">
                                 <Preview scheme="dark" />
-                            </>
-                        ) : (
-                            <Preview scheme={appearance} />
+                            </span>
                         )}
                     </span>
                     <span>{labels[appearance]}</span>

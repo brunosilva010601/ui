@@ -18,10 +18,10 @@ O repositório `brunosilva010601/ui` é público, e os apps instalam direto dele
 O pacote entra no `package.json` do app apontando para a tag:
 
 ```json
-"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.2.0"
+"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.1.1"
 ```
 
-A tag `v0.1.0` aponta para um commit de antes do nome atual, então quem está na 0.1.0 aponta para o commit `ce43ce1` até sair a próxima versão.
+A tag `v0.1.0` aponta para um commit de antes do nome atual e não serve para instalar.
 
 Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no pacote aparecem na hora.
 
