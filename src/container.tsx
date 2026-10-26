@@ -19,7 +19,7 @@ export function Container(props: Props) {
             className={cn(
                 'w-full min-w-0',
                 widths[props.width ?? 'page'],
-                props.padded && 'p-(--gutter)',
+                props.padded && 'p-(--gutter) [--bleed:var(--gutter)]',
             )}
         >
             {props.children}

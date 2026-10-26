@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { cn } from './lib/utils';
 import { useUi } from './provider';
 
-const rowPadding = 'p-md';
+const rowPadding = 'px-(--row-inset) py-md';
 
 const rowClass =
     'flex w-full cursor-pointer items-start gap-md text-left transition-colors';
@@ -118,7 +118,8 @@ export function List(props: ListProps) {
     return (
         <ul
             className={cn(
-                props.bleed && '-mx-(--row-inset)',
+                props.bleed &&
+                    '-mx-(--row-inset) [--row-inset:var(--bleed,var(--padding-md))]',
                 props.columns &&
                     'grid grid-cols-1 gap-px bg-border lg:grid-cols-2 [&>li]:bg-surface lg:[&>li:last-child:nth-child(odd)]:col-span-2',
                 props.horizontal && 'flex divide-x divide-border *:flex-1',

@@ -318,7 +318,11 @@ export function Section(props: SectionProps) {
                 <div
                     className={cn(
                         'flex flex-1 flex-col gap-md',
-                        isOutlined && !props.flush && sectionPadding.all,
+                        isOutlined &&
+                            !props.flush && [
+                                sectionPadding.all,
+                                '[--bleed:var(--padding-md)]',
+                            ],
                         isOutlined && hasHeader && 'border-t border-border',
                     )}
                 >

@@ -51,7 +51,7 @@ export function HeldMenu(props: Props) {
                     title={props.label}
                     className={
                         props.hover
-                            ? 'absolute top-1/2 right-3 hidden -translate-y-1/2 [@media(hover:hover)]:group-hover:inline-flex'
+                            ? 'absolute top-1/2 right-(--row-inset) hidden -translate-y-1/2 [@media(hover:hover)]:group-hover:inline-flex'
                             : 'mr-(--row-inset) hidden [@media(hover:hover)]:inline-flex'
                     }
                     onClick={() => setOpen(true)}

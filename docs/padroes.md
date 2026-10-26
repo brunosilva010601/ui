@@ -4,7 +4,7 @@
 
 - Cor sempre pelo papel (`primary`, `surface`, `foreground-muted`), nunca por uma cor fixa do Tailwind. A exceção é a paleta de cores que o usuário escolhe para itens (`src/palette.ts`).
 - Padding, gap e margem sempre pela escala com nome de `css/tokens.css`. Número só para o que não é espaçamento, como alturas, larguras e as margens negativas de sangria.
-- O recuo de linha (`--row-inset`) é o mesmo padding das seções outlined. É isso que faz uma lista com `bleed` encostar na borda do card.
+- Cada área com padding declara até onde uma lista com `bleed` avança (`--bleed`): a página pela margem dela, o card pelo padding dele. A lista recua isso e devolve o mesmo valor como recuo das linhas (`--row-inset`), para o fundo encostar na borda da área e o texto continuar alinhado com o resto.
 - A altura de um controle é a soma do padding, da linha de texto e da borda. Não há altura fixa nem mínima, para o controle crescer com o conteúdo.
 - Todo controle tem borda de 1 px, transparente quando não aparece, para trocar de variante nunca mudar a altura.
 - Campos usam fonte 16 porque, abaixo disso, o iPhone dá zoom ao tocar no campo.
