@@ -16,7 +16,10 @@ const variants = {
     outlined: 'border border-border rounded bg-surface',
 };
 
-const bandClass = 'flex flex-col [--row-surface:var(--color-background)]';
+const hoverClass =
+    'focus-within:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/header:opacity-100';
+
+const bandClass ='flex flex-col [--row-surface:var(--color-background)]';
 
 export const sectionPadding = { all: 'p-md', x: 'px-md' };
 
@@ -35,6 +38,7 @@ type SectionProps = {
     menu?: { label: string; items: ReactNode };
     sortId?: string;
     flush?: boolean;
+    hover?: boolean;
     onClick?: () => void;
     href?: string;
     headerHref?: string;
@@ -139,6 +143,7 @@ type BandHeaderProps = {
     action?: ReactNode;
     menu?: SectionProps['menu'];
     sortable: boolean;
+    hover: boolean;
 };
 
 function BandHeader(props: BandHeaderProps) {
@@ -147,7 +152,7 @@ function BandHeader(props: BandHeaderProps) {
     return (
         <div
             className={cn(
-                'group/band group/sort relative -mx-(--row-inset) flex items-center gap-sm py-sm',
+                'group/header group/sort relative -mx-(--row-inset) flex items-center gap-sm py-sm',
                 sectionPadding.x,
             )}
         >
@@ -168,7 +173,12 @@ function BandHeader(props: BandHeaderProps) {
                 </span>
             )}
             {(props.action || props.menu) && (
-                <div className="relative ml-auto flex shrink-0 items-center gap-xs focus-within:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/band:opacity-100">
+                <div
+                    className={cn(
+                        'relative ml-auto flex shrink-0 items-center gap-xs',
+                        props.hover && hoverClass,
+                    )}
+                >
                     {props.action}
                     {props.menu && (
                         <DropdownMenu
@@ -220,12 +230,13 @@ export function Section(props: SectionProps) {
             action={props.action}
             menu={props.menu}
             sortable={props.sortId !== undefined}
+            hover={props.hover ?? false}
         />
     ) : (
         hasHeader && (
             <div
                 className={cn(
-                    'flex items-center gap-md',
+                    'group/header flex items-center gap-md',
                     headerPadding,
                     (headerLink || collapsible) && 'relative',
                 )}
@@ -281,6 +292,7 @@ export function Section(props: SectionProps) {
                     <div
                         className={cn(
                             'shrink-0 [&_svg]:size-icon-md!',
+                            props.hover && hoverClass,
                             (headerLink || collapsible) && 'relative',
                             !props.action && props.hint && 'self-start',
                         )}

@@ -1185,7 +1185,7 @@ function SectionDemo() {
             variant="outlined"
             title="Section"
             description="Block with header and content, flat or outlined, with extras, collapsible and clickable. This whole page is built with it."
-            meta="variant · title · description · meta · icon · note · hint · menu · collapsible · collapsed · remember · onClick · href"
+            meta="variant · title · description · meta · icon · note · hint · action · menu · hover · collapsible · collapsed · remember · onClick · href"
             collapsible
             collapsed
             remember="docs:section"
@@ -1225,6 +1225,18 @@ function SectionDemo() {
                 <p className="text-sm">Content.</p>
             </Section>
             <Section title="Flat collapsible" note={2} collapsible>
+                <p className="text-sm">Content.</p>
+            </Section>
+            <Section
+                title="Action on hover"
+                collapsible
+                hover
+                action={
+                    <Button variant="ghost" size="sm" square title="Add">
+                        <Plus />
+                    </Button>
+                }
+            >
                 <p className="text-sm">Content.</p>
             </Section>
             <Section
