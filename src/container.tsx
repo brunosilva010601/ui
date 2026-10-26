@@ -5,6 +5,7 @@ const widths = {
     narrow: 'max-w-sm',
     bar: 'max-w-3xl',
     page: 'max-w-6xl',
+    full: 'max-w-none',
 };
 
 type Props = {
