@@ -40,26 +40,25 @@ export function AppearancePicker(props: Props) {
             type="single"
             value={props.value}
             onValueChange={(value) => value && props.onChange(value as Appearance)}
-            className="flex gap-md max-sm:grid max-sm:grid-cols-2"
+            className="grid grid-cols-[repeat(2,minmax(0,--spacing(48)))] gap-md"
         >
             {appearances.map((appearance) => (
                 <ToggleGroupPrimitive.Item
                     key={appearance}
                     value={appearance}
                     className={cn(
-                        'flex w-full flex-1 cursor-pointer flex-col gap-sm rounded border border-border bg-control p-sm text-left text-sm text-foreground transition hover:bg-control-hover active:bg-control-hover data-[state=on]:border-primary data-[state=on]:ring-1 data-[state=on]:ring-primary sm:max-w-48',
-                        appearance === 'system' &&
-                            'max-sm:order-last max-sm:col-span-full',
+                        'flex cursor-pointer flex-col gap-sm rounded border border-border bg-control p-sm text-left text-sm text-foreground transition hover:bg-control-hover active:bg-control-hover data-[state=on]:border-primary data-[state=on]:ring-1 data-[state=on]:ring-primary',
+                        appearance === 'system' && 'col-span-full',
                     )}
                 >
-                    <span className="relative flex">
-                        <Preview
-                            scheme={appearance === 'system' ? 'light' : appearance}
-                        />
-                        {appearance === 'system' && (
-                            <span className="absolute inset-0 flex [clip-path:inset(0_0_0_50%)]">
+                    <span className="flex gap-xs">
+                        {appearance === 'system' ? (
+                            <>
+                                <Preview scheme="light" />
                                 <Preview scheme="dark" />
-                            </span>
+                            </>
+                        ) : (
+                            <Preview scheme={appearance} />
                         )}
                     </span>
                     <span>{labels[appearance]}</span>
