@@ -18,7 +18,7 @@ O repositório `brunosilva010601/ui` é público, e os apps instalam direto dele
 O pacote entra no `package.json` do app apontando para a tag:
 
 ```json
-"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.4.2"
+"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.4.3"
 ```
 
 A tag `v0.1.0` aponta para um commit de antes do nome atual e não serve para instalar.

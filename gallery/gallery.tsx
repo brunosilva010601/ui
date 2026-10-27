@@ -25,6 +25,7 @@ const colorGroups = [
         description: 'Page, surfaces, controls and borders.',
         tokens: [
             'background',
+            'canvas',
             'surface',
             'surface-hover',
             'surface-raised',
@@ -114,6 +115,7 @@ const sizes = [
 ];
 
 const surfaces = [
+    { label: 'canvas', className: 'border border-border bg-canvas' },
     { label: 'surface', className: 'border border-border bg-surface' },
     { label: 'surface-raised', className: 'bg-surface-raised' },
     { label: 'control', className: 'border border-border bg-control' },

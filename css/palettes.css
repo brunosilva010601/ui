@@ -8,6 +8,7 @@
     --color-border: var(--color-zinc-200);
     --color-surface: var(--color-zinc-50);
     --color-surface-raised: var(--color-zinc-200);
+    --color-canvas: var(--color-white);
     --color-control: var(--color-white);
     --color-primary: var(--color-blue-600);
     --color-primary-foreground: var(--color-white);
@@ -52,6 +53,7 @@
         var(--color-zinc-800) 50%,
         var(--color-zinc-700)
     );
+    --color-canvas: var(--color-zinc-900);
     --color-control: var(--color-zinc-800);
     --color-primary: var(--color-blue-500);
     --color-primary-foreground: var(--color-white);
