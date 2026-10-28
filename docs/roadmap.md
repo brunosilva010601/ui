@@ -7,6 +7,7 @@
 - O espaço livre no topo das gavetas que sobem de baixo no celular está fora da escala (`src/modal.tsx`).
 - A modal e a detecção de toque acessam a janela assim que o arquivo carrega, o que quebra a renderização no servidor que o Loremy usa.
 - Ideia: configurar o tema do app num bloco no CSS (`@plugin`), com só as chaves que o projeto pode mudar, como a cor principal.
+- Menu aberto, a discutir: hoje todo menu escurece e desfoca a tela e põe uma cópia do botão por cima. A cópia perde o fundo, o recuo e o estado que vêm de onde o botão está, escapa do corte das listas que rolam e some de uma vez ao fechar. A inclinação é tirar o desfoque do menu de clique, deixando o botão marcado como aberto, e manter o desfoque só no segurar um item, com um recorte que mostra o item verdadeiro em vez da cópia.
 - Nome acessível: os `aria-label` foram removidos de todo o pacote, então botões só de ícone, setas, fechar e carregando não têm nome para leitor de tela. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
 
 ## Vindo do Mylo, a discutir
