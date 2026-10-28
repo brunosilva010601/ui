@@ -32,7 +32,7 @@ const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
 };
 
 const blockClass =
-    'w-full justify-start px-(--row-inset) text-left whitespace-normal';
+    'w-full justify-start rounded px-(--row-inset) text-left whitespace-normal';
 
 const bleedSides =
     'px-[calc(var(--gap-md)/2)] -mx-[calc(var(--gap-md)/2_+_var(--spacing)*0.25)]';
