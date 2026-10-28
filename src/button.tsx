@@ -19,7 +19,7 @@ const variants = {
 };
 
 const shapes = {
-    box: 'inline-flex shrink-0 items-center justify-center gap-sm rounded-full whitespace-nowrap select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+    box: 'inline-flex shrink-0 items-center justify-center rounded-full whitespace-nowrap select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
     link: 'has-[svg]:inline-flex has-[svg]:shrink-0 has-[svg]:items-center has-[svg]:gap-sm disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
 };
 
@@ -30,6 +30,9 @@ const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
     danger: 'box',
     link: 'link',
 };
+
+const blockClass =
+    'w-full justify-start px-(--row-inset) text-left whitespace-normal';
 
 const bleedSides =
     'px-[calc(var(--gap-md)/2)] -mx-[calc(var(--gap-md)/2_+_var(--spacing)*0.25)]';
@@ -44,7 +47,7 @@ const sizes = {
         square: '[--pad:--spacing(3)] p-(--pad)',
         squareBleed: '-my-3.25',
         link: 'text-sm',
-        icon: "[&_svg:not([class*='size-'])]:size-icon-sm",
+        icon: "gap-sm [&_svg:not([class*='size-'])]:size-icon-sm",
     },
     sm: {
         text: '[--pad:--spacing(3)] px-(--pad) py-1.5 text-xs',
@@ -52,7 +55,7 @@ const sizes = {
         square: '[--pad:--spacing(1.5)] p-(--pad)',
         squareBleed: '-my-1.75',
         link: 'text-xs',
-        icon: "[&_svg:not([class*='size-'])]:size-icon-xs",
+        icon: "gap-xs [&_svg:not([class*='size-'])]:size-icon-xs",
     },
 };
 
@@ -66,6 +69,7 @@ type ButtonProps = (
 ) & {
     size?: ButtonSize;
     square?: boolean;
+    block?: boolean;
     bleed?: boolean;
     asChild?: boolean;
     type?: 'button' | 'submit';
@@ -81,6 +85,7 @@ type ButtonClassOptions = {
     variant?: keyof typeof variants;
     size?: keyof typeof sizes;
     square?: boolean;
+    block?: boolean;
     bleed?: boolean;
     className?: string;
 };
@@ -89,6 +94,7 @@ export function buttonClass({
     variant = 'primary',
     size,
     square = false,
+    block = false,
     bleed = false,
     className,
 }: ButtonClassOptions = {}) {
@@ -102,6 +108,7 @@ export function buttonClass({
         box.icon,
         shape === 'link' && size && sizes[size].link,
         isBox && (square ? box.square : box.text),
+        block && isBox && blockClass,
         bleed && isBox && bleedSides,
         bleed && isBox && bleedBackdrop,
         bleed && isBox && (square ? box.squareBleed : box.textBleed),
@@ -114,6 +121,7 @@ export function Button(props: ButtonProps) {
         variant,
         size,
         square,
+        block,
         bleed,
         selected,
         asChild = false,
@@ -131,7 +139,14 @@ export function Button(props: ButtonProps) {
             form={submit ? formId : undefined}
             aria-pressed={selected}
             data-state={selected === undefined ? undefined : selected ? 'on' : 'off'}
-            className={buttonClass({ variant, size, square, bleed, className })}
+            className={buttonClass({
+                variant,
+                size,
+                square,
+                block,
+                bleed,
+                className,
+            })}
             {...rest}
             disabled={rest.disabled || undefined}
         />

@@ -4,6 +4,7 @@
 
 - Cor sempre pelo papel (`primary`, `surface`, `foreground-muted`), nunca por uma cor fixa do Tailwind. A exceção é a paleta de cores que o usuário escolhe para itens (`src/palette.ts`).
 - Padding, gap e margem sempre pela escala com nome de `css/tokens.css`. Número só para o que não é espaçamento, como alturas, larguras e as margens negativas de sangria.
+- O espaço entre ícone e texto segue o tamanho do ícone: ícone `xs` com `gap-xs`, `sm` com `gap-sm`, `md` com `gap-md`.
 - Cada área com padding declara até onde uma lista com `bleed` avança (`--bleed`): a página pela margem dela, o card pelo padding dele. A lista recua isso e devolve o mesmo valor como recuo das linhas (`--row-inset`), para o fundo encostar na borda da área e o texto continuar alinhado com o resto.
 - A altura de um controle é a soma do padding, da linha de texto e da borda. Não há altura fixa nem mínima, para o controle crescer com o conteúdo.
 - Todo controle tem borda de 1 px, transparente quando não aparece, para trocar de variante nunca mudar a altura.
@@ -13,7 +14,7 @@
 
 - Nenhum componente depende de roteador nem dos textos de um app. Link, textos, idioma e navegação chegam pelo `UiProvider` ou por props.
 - Em cada tamanho, o botão de texto e o botão quadrado de ícone têm a mesma altura. Mudar o padding de um exige ajustar o outro, em geral pelo tamanho do ícone.
-- Tudo que é clicável é `Button`. Escolha entre opções é um `ButtonGroup` (uma opção que troca, ou várias com `multiple`), outline por padrão e ghost dentro de menu, onde o escolhido ganha só um fundo leve. O botão selecionado usa a prop `selected`, que só existe no `outline` e tem o visual invertido (fundo da cor do texto), igual à aba ativa. A cor principal fica para ação, nunca para seleção. `Badge` é só etiqueta estática, nunca clicável.
+- Tudo que é clicável é `Button`, inclusive os itens de menu, que são ghost com `block` (largura toda, conteúdo à esquerda e o recuo das listas). Escolha entre opções é um `ButtonGroup` (uma opção que troca, ou várias com `multiple`), outline por padrão e ghost dentro de menu, onde o escolhido ganha só um fundo leve. O botão selecionado usa a prop `selected`, que só existe no `outline` e tem o visual invertido (fundo da cor do texto), igual à aba ativa. A cor principal fica para ação, nunca para seleção. `Badge` é só etiqueta estática, nunca clicável.
 - Link tem uma variante só (`variant="link"`). Sem `size`, ele herda o tamanho do texto em volta e quebra linha junto com a frase.
 - A `Section` aceita uma terceira linha no cabeçalho (`meta`), em fonte de código, depois da descrição.
 - A lista é só a moldura, e o conteúdo de cada item é livre e do app. O pacote dá o formato (`divided`, `cards` ou `bare`), o recuo, o realce, os estados ativo e selecionado, o clique do item inteiro e o menu do item, com o ⋯ no fim dentro do realce ou só ao passar o mouse. Assim cada app monta a linha do seu jeito sem o pacote virar o de um app só.

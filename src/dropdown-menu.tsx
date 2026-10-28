@@ -4,7 +4,7 @@ import type { LucideIcon } from 'lucide-react';
 import { createContext, useContext, useLayoutEffect, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import { Backdrop } from './backdrop';
-import { buttonClass, ghostHoverClass, touchClass } from './button';
+import { buttonClass, touchClass } from './button';
 import { fieldClass } from './form/field';
 import { IconBadge } from './icon-badge';
 import { touch } from './lib/device';
@@ -22,8 +22,7 @@ import {
 } from './popover';
 import { useUi } from './provider';
 
-export const menuRowClass =
-    'flex items-center gap-md rounded px-(--row-inset) py-md text-sm';
+const itemClass = buttonClass({ variant: 'ghost', block: true });
 
 const triggers = {
     icon: buttonClass({
@@ -38,7 +37,7 @@ const triggers = {
         className: 'min-w-0 shrink px-md text-primary-text [&_span]:truncate',
     }),
     button: buttonClass({ variant: 'outline' }),
-    row: `${menuRowClass} ${ghostHoverClass} w-full cursor-pointer text-left transition-colors`,
+    row: itemClass,
     listRow:
         'flex w-full cursor-pointer items-center gap-md p-md text-left text-sm transition-colors hover:bg-surface-hover focus-visible:-outline-offset-2 active:bg-surface-hover',
     field: `${fieldClass} flex cursor-pointer items-center gap-sm text-left`,
@@ -237,8 +236,6 @@ export function RowTrigger(props: RowTriggerProps) {
     );
 }
 
-export const menuItemClass = `${menuRowClass} ${ghostHoverClass} [&_svg]:text-foreground-muted w-full cursor-pointer text-left [&_svg]:size-icon-sm`;
-
 type DropdownItemProps =
     | {
           asChild?: false;
@@ -259,7 +256,7 @@ export function DropdownItem(props: DropdownItemProps) {
     if (props.asChild) {
         return (
             <Close asChild>
-                <Slot className={menuItemClass}>{props.children}</Slot>
+                <Slot className={itemClass}>{props.children}</Slot>
             </Close>
         );
     }
@@ -269,7 +266,7 @@ export function DropdownItem(props: DropdownItemProps) {
             href={props.href}
             onClick={props.onClick}
             data-test={props['data-test']}
-            className={menuItemClass}
+            className={itemClass}
         >
             {props.children}
         </Link>

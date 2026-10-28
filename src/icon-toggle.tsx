@@ -25,7 +25,7 @@ export function IconToggle(props: Props) {
             className={cn(
                 'flex cursor-pointer items-center rounded border border-border bg-control px-xs text-sm whitespace-nowrap text-foreground-soft transition hover:bg-control-hover hover:text-foreground active:bg-control-hover active:text-foreground disabled:pointer-events-none disabled:opacity-50',
                 props.inline
-                    ? 'justify-center gap-sm py-sm [&_svg]:size-icon-md'
+                    ? 'justify-center gap-md py-sm [&_svg]:size-icon-md'
                     : 'flex-col justify-center gap-xs py-md [&_svg]:size-icon-lg',
                 props.iconOnly && 'aspect-square justify-center py-0',
                 props.active &&
