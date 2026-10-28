@@ -1,5 +1,6 @@
 import { Check, ChevronDown } from 'lucide-react';
 import { useId } from 'react';
+import type { ReactNode } from 'react';
 import { DropdownItem, DropdownMenu } from '../dropdown-menu';
 import { Field } from './field';
 
@@ -8,6 +9,7 @@ type Option<T extends string> = {
     label: string;
     emoji?: string;
     lang?: string;
+    content?: ReactNode;
 };
 
 type Props<T extends string> = {
@@ -30,10 +32,14 @@ function OptionText<T extends string>(props: OptionTextProps<T>) {
             className="flex min-w-0 flex-1 items-center gap-sm"
             lang={props.option.lang}
         >
-            {props.option.emoji && (
-                <span aria-hidden>{props.option.emoji}</span>
+            {props.option.content ?? (
+                <>
+                    {props.option.emoji && (
+                        <span aria-hidden>{props.option.emoji}</span>
+                    )}
+                    <span className="truncate">{props.option.label}</span>
+                </>
             )}
-            <span className="truncate">{props.option.label}</span>
         </span>
     );
 }

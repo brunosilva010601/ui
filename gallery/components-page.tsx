@@ -117,6 +117,19 @@ const emojiOptions = [
     { value: 'c', label: 'Option C', emoji: '🍇' },
 ];
 
+const contentOptions = (['red', 'green', 'blue'] as const).map(
+    (color, index) => ({
+        value: options[index].value,
+        label: options[index].label,
+        content: (
+            <>
+                <ColorDot color={color} />
+                <span className="truncate">{options[index].label}</span>
+            </>
+        ),
+    }),
+);
+
 const iconOptions = [
     { value: 'a', label: 'Option A', icon: Heart },
     { value: 'b', label: 'Option B', icon: Star },
@@ -606,8 +619,8 @@ function SelectDemo() {
         <Section
             variant="outlined"
             title="Select"
-            description="Pick one option from a menu, or a sheet on touch screens: plain, with emoji, and with description and hint."
-            meta="options · options[].emoji · description · hint"
+            description="Pick one option from a menu, or a sheet on touch screens: plain, with emoji, with free content, and with description and hint."
+            meta="options · options[].emoji · options[].content · description · hint"
             collapsible
             collapsed
             remember="docs:select"
@@ -623,6 +636,12 @@ function SelectDemo() {
                 value={valueOf('emoji')}
                 options={emojiOptions}
                 onChange={choose('emoji')}
+            />
+            <Select
+                label="Label"
+                value={valueOf('content')}
+                options={contentOptions}
+                onChange={choose('content')}
             />
             <Select
                 label="Label"
