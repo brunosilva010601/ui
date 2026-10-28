@@ -18,7 +18,7 @@ O repositório `brunosilva010601/ui` é público, e os apps instalam direto dele
 O pacote entra no `package.json` do app apontando para a tag:
 
 ```json
-"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.4.5"
+"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.4.6"
 ```
 
 A tag `v0.1.0` aponta para um commit de antes do nome atual e não serve para instalar.
@@ -41,7 +41,7 @@ Regras da adoção:
 
 ## Ligar num app
 
-1. No CSS do app, importar o Tailwind e depois `@brunosilva010601/ui/theme.css`, e remover os arquivos de tema próprios que ele substitui (tokens, paletas, animações, fonte). Em seguida, sobrescrever as variáveis da cor principal no claro (`:root, .light`) e no escuro (`.dark`).
+1. No CSS do app, importar o Tailwind e depois `@brunosilva010601/ui/theme.css`, e remover os arquivos de tema próprios que ele substitui (tokens, paletas, animações, fonte) e a fonte de emoji carregada pelo app, porque o pacote já traz a Noto Color Emoji. Em seguida, sobrescrever as variáveis da cor principal no claro (`:root, .light`) e no escuro (`.dark`).
 2. O modo escuro é a classe `dark` no `html`.
 3. Envolver o app com `UiProvider`, que recebe o componente de link do roteador, os textos internos, o idioma, o início da semana e o aviso de saída de página (`onLeave`). Sem ele, tudo funciona com textos em português e links comuns.
 4. Montar o `Toaster` uma vez na raiz, passando claro ou escuro. Mensagens vindas do servidor ficam no app, chamando `notify`.
