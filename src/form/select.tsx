@@ -2,7 +2,7 @@ import { Check, ChevronDown } from 'lucide-react';
 import { useId } from 'react';
 import type { ReactNode } from 'react';
 import { DropdownItem, DropdownMenu } from '../dropdown-menu';
-import { Field } from './field';
+import { Field, fieldClass } from './field';
 
 type Option<T extends string> = {
     value: T;
@@ -60,29 +60,28 @@ export function Select<T extends string>(props: Props<T>) {
         >
             <DropdownMenu
                 choice
-                variant="field"
+                wide
                 label={props.label}
                 align="start"
                 trigger={
-                    <>
+                    <button
+                        id={id}
+                        type="button"
+                        className={`${fieldClass} flex cursor-pointer items-center gap-sm text-left`}
+                    >
                         {current && <OptionText option={current} />}
                         <ChevronDown className="size-icon-sm shrink-0 text-foreground-muted" />
-                    </>
+                    </button>
                 }
             >
                 {props.options.map((option) => (
                     <DropdownItem
                         key={option.value}
-                        asChild
                         selected={option.value === props.value}
+                        onSelect={() => props.onChange(option.value)}
                     >
-                        <button
-                            type="button"
-                            onClick={() => props.onChange(option.value)}
-                        >
-                            <OptionText option={option} />
-                            {option.value === props.value && <Check />}
-                        </button>
+                        <OptionText option={option} />
+                        {option.value === props.value && <Check />}
                     </DropdownItem>
                 ))}
             </DropdownMenu>

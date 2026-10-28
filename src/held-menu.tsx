@@ -22,32 +22,45 @@ type Props = {
     children: ReactNode;
 };
 
-export function HeldMenu(props: Props) {
+type HeldMenuOptions = {
+    label: string;
+    hover?: boolean;
+    onHold?: () => void;
+};
+
+export function useHeldMenu(options: HeldMenuOptions) {
     const [open, setOpen] = useState(false);
     const hold = useHold((pointer) => {
-        if (pointer !== 'mouse' && props.onHold) {
-            props.onHold();
+        if (pointer !== 'mouse' && options.onHold) {
+            options.onHold();
         } else {
             setOpen(true);
         }
     });
-    const beside = !props.hover && !props.bare;
-    const more = !props.bare && (
+    const more = (
         <Button
-            variant={props.hover ? 'outline' : 'ghost'}
+            variant={options.hover ? 'outline' : 'ghost'}
             size="sm"
             square
-            title={props.label}
+            title={options.label}
             className={
-                props.hover
+                options.hover
                     ? 'absolute top-1/2 right-(--row-inset) hidden -translate-y-1/2 [@media(hover:hover)]:group-hover:inline-flex'
-                    : 'mr-(--row-inset) hidden [@media(hover:hover)]:inline-flex'
+                    : 'mr-(--row-inset) hidden shrink-0 [@media(hover:hover)]:inline-flex'
             }
             onClick={() => setOpen(true)}
         >
             <Ellipsis />
         </Button>
     );
+
+    return { open, setOpen, hold, more };
+}
+
+export function HeldMenu(props: Props) {
+    const { open, setOpen, hold, more: button } = useHeldMenu(props);
+    const beside = !props.hover && !props.bare;
+    const more = !props.bare && button;
 
     return (
         <div className="group relative" {...hold}>

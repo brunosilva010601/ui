@@ -1,11 +1,9 @@
 import { Slot } from '@radix-ui/react-slot';
-import { ChevronRight } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { createContext, useContext, useLayoutEffect, useState } from 'react';
-import type { ReactElement, ReactNode } from 'react';
+import { createContext, useContext, useState } from 'react';
+import type { ComponentProps, ReactElement, ReactNode } from 'react';
 import { Backdrop } from './backdrop';
-import { buttonClass, touchClass } from './button';
-import { fieldClass } from './form/field';
 import { IconBadge } from './icon-badge';
 import { touch } from './lib/device';
 import { cn } from './lib/utils';
@@ -25,105 +23,11 @@ import { useUi } from './provider';
 const itemClass =
     "flex w-full cursor-pointer items-center gap-sm rounded border border-transparent px-(--row-inset) py-2.5 text-left text-sm text-foreground transition-colors select-none hover:bg-foreground/5 active:bg-foreground/5 data-[state=on]:bg-foreground/5 [&_svg]:shrink-0 [&_svg]:text-foreground-muted [&_svg:not([class*='size-'])]:size-icon-sm";
 
-const triggers = {
-    icon: buttonClass({
-        variant: 'ghost',
-        square: true,
-        className: `p-xs ${touchClass}`,
-    }),
-    tool: buttonClass({ variant: 'ghost', square: true }),
-    toolBleed: buttonClass({ variant: 'ghost', square: true, bleed: true }),
-    chip: buttonClass({
-        variant: 'ghost',
-        className: 'min-w-0 shrink px-md text-primary-text [&_span]:truncate',
-    }),
-    button: buttonClass({ variant: 'outline' }),
-    row: itemClass,
-    listRow:
-        'flex w-full cursor-pointer items-center gap-md p-md text-left text-sm transition-colors hover:bg-surface-hover focus-visible:-outline-offset-2 active:bg-surface-hover',
-    field: `${fieldClass} flex cursor-pointer items-center gap-sm text-left`,
-    bar: 'flex min-w-0 flex-1 cursor-pointer flex-col items-center gap-xs px-xs py-sm text-xs font-semibold whitespace-nowrap text-foreground-muted transition-colors hover:text-foreground active:text-foreground',
-};
-
-const triggerWide: Partial<Record<keyof typeof triggers, boolean>> = {
-    row: true,
-    listRow: true,
-    field: true,
-};
-
-const iconOnly: Partial<Record<keyof typeof triggers, boolean>> = {
-    icon: true,
-    tool: true,
-    toolBleed: true,
-    chip: true,
-};
-
-type LiftedProps = {
-    target: HTMLElement | null;
-    open: boolean;
-};
-
-function Lifted(props: LiftedProps) {
-    useLayoutEffect(() => {
-        const target = props.target;
-
-        if (!props.open || !target) {
-            return;
-        }
-
-        const holder = document.createElement('div');
-        const opacity = target.style.opacity;
-        const copy = () => {
-            const clone = target.cloneNode(true) as HTMLElement;
-            clone.removeAttribute('id');
-            clone.style.opacity = opacity;
-            holder.replaceChildren(clone);
-        };
-        holder.setAttribute('aria-hidden', 'true');
-        Object.assign(holder.style, {
-            position: 'fixed',
-            zIndex: '50',
-            pointerEvents: 'none',
-        });
-        copy();
-        document.body.appendChild(holder);
-        target.style.opacity = '0';
-        const changes = new MutationObserver(copy);
-        changes.observe(target, {
-            childList: true,
-            characterData: true,
-            subtree: true,
-        });
-
-        let frame = 0;
-        const follow = () => {
-            const box = target.getBoundingClientRect();
-            Object.assign(holder.style, {
-                left: `${box.left}px`,
-                top: `${box.top}px`,
-                width: `${box.width}px`,
-                height: `${box.height}px`,
-            });
-            frame = window.requestAnimationFrame(follow);
-        };
-        follow();
-
-        return () => {
-            changes.disconnect();
-            window.cancelAnimationFrame(frame);
-            holder.remove();
-            target.style.opacity = opacity;
-        };
-    }, [props.open, props.target]);
-
-    return null;
-}
-
 type DropdownMenuProps = {
-    trigger?: ReactNode;
+    trigger?: ReactElement;
     anchor?: ReactElement;
     label: string;
-    variant?: keyof typeof triggers;
+    wide?: boolean;
     align?: 'start' | 'center' | 'end';
     choice?: boolean;
     open?: boolean;
@@ -143,19 +47,12 @@ export function DropdownMenu(props: DropdownMenuProps) {
 
 function ChoiceModal(props: DropdownMenuProps) {
     const [open, setOpen] = useState(false);
-    const variant = props.variant ?? 'icon';
 
     return (
         <>
-            <button
-                type="button"
-                aria-haspopup="dialog"
-                title={iconOnly[variant] ? props.label : undefined}
-                className={triggers[variant]}
-                onClick={() => setOpen(true)}
-            >
+            <Slot aria-haspopup="dialog" onClick={() => setOpen(true)}>
                 {props.trigger}
-            </button>
+            </Slot>
             <Modal
                 open={open}
                 onClose={() => setOpen(false)}
@@ -173,37 +70,32 @@ function PopoverMenu(props: DropdownMenuProps) {
     const [ownOpen, setOwnOpen] = useBlockingPopover();
     const open = props.open ?? ownOpen;
     const setOpen = props.onOpenChange ?? setOwnOpen;
-    const [target, setTarget] = useState<HTMLElement | null>(null);
-    const variant = props.variant ?? 'icon';
+    const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
     useClosesOnLeave(props.open === true, () => setOpen(false));
     useCloseOnBack(() => setOpen(false), props.open === true);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
-            <Backdrop open={open} onClose={() => setOpen(false)} />
+            <Backdrop
+                open={open}
+                onClose={() => setOpen(false)}
+                veil={Boolean(props.anchor)}
+                hole={anchor}
+            />
             {props.anchor ? (
-                <PopoverAnchor asChild ref={setTarget}>
+                <PopoverAnchor asChild ref={setAnchor}>
                     {props.anchor}
                 </PopoverAnchor>
             ) : (
-                <PopoverTrigger
-                    ref={setTarget}
-                    title={iconOnly[variant] ? props.label : undefined}
-                    className={triggers[variant]}
-                >
-                    {props.trigger}
-                </PopoverTrigger>
+                <PopoverTrigger asChild>{props.trigger}</PopoverTrigger>
             )}
-            <Lifted target={target} open={open} />
             <PopoverContent
                 align={props.align ?? 'end'}
                 onPointerDownOutside={keepOpenOnOutsidePress}
                 className={cn(
                     'flex max-h-(--radix-popover-content-available-height) flex-col gap-xs overflow-y-auto p-xs',
-                    triggerWide[variant]
-                        ? 'w-(--radix-popover-trigger-width)'
-                        : 'w-52',
+                    props.wide ? 'w-(--radix-popover-trigger-width)' : 'w-52',
                 )}
             >
                 {props.children}
@@ -212,7 +104,7 @@ function PopoverMenu(props: DropdownMenuProps) {
     );
 }
 
-type RowTriggerProps = {
+type RowTriggerProps = Omit<ComponentProps<'button'>, 'value'> & {
     icon: LucideIcon;
     label: string;
     value: ReactNode;
@@ -220,64 +112,103 @@ type RowTriggerProps = {
 };
 
 export function RowTrigger(props: RowTriggerProps) {
+    const { icon, label, value, set, className, ...rest } = props;
+
     return (
-        <>
-            <IconBadge icon={props.icon} size="sm" />
-            <span className="shrink-0 font-semibold">{props.label}</span>
+        <button
+            type="button"
+            className={cn(
+                'flex w-full cursor-pointer items-center gap-md px-(--row-inset) py-md text-left text-sm transition-colors hover:bg-surface-hover focus-visible:-outline-offset-2 active:bg-surface-hover data-[state=open]:bg-surface-hover',
+                className,
+            )}
+            {...rest}
+        >
+            <IconBadge icon={icon} size="sm" />
+            <span className="shrink-0 font-semibold">{label}</span>
             <span
                 className={cn(
                     'min-w-0 flex-1 truncate text-end',
-                    props.set ? 'text-primary-text' : 'text-foreground-muted',
+                    set ? 'text-primary-text' : 'text-foreground-muted',
                 )}
             >
-                {props.value}
+                {value}
             </span>
             <ChevronRight className="size-icon-sm shrink-0 text-foreground-muted" />
-        </>
+        </button>
     );
 }
 
-type DropdownItemProps = { selected?: boolean } & (
-    | {
-          asChild?: false;
-          href: string;
-          onClick?: () => void;
-          'data-test'?: string;
-          children: ReactNode;
-      }
-    | {
-          asChild: true;
-          children: ReactNode;
-      }
+type DropdownItemProps = {
+    selected?: boolean;
+    'data-test'?: string;
+    children: ReactNode;
+} & (
+    | { href: string; onClick?: () => void; onSelect?: never; asChild?: never }
+    | { onSelect: () => void; href?: never; asChild?: never }
+    | { asChild: true; href?: never; onSelect?: never }
 );
 
 export function DropdownItem(props: DropdownItemProps) {
     const Close = useContext(MenuClose);
     const { link: Link } = useUi();
     const state = {
-        'aria-current': props.selected || undefined,
+        'data-test': props['data-test'],
         'data-state': props.selected ? 'on' : undefined,
     };
 
-    if (props.asChild) {
+    if (props.href !== undefined) {
         return (
-            <Close asChild>
-                <Slot className={itemClass} {...state}>
-                    {props.children}
-                </Slot>
-            </Close>
+            <Link
+                href={props.href}
+                onClick={props.onClick}
+                aria-current={props.selected ? 'page' : undefined}
+                className={itemClass}
+                {...state}
+            >
+                {props.children}
+            </Link>
         );
     }
 
     return (
-        <Link
-            href={props.href}
-            onClick={props.onClick}
-            data-test={props['data-test']}
+        <Close asChild>
+            {props.asChild ? (
+                <Slot className={itemClass} {...state}>
+                    {props.children}
+                </Slot>
+            ) : (
+                <button
+                    type="button"
+                    aria-pressed={props.selected}
+                    onClick={props.onSelect}
+                    className={itemClass}
+                    {...state}
+                >
+                    {props.children}
+                </button>
+            )}
+        </Close>
+    );
+}
+
+type DropdownCheckboxItemProps = {
+    checked: boolean;
+    onCheckedChange: (checked: boolean) => void;
+    children: ReactNode;
+};
+
+export function DropdownCheckboxItem(props: DropdownCheckboxItemProps) {
+    return (
+        <button
+            type="button"
+            role="menuitemcheckbox"
+            aria-checked={props.checked}
+            data-state={props.checked ? 'on' : undefined}
+            onClick={() => props.onCheckedChange(!props.checked)}
             className={itemClass}
-            {...state}
         >
+            <Check className={cn(!props.checked && 'invisible')} />
             {props.children}
-        </Link>
+        </button>
     );
 }

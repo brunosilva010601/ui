@@ -1,5 +1,5 @@
 import { Slot } from '@radix-ui/react-slot';
-import type { ReactNode } from 'react';
+import type { ComponentProps } from 'react';
 import { useFormId } from './form/form';
 import { cn } from './lib/utils';
 
@@ -13,7 +13,7 @@ const variants = {
         'cursor-pointer transition border border-primary bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-hover',
     outline:
         'cursor-pointer transition border border-border bg-control text-foreground hover:bg-control-hover active:bg-control-hover data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background',
-    ghost: `border border-transparent text-foreground-muted ${ghostHoverClass} hover:text-foreground active:text-foreground cursor-pointer transition-colors data-[state=on]:bg-foreground/5 data-[state=on]:text-foreground`,
+    ghost: `border border-transparent text-foreground-muted ${ghostHoverClass} hover:text-foreground active:text-foreground cursor-pointer transition-colors data-[state=on]:bg-foreground/5 data-[state=on]:text-foreground data-[state=open]:bg-foreground/5 data-[state=open]:text-foreground`,
     danger: 'cursor-pointer transition border border-danger bg-danger text-danger-foreground hover:bg-danger-hover active:bg-danger-hover',
     link: 'text-primary-text cursor-pointer underline-offset-4 hover:underline active:underline',
 };
@@ -35,7 +35,7 @@ const bleedSides =
     'px-[calc(var(--gap-md)/2)] -mx-[calc(var(--gap-md)/2_+_var(--spacing)*0.25)]';
 
 const bleedBackdrop =
-    'relative isolate before:absolute before:inset-y-0 before:-inset-x-[calc(var(--pad)_-_var(--gap-md)/2)] before:-z-10 before:rounded-full before:transition-colors hover:bg-transparent active:bg-transparent hover:before:bg-foreground/5 active:before:bg-foreground/5';
+    'relative isolate before:absolute before:inset-y-0 before:-inset-x-[calc(var(--pad)_-_var(--gap-md)/2)] before:-z-10 before:rounded-full before:transition-colors hover:bg-transparent active:bg-transparent data-[state=open]:bg-transparent hover:before:bg-foreground/5 active:before:bg-foreground/5 data-[state=open]:before:bg-foreground/5';
 
 const sizes = {
     md: {
@@ -60,19 +60,14 @@ export type ButtonVariant = keyof typeof variants;
 
 export type ButtonSize = keyof typeof sizes;
 
-type ButtonProps = {
+type ButtonProps = Omit<ComponentProps<'button'>, 'type'> & {
     variant?: ButtonVariant;
     size?: ButtonSize;
     square?: boolean;
     bleed?: boolean;
     asChild?: boolean;
     type?: 'button' | 'submit';
-    className?: string;
-    disabled?: boolean;
-    onClick?: () => void;
-    title?: string;
     'data-test'?: string;
-    children: ReactNode;
 };
 
 type ButtonClassOptions = {

@@ -34,6 +34,7 @@ import {
     ConfirmDialog,
     Copyable,
     Detail,
+    DropdownCheckboxItem,
     DropdownItem,
     DropdownMenu,
     EmptyState,
@@ -43,7 +44,6 @@ import {
     Heading,
     Hint,
     IconBadge,
-    IconToggle,
     ImageViewer,
     Input,
     List,
@@ -55,6 +55,7 @@ import {
     notify,
     NumberInput,
     ProgressBar,
+    RowTrigger,
     SearchInput,
     Section,
     SectionSkeleton,
@@ -174,7 +175,6 @@ export function ComponentsPage() {
             <Section title="Choices" collapsible remember="docs:choices">
                 <ButtonGroupDemo />
                 <BadgeDemo />
-                <IconToggleDemo />
                 <SwitchDemo />
                 <AppearancePickerDemo />
             </Section>
@@ -443,81 +443,6 @@ function ButtonGroupDemo() {
     );
 }
 
-function IconToggleDemo() {
-    const [active, setActive] = useState<Record<string, boolean>>({
-        stacked: true,
-        inline: true,
-    });
-    const toggle = (key: string) => () =>
-        setActive({ ...active, [key]: !active[key] });
-
-    return (
-        <Section
-            variant="outlined"
-            title="IconToggle"
-            description="On and off button with an icon: stacked, inline and icon only, each on and off."
-            meta="active · inline · iconOnly · tone"
-            collapsible
-            collapsed
-            remember="docs:icon-toggle"
-        >
-            <div className="grid grid-cols-3 gap-sm sm:grid-cols-6">
-                <IconToggle
-                    label="Stacked"
-                    tone="primary"
-                    active={active.stacked}
-                    onClick={toggle('stacked')}
-                >
-                    <Heart />
-                </IconToggle>
-                <IconToggle
-                    label="Stacked"
-                    tone="primary"
-                    active={active.stackedOff}
-                    onClick={toggle('stackedOff')}
-                >
-                    <Heart />
-                </IconToggle>
-                <IconToggle
-                    label="Inline"
-                    tone="primary"
-                    inline
-                    active={active.inline}
-                    onClick={toggle('inline')}
-                >
-                    <Bell />
-                </IconToggle>
-                <IconToggle
-                    label="Inline"
-                    tone="primary"
-                    inline
-                    active={active.inlineOff}
-                    onClick={toggle('inlineOff')}
-                >
-                    <Bell />
-                </IconToggle>
-                <IconToggle
-                    label="Icon only"
-                    tone="primary"
-                    iconOnly
-                    active={active.iconOnly}
-                    onClick={toggle('iconOnly')}
-                >
-                    <Star />
-                </IconToggle>
-                <IconToggle
-                    label="Icon only"
-                    tone="primary"
-                    iconOnly
-                    active={!active.iconOnlyOff}
-                    onClick={toggle('iconOnlyOff')}
-                >
-                    <Star />
-                </IconToggle>
-            </div>
-        </Section>
-    );
-}
 
 function SwitchDemo() {
     const [described, setDescribed] = useState(true);
@@ -1615,72 +1540,98 @@ function ConfirmDialogDemo() {
 }
 
 function DropdownMenuDemo() {
+    const [chosen, setChosen] = useState('a');
+    const [checked, setChecked] = useState<string[]>(['a']);
+    const toggle = (value: string) =>
+        setChecked(
+            checked.includes(value)
+                ? checked.filter((each) => each !== value)
+                : [...checked, value],
+        );
+
     return (
         <Section
             variant="outlined"
             title="DropdownMenu"
-            description="Menu from every kind of trigger, with button and link items."
-            meta="label · variant · trigger · align · DropdownItem asChild · href"
+            description="Opens from any button and marks it open. Items act on select, link somewhere, mark the chosen one with a light background, or check several without closing. A row trigger opens a menu as wide as the row."
+            meta="label · trigger · wide · align · choice · DropdownItem onSelect · href · selected · asChild · DropdownCheckboxItem · RowTrigger"
             collapsible
             collapsed
             remember="docs:dropdown-menu"
         >
             <div className="flex flex-wrap items-center gap-md">
-                <DropdownMenu label="Options" trigger={<Settings />}>
-                    <DropdownItem asChild>
-                        <button
-                            type="button"
-                            onClick={() => notify({ title: 'Edit' })}
-                        >
-                            <Pencil />
-                            Edit
-                        </button>
+                <DropdownMenu
+                    label="Options"
+                    trigger={
+                        <Button variant="ghost" square title="Options">
+                            <Settings />
+                        </Button>
+                    }
+                >
+                    <DropdownItem onSelect={() => notify({ title: 'Edit' })}>
+                        <Pencil />
+                        Edit
                     </DropdownItem>
-                    <DropdownItem asChild>
-                        <button
-                            type="button"
-                            onClick={() => notify({ title: 'Copy' })}
-                        >
-                            <Copy />
-                            Copy
-                        </button>
+                    <DropdownItem onSelect={() => notify({ title: 'Copy' })}>
+                        <Copy />
+                        Copy
                     </DropdownItem>
                     <DropdownItem href="#components">Link item</DropdownItem>
                 </DropdownMenu>
-                <DropdownMenu label="Options" variant="button" trigger="button">
-                    <DropdownItem asChild>
-                        <button type="button">Item 1</button>
-                    </DropdownItem>
-                    <DropdownItem asChild>
-                        <button type="button">Item 2</button>
-                    </DropdownItem>
+                <DropdownMenu
+                    label="Choose"
+                    trigger={<Button variant="outline">Choose one</Button>}
+                >
+                    {options.map((option) => (
+                        <DropdownItem
+                            key={option.value}
+                            selected={chosen === option.value}
+                            onSelect={() => setChosen(option.value)}
+                        >
+                            {option.label}
+                        </DropdownItem>
+                    ))}
                 </DropdownMenu>
                 <DropdownMenu
-                    label="Options"
-                    variant="chip"
-                    trigger={<span>chip</span>}
+                    label="Check"
+                    trigger={<Button variant="ghost">Check several</Button>}
                 >
-                    <DropdownItem asChild>
-                        <button type="button">Item 1</button>
-                    </DropdownItem>
-                    <DropdownItem asChild>
-                        <button type="button">Item 2</button>
-                    </DropdownItem>
+                    {options.map((option) => (
+                        <DropdownCheckboxItem
+                            key={option.value}
+                            checked={checked.includes(option.value)}
+                            onCheckedChange={() => toggle(option.value)}
+                        >
+                            {option.label}
+                        </DropdownCheckboxItem>
+                    ))}
                 </DropdownMenu>
             </div>
-            <DropdownMenu
-                label="Options"
-                variant="field"
-                align="start"
-                trigger={<span className="flex-1">field</span>}
-            >
-                <DropdownItem asChild>
-                    <button type="button">Item 1</button>
-                </DropdownItem>
-                <DropdownItem asChild>
-                    <button type="button">Item 2</button>
-                </DropdownItem>
-            </DropdownMenu>
+            <div className="overflow-hidden rounded border border-border bg-surface">
+                <DropdownMenu
+                    label="Reminder"
+                    wide
+                    align="start"
+                    trigger={
+                        <RowTrigger
+                            icon={Bell}
+                            label="Reminder"
+                            value={options.find((o) => o.value === chosen)?.label}
+                            set
+                        />
+                    }
+                >
+                    {options.map((option) => (
+                        <DropdownItem
+                            key={option.value}
+                            selected={chosen === option.value}
+                            onSelect={() => setChosen(option.value)}
+                        >
+                            {option.label}
+                        </DropdownItem>
+                    ))}
+                </DropdownMenu>
+            </div>
         </Section>
     );
 }
@@ -1739,23 +1690,33 @@ function ImageViewerDemo() {
 
 function BackdropDemo() {
     const [open, setOpen] = useState(false);
+    const [hole, setHole] = useState<HTMLButtonElement | null>(null);
 
     return (
         <Section
             variant="outlined"
             title="Backdrop"
-            description="Dims the page behind floating content and closes when clicked."
-            meta="open · onClose"
+            description="Catches the first click outside floating content and closes it. With a veil, it dims and blurs the page, leaving a hole around one element."
+            meta="open · onClose · veil · hole"
             collapsible
             collapsed
             remember="docs:backdrop"
         >
             <div>
-                <Button variant="outline" onClick={() => setOpen(true)}>
+                <Button
+                    ref={setHole}
+                    variant="outline"
+                    onClick={() => setOpen(true)}
+                >
                     Open
                 </Button>
             </div>
-            <Backdrop open={open} onClose={() => setOpen(false)} />
+            <Backdrop
+                open={open}
+                onClose={() => setOpen(false)}
+                veil
+                hole={hole}
+            />
         </Section>
     );
 }

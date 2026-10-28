@@ -2,13 +2,14 @@ import { ChevronDown, ChevronRight, ChevronUp, Ellipsis } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
+import { Button, touchClass } from './button';
+import { Cover } from './cover';
 import { DropdownMenu } from './dropdown-menu';
 import { Heading } from './heading';
 import { HeldMenu } from './held-menu';
 import { Hint } from './hint';
 import { IconBadge } from './icon-badge';
 import { cn } from './lib/utils';
-import { useUi } from './provider';
 import { SortHandle, sortItemClass } from './sortable';
 
 const variants = {
@@ -81,22 +82,6 @@ function SectionText(props: SectionTextProps) {
     );
 }
 
-type CoverProps = {
-    onClick?: () => void;
-    href?: string;
-};
-
-function Cover(props: CoverProps) {
-    const { link: Link } = useUi();
-    const className =
-        'rounded-[inherit] absolute inset-0 cursor-pointer focus-visible:outline-2';
-
-    return props.href ? (
-        <Link href={props.href} className={className} />
-    ) : (
-        <button type="button" onClick={props.onClick} className={className} />
-    );
-}
 
 function storedOpen(key: string | undefined, fallback: boolean): boolean {
     try {
@@ -157,12 +142,7 @@ function BandHeader(props: BandHeaderProps) {
                 sectionPadding.x,
             )}
         >
-            <button
-                type="button"
-                aria-expanded={props.open}
-                onClick={props.onToggle}
-                className="absolute inset-0 cursor-pointer"
-            />
+            <Cover aria-expanded={props.open} onClick={props.onToggle} />
             {props.sortable && <SortHandle />}
             <Chevron className="pointer-events-none relative size-icon-sm shrink-0 text-foreground-muted" />
             {props.title ? (
@@ -190,7 +170,16 @@ function BandHeader(props: BandHeaderProps) {
                     {props.menu && (
                         <DropdownMenu
                             label={props.menu.label}
-                            trigger={<Ellipsis className="size-icon-md" />}
+                            trigger={
+                                <Button
+                                    variant="ghost"
+                                    square
+                                    title={props.menu.label}
+                                    className={`p-xs ${touchClass}`}
+                                >
+                                    <Ellipsis className="size-icon-md" />
+                                </Button>
+                            }
                         >
                             {props.menu.items}
                         </DropdownMenu>
@@ -202,7 +191,6 @@ function BandHeader(props: BandHeaderProps) {
 }
 
 export function Section(props: SectionProps) {
-    const { link: Link } = useUi();
     const collapsible = props.collapsible ?? false;
     const [open, setOpen] = useOpen(props);
     const variant = props.variant ?? 'flat';
@@ -225,7 +213,7 @@ export function Section(props: SectionProps) {
     const headerLink =
         !collapsible && Boolean(props.headerHref || props.onHeaderClick);
     const headerLinkClass = cn(
-        'absolute cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 active:bg-surface-hover',
+        'transition-colors hover:bg-surface-hover focus-visible:outline-2 active:bg-surface-hover',
         isOutlined
             ? 'inset-0 rounded-t-[inherit]'
             : '-inset-y-(--gap-sm) max-xl:-inset-x-(--gutter) xl:-inset-x-(--gap-sm)',
@@ -252,26 +240,19 @@ export function Section(props: SectionProps) {
                     (headerLink || collapsible) && 'relative',
                 )}
             >
-                {headerLink &&
-                    (props.headerHref ? (
-                        <Link
-                            href={props.headerHref}
-                            className={headerLinkClass}
-                        />
-                    ) : (
-                        <button
-                            type="button"
-                            onClick={props.onHeaderClick}
-                            className={headerLinkClass}
-                        />
-                    ))}
+                {headerLink && (
+                    <Cover
+                        href={props.headerHref}
+                        onClick={props.onHeaderClick}
+                        className={headerLinkClass}
+                    />
+                )}
                 {collapsible ? (
                     <>
-                        <button
-                            type="button"
+                        <Cover
                             aria-expanded={open}
                             onClick={() => setOpen(!open)}
-                            className="absolute inset-0 cursor-pointer rounded-t-[inherit]"
+                            className="inset-0 rounded-t-[inherit]"
                         />
                         <div className="pointer-events-none relative flex min-w-0 flex-1 items-center gap-md [&_a]:pointer-events-auto">
                             <SectionText
@@ -363,7 +344,11 @@ export function Section(props: SectionProps) {
             )}
 
             {isClickable && (
-                <Cover onClick={props.onClick} href={props.href} />
+                <Cover
+                    onClick={props.onClick}
+                    href={props.href}
+                    className="inset-0 rounded-[inherit] focus-visible:outline-2"
+                />
             )}
         </section>
     );

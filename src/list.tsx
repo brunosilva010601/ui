@@ -1,11 +1,9 @@
-import { Ellipsis } from 'lucide-react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
-import { Button } from './button';
+import { Cover } from './cover';
 import { DropdownMenu } from './dropdown-menu';
-import { useHold } from './hold';
+import { useHeldMenu } from './held-menu';
 import { cn } from './lib/utils';
-import { useUi } from './provider';
 import { SortHandle, SortProvider, sortItemClass, useSortable } from './sortable';
 
 const variants = {
@@ -24,9 +22,6 @@ const itemVariants: Record<ListVariant, string> = {
 
 const VariantContext = createContext<ListVariant>('divided');
 
-const layerClass =
-    'absolute inset-0 cursor-pointer focus-visible:-outline-offset-2';
-
 export type ListItemMenu = {
     label: string;
     items: ReactNode;
@@ -41,36 +36,17 @@ type ItemLayerProps = {
 };
 
 function ItemLayer(props: ItemLayerProps) {
-    const { link: Link } = useUi();
-
-    if (props.href && props.external) {
-        return (
-            <a
+    return (
+        (props.href || props.onClick) && (
+            <Cover
                 data-layer
                 href={props.href}
-                target="_blank"
-                rel="noopener"
-                className={layerClass}
-            />
-        );
-    }
-
-    if (props.href) {
-        return <Link data-layer href={props.href} className={layerClass} />;
-    }
-
-    if (props.onClick) {
-        return (
-            <button
-                type="button"
-                data-layer
+                external={props.external}
                 onClick={props.onClick}
-                className={layerClass}
+                className="inset-0 focus-visible:-outline-offset-2"
             />
-        );
-    }
-
-    return null;
+        )
+    );
 }
 
 type ListItemProps = ItemLayerProps & {
@@ -84,39 +60,22 @@ type ListItemProps = ItemLayerProps & {
 
 export function ListItem(props: ListItemProps) {
     const variant = useContext(VariantContext);
-    const [open, setOpen] = useState(false);
     const menu = props.menu;
-    const hold = useHold((pointer) => {
-        if (pointer !== 'mouse' && menu?.onHold) {
-            menu.onHold();
-        } else {
-            setOpen(true);
-        }
+    const held = useHeldMenu({
+        label: menu?.label ?? '',
+        hover: menu?.hover,
+        onHold: menu?.onHold,
     });
+    const { open, setOpen, hold } = held;
     const layered = Boolean(props.onClick || props.href);
-    const more = menu && (
-        <Button
-            variant={menu.hover ? 'outline' : 'ghost'}
-            size="sm"
-            square
-            title={menu.label}
-            className={
-                menu.hover
-                    ? 'absolute top-1/2 right-(--row-inset) hidden -translate-y-1/2 [@media(hover:hover)]:group-hover:inline-flex'
-                    : 'mr-(--row-inset) hidden shrink-0 [@media(hover:hover)]:inline-flex'
-            }
-            onClick={() => setOpen(true)}
-        >
-            <Ellipsis />
-        </Button>
-    );
+    const more = menu && held.more;
     const body = (
         <div
             className={cn(
                 'group group/sort relative flex items-center transition-colors',
                 itemVariants[variant],
                 props.selected
-                    ? 'bg-primary/20'
+                    ? 'bg-foreground/10'
                     : props.active
                       ? 'bg-surface-hover'
                       : 'bg-[var(--row-surface,var(--color-surface))]',
