@@ -71,10 +71,13 @@ export function Select<T extends string>(props: Props<T>) {
                 }
             >
                 {props.options.map((option) => (
-                    <DropdownItem key={option.value} asChild>
+                    <DropdownItem
+                        key={option.value}
+                        asChild
+                        selected={option.value === props.value}
+                    >
                         <button
                             type="button"
-                            aria-current={option.value === props.value}
                             onClick={() => props.onChange(option.value)}
                         >
                             <OptionText option={option} />

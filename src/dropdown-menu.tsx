@@ -236,7 +236,7 @@ export function RowTrigger(props: RowTriggerProps) {
     );
 }
 
-type DropdownItemProps =
+type DropdownItemProps = { selected?: boolean } & (
     | {
           asChild?: false;
           href: string;
@@ -247,16 +247,23 @@ type DropdownItemProps =
     | {
           asChild: true;
           children: ReactNode;
-      };
+      }
+);
 
 export function DropdownItem(props: DropdownItemProps) {
     const Close = useContext(MenuClose);
     const { link: Link } = useUi();
+    const state = {
+        'aria-current': props.selected || undefined,
+        'data-state': props.selected ? 'on' : undefined,
+    };
 
     if (props.asChild) {
         return (
             <Close asChild>
-                <Slot className={itemClass}>{props.children}</Slot>
+                <Slot className={itemClass} {...state}>
+                    {props.children}
+                </Slot>
             </Close>
         );
     }
@@ -267,6 +274,7 @@ export function DropdownItem(props: DropdownItemProps) {
             onClick={props.onClick}
             data-test={props['data-test']}
             className={itemClass}
+            {...state}
         >
             {props.children}
         </Link>

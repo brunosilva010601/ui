@@ -271,8 +271,8 @@ function ButtonDemo() {
                                 <Plus />
                                 {variant}
                             </Button>
-                            {variant === 'outline' ? (
-                                <Button variant="outline" size={size} selected>
+                            {variant === 'outline' || variant === 'ghost' ? (
+                                <Button variant={variant} size={size} selected>
                                     {variant}
                                 </Button>
                             ) : (

@@ -64,8 +64,11 @@ export type ButtonVariant = keyof typeof variants;
 export type ButtonSize = keyof typeof sizes;
 
 type ButtonProps = (
-    | { variant: 'outline'; selected?: boolean }
-    | { variant?: Exclude<ButtonVariant, 'outline'>; selected?: never }
+    | { variant: 'outline' | 'ghost'; selected?: boolean }
+    | {
+          variant?: Exclude<ButtonVariant, 'outline' | 'ghost'>;
+          selected?: never;
+      }
 ) & {
     size?: ButtonSize;
     square?: boolean;
@@ -137,7 +140,8 @@ export function Button(props: ButtonProps) {
         <Component
             type={asChild ? undefined : type}
             form={submit ? formId : undefined}
-            aria-pressed={selected}
+            aria-pressed={asChild ? undefined : selected}
+            aria-current={asChild ? selected || undefined : undefined}
             data-state={selected === undefined ? undefined : selected ? 'on' : 'off'}
             className={buttonClass({
                 variant,
