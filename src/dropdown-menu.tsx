@@ -22,7 +22,8 @@ import {
 } from './popover';
 import { useUi } from './provider';
 
-const itemClass = buttonClass({ variant: 'ghost', block: true });
+const itemClass =
+    "flex w-full cursor-pointer items-center gap-sm rounded border border-transparent px-(--row-inset) py-2.5 text-left text-sm text-foreground transition-colors select-none hover:bg-foreground/5 active:bg-foreground/5 data-[state=on]:bg-foreground/5 [&_svg]:shrink-0 [&_svg]:text-foreground-muted [&_svg:not([class*='size-'])]:size-icon-sm";
 
 const triggers = {
     icon: buttonClass({

@@ -234,7 +234,7 @@ function ButtonDemo() {
             variant="outlined"
             title="Button"
             description="Every variant in both sizes, with text, icon and text, icon only and disabled. Without size, a link takes the size of the text around it."
-            meta='variant · size · square · block · selected · disabled · asChild'
+            meta='variant · size · square · disabled · asChild'
             collapsible
             collapsed
             remember="docs:button"
@@ -242,15 +242,12 @@ function ButtonDemo() {
             {sizes.map((size) => (
                 <div
                     key={size}
-                    className="flex flex-col gap-md sm:grid sm:grid-cols-5 sm:items-center sm:justify-items-center"
+                    className="flex flex-col gap-md sm:grid sm:grid-cols-4 sm:items-center sm:justify-items-center"
                 >
                     <div className="sm:contents">
                         <span className={caption}>size="{size}"</span>
                         <span className={cn(caption, 'max-sm:hidden')}>
                             with icon
-                        </span>
-                        <span className={cn(caption, 'max-sm:hidden')}>
-                            selected
                         </span>
                         <span className={cn(caption, 'max-sm:hidden')}>
                             disabled
@@ -271,13 +268,6 @@ function ButtonDemo() {
                                 <Plus />
                                 {variant}
                             </Button>
-                            {variant === 'outline' || variant === 'ghost' ? (
-                                <Button variant={variant} size={size} selected>
-                                    {variant}
-                                </Button>
-                            ) : (
-                                <span className="max-sm:hidden" />
-                            )}
                             <Button variant={variant} size={size} disabled>
                                 {variant}
                             </Button>
@@ -305,19 +295,6 @@ function ButtonDemo() {
                     <Button>Normal</Button>
                 </div>
             </div>
-            <div className="flex flex-col gap-sm">
-                <span className={caption}>block</span>
-                <div className="flex max-w-xs flex-col">
-                    <Button variant="ghost" block>
-                        <Plus />
-                        Full width, content at the start
-                    </Button>
-                    <Button variant="ghost" block>
-                        <Plus />A longer label that wraps onto a second line
-                        inside the block
-                    </Button>
-                </div>
-            </div>
             <p className="text-sm">
                 A link inside a sentence:{' '}
                 <Button variant="link" asChild>
@@ -328,6 +305,7 @@ function ButtonDemo() {
         </Section>
     );
 }
+
 
 function BadgeDemo() {
     return (
@@ -1368,10 +1346,9 @@ function ListDemo() {
                 <Button
                     variant="outline"
                     size="sm"
-                    selected={organizing}
                     onClick={() => setOrganizing(!organizing)}
                 >
-                    organizing
+                    {organizing ? 'Done' : 'Organize'}
                 </Button>
             </div>
             <div className="overflow-hidden rounded border border-border bg-surface">

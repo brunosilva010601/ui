@@ -31,9 +31,6 @@ const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
     link: 'link',
 };
 
-const blockClass =
-    'w-full justify-start rounded px-(--row-inset) text-left whitespace-normal';
-
 const bleedSides =
     'px-[calc(var(--gap-md)/2)] -mx-[calc(var(--gap-md)/2_+_var(--spacing)*0.25)]';
 
@@ -63,16 +60,10 @@ export type ButtonVariant = keyof typeof variants;
 
 export type ButtonSize = keyof typeof sizes;
 
-type ButtonProps = (
-    | { variant: 'outline' | 'ghost'; selected?: boolean }
-    | {
-          variant?: Exclude<ButtonVariant, 'outline' | 'ghost'>;
-          selected?: never;
-      }
-) & {
+type ButtonProps = {
+    variant?: ButtonVariant;
     size?: ButtonSize;
     square?: boolean;
-    block?: boolean;
     bleed?: boolean;
     asChild?: boolean;
     type?: 'button' | 'submit';
@@ -88,7 +79,6 @@ type ButtonClassOptions = {
     variant?: keyof typeof variants;
     size?: keyof typeof sizes;
     square?: boolean;
-    block?: boolean;
     bleed?: boolean;
     className?: string;
 };
@@ -97,7 +87,6 @@ export function buttonClass({
     variant = 'primary',
     size,
     square = false,
-    block = false,
     bleed = false,
     className,
 }: ButtonClassOptions = {}) {
@@ -111,7 +100,6 @@ export function buttonClass({
         box.icon,
         shape === 'link' && size && sizes[size].link,
         isBox && (square ? box.square : box.text),
-        block && isBox && blockClass,
         bleed && isBox && bleedSides,
         bleed && isBox && bleedBackdrop,
         bleed && isBox && (square ? box.squareBleed : box.textBleed),
@@ -124,9 +112,7 @@ export function Button(props: ButtonProps) {
         variant,
         size,
         square,
-        block,
         bleed,
-        selected,
         asChild = false,
         type = 'button',
         className,
@@ -140,17 +126,7 @@ export function Button(props: ButtonProps) {
         <Component
             type={asChild ? undefined : type}
             form={submit ? formId : undefined}
-            aria-pressed={asChild ? undefined : selected}
-            aria-current={asChild ? selected || undefined : undefined}
-            data-state={selected === undefined ? undefined : selected ? 'on' : 'off'}
-            className={buttonClass({
-                variant,
-                size,
-                square,
-                block,
-                bleed,
-                className,
-            })}
+            className={buttonClass({ variant, size, square, bleed, className })}
             {...rest}
             disabled={rest.disabled || undefined}
         />
