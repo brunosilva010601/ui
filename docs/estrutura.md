@@ -3,7 +3,7 @@
 ## Pastas
 
 - `theme.css`: entrada do tema. Junta os arquivos de `css/` e registra `src/` para o Tailwind gerar as classes dos componentes.
-- `css/`: escalas e tamanhos (`tokens.css`), cores do claro e do escuro (`palettes.css`), animações, fonte e estilos base.
+- `css/`: escalas e tamanhos (`tokens.css`), cores do claro e do escuro (`palettes.css`), animações, fonte e estilos base. Em `css/fonts/` ficam os arquivos da Noto Color Emoji, copiados do que o Google Fonts serve, porque a versão do `@fontsource` carrega e não desenha nada: o texto some e o espaço fica. A Outfit continua vindo do `@fontsource`.
 - `src/`: os componentes, todos exportados por `src/index.ts`.
 - `gallery/`: página de consulta do tema e dos componentes. Não vai para os apps.
 
@@ -23,7 +23,7 @@ O pacote entra no `package.json` do app apontando para a tag:
 
 A tag `v0.1.0` aponta para um commit de antes do nome atual e não serve para instalar.
 
-Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no pacote aparecem na hora.
+Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no pacote aparecem na hora. Nesse modo o servidor do Vite serve os arquivos pelo caminho real da pasta, fora do projeto, e recusa tudo que está fora da raiz dele: sem liberar essa pasta em `server.fs.allow`, as fontes não carregam e o emoji sai em branco ou com o desenho do aparelho. Instalado pela tag, nada disso é preciso.
 
 ## Adotar num app
 

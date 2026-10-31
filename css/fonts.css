@@ -35,7 +35,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-0-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-0.woff2')
         format('woff2');
     unicode-range:
         U+1F1E6-1F1FF;
@@ -46,7 +46,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-1-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-1.woff2')
         format('woff2');
     unicode-range:
         U+200D, U+2620, U+26A7, U+FE0F, U+1F308, U+1F38C, U+1F3C1,
@@ -59,7 +59,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-2-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-2.woff2')
         format('woff2');
     unicode-range:
         U+23, U+2A, U+30-39, U+A9, U+AE, U+200D, U+203C, U+2049, U+20E3, U+2122,
@@ -87,7 +87,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-3-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-3.woff2')
         format('woff2');
     unicode-range:
         U+200D, U+231A-231B, U+2328, U+23F0-23F3, U+2602, U+260E, U+2692,
@@ -111,7 +111,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-4-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-4.woff2')
         format('woff2');
     unicode-range:
         U+265F, U+26BD-26BE, U+26F3, U+26F8, U+FE0F, U+1F004, U+1F0CF,
@@ -131,7 +131,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-5-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-5.woff2')
         format('woff2');
     unicode-range:
         U+2693, U+26E9-26EA, U+26F1-26F2, U+26F4-26F5, U+26FA, U+26FD, U+2708,
@@ -149,7 +149,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-6-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-6.woff2')
         format('woff2');
     unicode-range:
         U+200D, U+2615, U+FE0F, U+1F32D-1F330, U+1F336, U+1F33D, U+1F344-1F37F,
@@ -162,7 +162,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-7-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-7.woff2')
         format('woff2');
     unicode-range:
         U+200D, U+2600-2601, U+2603-2604, U+2614, U+2618, U+26A1, U+26C4-26C5,
@@ -180,7 +180,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-8-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-8.woff2')
         format('woff2');
     unicode-range:
         U+200D, U+2640, U+2642, U+2695-2696, U+26F7, U+26F9, U+2708, U+2764,
@@ -200,7 +200,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-9-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-9.woff2')
         format('woff2');
     unicode-range:
         U+200D, U+2194-2195, U+2603, U+261D, U+2620, U+2639-263A, U+2665,
@@ -220,7 +220,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@fontsource/noto-color-emoji/files/noto-color-emoji-10-400-normal.woff2')
+    src: url('./fonts/noto-color-emoji-10.woff2')
         format('woff2');
     unicode-range:
         U+1F6D9, U+1FA8B-1FA8D, U+1FACC, U+1FADD, U+1FAEB;
