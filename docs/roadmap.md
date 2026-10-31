@@ -1,25 +1,16 @@
 # Roadmap
 
-## Refatoração aprovada
-
-Objetivo: os apps usam o pacote e não criam tamanho de fonte nem nada próprio de aparência, com diferenças só por classe de caso, como `w-full`. Ordem de execução:
-
-1. Trocar no pacote todas as classes para a escala nova (`gap-md` para `gap-12px`, `text-sm` para `text-14px`, números soltos) e absorver 20 px de texto em 18 e 36 px em 30.
-2. Criar no pacote a moldura da página (cabeçalho, página com rodapé fixo, área segura, medida do rodapé para o `notify`), a superfície de cartão, `disabled` e `busy` no `ListItem`, `Cover` exportado, telas de autenticação e erro, item de navegação, botão flutuante e larguras no `Container`.
-3. Completar o que já existe: `Detail` lado a lado com ação, par título e linha secundária, `EmptyState` compacto, props iguais em todos os campos, `NumberInput` sem moldura e com valor grande, borda e fundo na paleta, botão marcado na cor do significado.
-4. Limpar: exportações em lista explícita, sem as sem uso e as classes internas; um mapa de tons, com `danger` no `notify`; moldura compartilhada entre abas e grupo; `Section` e `Modal` divididas; sem `emoji` no `Select`; sombras com nome; variáveis todas em `tokens.css`; formatador no pacote.
-5. Completar a galeria com `Columns`, `MainColumn`, `SideColumn`, `Container`, `ControlStrut`, `Sortable`, `Popover`, `useModalValue`, `ModalCloseButton`, `touchClass` e `FieldError`, e com as escalas novas.
-6. Migrar os apps um a um, primeiro o Salalas e depois o Mylo, que então declara a própria cor e larga `--gutter` e `size-icon-md`. O Salalas perde a altura de linha própria e passa a usar `ui-label`, `ui-prompt` e `ui-display` do pacote.
-7. Remover os nomes antigos e o multiplicador `--spacing` na versão em que o Loremy adotar, com um lint contra número puro.
-
 ## Pacote
 
+- Quando o Loremy adotar: remover os nomes antigos (`gap-md`, `text-sm`, `size-icon-sm`, `--gap-*`, `--padding-*`, `--margin-*`) e o multiplicador `--spacing`, fechar `--text-*` e acrescentar um lint contra número puro. Mylo e Salalas já estão sem eles.
 - Escolher o nome definitivo do pacote, hoje `ui`.
 - Renomear a pasta `gallery`, provavelmente para `docs`.
-- O espaço livre no topo das gavetas que sobem de baixo no celular está fora da escala (`src/modal.tsx`).
 - A modal e a detecção de toque acessam a janela assim que o arquivo carrega, o que quebra a renderização no servidor que o Loremy usa.
 - Ideia: configurar o tema do app num bloco no CSS (`@plugin`), com só as chaves que o projeto pode mudar, como a cor principal.
-- A modal escuta o voltar do navegador assim que o arquivo carrega e empurra uma entrada de histórico por janela aberta (`src/modal.tsx`), o que ainda não foi testado contra um roteador que não seja o do Inertia, como o do Salalas.
+- A modal escuta o voltar do navegador assim que o arquivo carrega e empurra uma entrada de histórico por janela aberta (`src/modal-history.ts`), o que ainda não foi testado contra um roteador que não seja o do Inertia, como o do Salalas.
+- `Section` ainda tem quatro formas de clique (`onClick`, `href`, `headerHref`, `onHeaderClick`), e `Banner`, `EmptyState` e `notify` recebem a ação em três formatos.
+- `Brand` no tamanho `md` traz recuo de posição junto do tamanho, e o girador aparece repetido no botão, no `Banner` e no `Spinner`.
+- O mínimo de `lucide-react` aceito pelo pacote está abaixo do que ele usa.
 - A modal não dismissível (`dismissible={false}`) prende Escape e clique fora e esconde o X, mas o gesto de arrastar a gaveta para baixo ainda fecha.
 - Nome acessível: os `aria-label` foram removidos de todo o pacote, então botões só de ícone, setas, fechar e carregando não têm nome para leitor de tela. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
 
@@ -36,7 +27,7 @@ O Salalas já usa o pacote. O que a troca decidiu:
 
 O que a adoção pediu ao pacote: `disabled` no `Input`, `cancelLabel` e `tone` no `ConfirmDialog`, `dismissible` no `Modal`, `disabled` no `ButtonGroup` e no `ButtonGroupItem`, `aria-label` no item, `layout="segmented"` no grupo e `sideEffects` no `package.json`, que tirou do app o realce de código que ele nunca mostra.
 
-O que falta: o voltar do navegador com modal aberta não foi testado contra o roteador do Salalas, e a galeria ainda não mostra o `dismissible` da modal, o `cancelLabel` e o `tone` da confirmação nem o `disabled` do campo.
+O que falta: o voltar do navegador com modal aberta não foi testado contra o roteador do Salalas. Os cartões com regra do jogo (`EntryRow`, `GroupCard`, `IdentityCard`, `HoldToReveal` e a pista do Três Pistas) continuam montados no app, com as classes de `Surface` escritas à mão, porque têm medalha, tremor e toque próprios; vale passá-los para `Surface` quando forem mexidos. O teclado (`Keypad`) ainda reescreve o gesto de segurar em vez de usar `useHold`.
 
 ## Vindo do Mylo, a discutir
 
