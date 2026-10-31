@@ -22,6 +22,7 @@ import {
     Button,
     Calendar,
     Badge,
+    Banner,
     ButtonGroup,
     ButtonGroupItem,
     CarouselFrame,
@@ -200,6 +201,7 @@ export function ComponentsPage() {
                 <DetailDemo />
                 <StatDemo />
                 <BrandDemo />
+                <BannerDemo />
                 <EmptyStateDemo />
                 <MarkdownDemo />
                 <CodeBlockDemo />
@@ -233,8 +235,8 @@ function ButtonDemo() {
         <Section
             variant="outlined"
             title="Button"
-            description="Every variant in both sizes, with text, icon and text, icon only and disabled. Without size, a link takes the size of the text around it."
-            meta='variant · size · square · disabled · asChild'
+            description="Every variant in both sizes, with text, icon and text, icon only, disabled and busy. Without size, a link takes the size of the text around it."
+            meta='variant · size · square · bleed · busy · disabled · asChild'
             collapsible
             collapsed
             remember="docs:button"
@@ -282,6 +284,25 @@ function ButtonDemo() {
                     ))}
                 </div>
             ))}
+            <div className="flex flex-col gap-sm">
+                <span className={caption}>busy</span>
+                <div className="flex flex-wrap items-center gap-sm">
+                    <Button busy>Sending</Button>
+                    <Button busy>
+                        <Plus />
+                        Sending
+                    </Button>
+                    <Button variant="outline" square busy>
+                        <Plus />
+                    </Button>
+                    <Button size="sm" busy>
+                        Sending
+                    </Button>
+                    <Button variant="outline" size="sm" square busy>
+                        <Plus />
+                    </Button>
+                </div>
+            </div>
             <div className="flex flex-col gap-sm">
                 <span className={caption}>edge cases</span>
                 <div className="flex flex-wrap items-start gap-sm">
@@ -1010,7 +1031,7 @@ function EmptyStateDemo() {
         <Section
             variant="outlined"
             title="EmptyState"
-            description="Placeholder for empty lists and pages, with and without an action."
+            description="Placeholder for empty lists and pages, with and without an action, and with the title alone."
             meta="icon · title · description · action"
             collapsible
             collapsed
@@ -1028,6 +1049,48 @@ function EmptyStateDemo() {
                     }}
                 />
                 <EmptyState icon={Inbox} title="Title" />
+                <EmptyState title="Nothing here yet" />
+            </div>
+        </Section>
+    );
+}
+
+function BannerDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="Banner"
+            description="Notice that stays in the content, in every tone, with a chosen icon, while waiting, with an action, and edge to edge inside an area."
+            meta="tone · icon · busy · bleed · action"
+            collapsible
+            collapsed
+            remember="docs:banner"
+        >
+            {badgeTones.map((tone) => (
+                <Banner key={tone} tone={tone}>
+                    tone="{tone}"
+                </Banner>
+            ))}
+            <Banner tone="primary" icon={Bell}>
+                A chosen icon, and a longer line of text that wraps onto two
+                lines to show how it balances beside the icon.
+            </Banner>
+            <Banner busy>Waiting for something to finish</Banner>
+            <Banner
+                tone="warning"
+                action={
+                    <Button variant="link" size="sm">
+                        Action
+                    </Button>
+                }
+            >
+                With an action beside the text
+            </Banner>
+            <div className="flex flex-col gap-sm rounded border border-border bg-surface p-md [--bleed:var(--padding-md)]">
+                <span className={caption}>bleed inside a card</span>
+                <Banner tone="danger" bleed>
+                    Edge to edge, up to the padding of the area
+                </Banner>
             </div>
         </Section>
     );

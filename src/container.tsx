@@ -11,6 +11,7 @@ const widths = {
 type Props = {
     width?: keyof typeof widths;
     padded?: boolean;
+    className?: string;
     children: ReactNode;
 };
 
@@ -21,6 +22,7 @@ export function Container(props: Props) {
                 'w-full min-w-0',
                 widths[props.width ?? 'page'],
                 props.padded && 'p-(--gutter) [--bleed:var(--gutter)]',
+                props.className,
             )}
         >
             {props.children}

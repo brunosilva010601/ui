@@ -13,7 +13,7 @@ type EmptyAction = {
 };
 
 export type EmptyStateProps = {
-    icon: LucideIcon;
+    icon?: LucideIcon;
     title: string;
     description?: string;
     action?: EmptyAction;
@@ -46,7 +46,7 @@ export function EmptyState(props: EmptyStateProps) {
                 props.className,
             )}
         >
-            <IconBadge icon={props.icon} size="lg" />
+            {props.icon && <IconBadge icon={props.icon} size="lg" />}
             <Heading
                 as="p"
                 title={props.title}

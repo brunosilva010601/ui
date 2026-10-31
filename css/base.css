@@ -1,5 +1,6 @@
 @layer base {
     :root {
+        --gutter: var(--padding-md);
         --row-inset: var(--padding-md);
         --drawer-gap: calc(var(--spacing) * 3);
         --page-top: calc(var(--spacing) * 6);

@@ -9,6 +9,7 @@
 - A altura de um controle é a soma do padding, da linha de texto e da borda. Não há altura fixa nem mínima, para o controle crescer com o conteúdo.
 - Todo controle tem borda de 1 px, transparente quando não aparece, para trocar de variante nunca mudar a altura.
 - Campos usam fonte 16 porque, abaixo disso, o iPhone dá zoom ao tocar no campo.
+- A fonte de emoji vem antes das fontes do sistema na família padrão, porque é o pacote que a carrega: atrás delas, o emoji e os símbolos que o sistema também desenha (©, ❤, as teclas numéricas) mudariam de forma a cada aparelho e sairiam em preto e branco.
 
 ## Componentes
 
@@ -24,6 +25,10 @@
 - Itens de lista e seções se reordenam arrastando por uma alça no recuo à esquerda (`onReorder` e `sortId`, ou `Sortable` em volta de seções). Ela aparece ao passar o mouse e, no modo de organizar (`organizing`), fica sempre à vista, porque no toque o segurar já é o gesto de outra coisa.
 - Cada uso do `Modal` diz o formato no celular (`mobile`) e, quando foge do padrão, no computador (`desktop`), e a troca entre os dois é só CSS. Detectar a tela em JavaScript quebraria a montagem no servidor e trocaria a peça no meio, com a janela aberta, se o tamanho mudasse.
 - Controles que se repetem com o mesmo papel (botão, campo) têm tamanhos fixos com nome. Modal, gaveta e menus têm uma largura padrão e mudam pelo `className` quando o conteúdo pede, porque cada caso tem um conteúdo diferente.
+- Ação em curso é o `busy` do botão: ele bloqueia, se anuncia como ocupado e troca o ícone por um girador do tamanho do ícone, sem mudar de altura. Pulsar ou esmaecer o bloco em volta é do app, não do controle.
+- Aviso que fica na tela é o `Banner`, com os tons da `Badge`, ícone por tom, ação ao lado e `bleed` para encostar nas bordas da área. Aviso passageiro é o `notify`, e dica sob demanda é o `Hint`: cada um aparece de um jeito e some de um jeito, então não são variantes da mesma peça.
+- O vazio (`EmptyState`) pede só o título; ícone, descrição e ação entram quando a tela pede. Não há uma segunda moldura de vazio, porque seriam dois jeitos de dizer a mesma coisa.
+- Largura é do caso, não do controle. O botão nasce do tamanho do conteúdo e recebe `w-full` onde precisa ocupar a linha, como num rodapé ou numa grade de escolha. Não há prop de largura: ela seria um segundo jeito de dizer o que a classe já diz.
 - O gesto de segurar ou clicar com o botão direito é uma peça própria (`useHold`), aplicável a qualquer elemento. O menu do item da lista e o das seções usam o mesmo gancho em cima dela (`useHeldMenu`), com o mesmo ⋯, e todo bloco clicável inteiro usa a mesma cobertura (`Cover`).
 
 ## Galeria

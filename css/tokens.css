@@ -3,7 +3,7 @@
     --radius: 0.75rem;
 
     --font-sans:
-        'Outfit', ui-sans-serif, system-ui, sans-serif, 'Noto Color Emoji';
+        'Outfit', 'Noto Color Emoji', ui-sans-serif, system-ui, sans-serif;
 
     --gap-2xs: calc(var(--spacing) * 0.5);
     --gap-xs: calc(var(--spacing) * 1);

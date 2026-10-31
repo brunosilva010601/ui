@@ -7,7 +7,22 @@
 - O espaço livre no topo das gavetas que sobem de baixo no celular está fora da escala (`src/modal.tsx`).
 - A modal e a detecção de toque acessam a janela assim que o arquivo carrega, o que quebra a renderização no servidor que o Loremy usa.
 - Ideia: configurar o tema do app num bloco no CSS (`@plugin`), com só as chaves que o projeto pode mudar, como a cor principal.
+- A modal escuta o voltar do navegador assim que o arquivo carrega e empurra uma entrada de histórico por janela aberta (`src/modal.tsx`), o que ainda não foi testado contra um roteador que não seja o do Inertia, como o do Salalas.
 - Nome acessível: os `aria-label` foram removidos de todo o pacote, então botões só de ícone, setas, fechar e carregando não têm nome para leitor de tela. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
+
+## Adoção pelo Salalas
+
+O Salalas vai adotar o pacote. O que já está decidido para a troca:
+
+- O emoji do jogo entra como conteúdo do botão e do título da seção, que aceitam qualquer coisa, no tamanho da escala de ícone. Não há prop de emoji nem escala de texto só para ele.
+- A coluna de 32 rem do app é o `max-w-lg` do Tailwind, no shell da tela, que é do app.
+- O botão de linha cheia recebe `w-full` em cada uso, e os dezenove nomes de leitor de tela do app viram `aria-label`, que o botão já repassa.
+- Pergunta grande e placar do jogo continuam no app: são tipografia de produto, e nenhum outro app tem.
+
+O que falta decidir:
+
+- O app tem dez botões que marcam escolha por `aria-pressed`. Pelos padrões, escolha entre opções é `ButtonGroup`, o que deixa o escolhido invertido em vez de realçado.
+- O tema do app é um atributo no `html` e o do pacote é a classe `dark`, com CSS do logo preso no atributo. Nada disso o TypeScript aponta: o app simplesmente nasce claro.
 
 ## Vindo do Mylo, a discutir
 

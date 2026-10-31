@@ -6,6 +6,7 @@ export { Button, touchClass } from './button';
 export type { ButtonSize, ButtonVariant } from './button';
 export * from './carousel';
 export * from './badge';
+export * from './banner';
 export * from './button-group';
 export * from './code-block';
 export * from './color-dot';

@@ -1,4 +1,5 @@
 import { Slot } from '@radix-ui/react-slot';
+import { LoaderCircle } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { useFormId } from './form/form';
 import { cn } from './lib/utils';
@@ -65,6 +66,7 @@ type ButtonProps = Omit<ComponentProps<'button'>, 'type'> & {
     size?: ButtonSize;
     square?: boolean;
     bleed?: boolean;
+    busy?: boolean;
     asChild?: boolean;
     type?: 'button' | 'submit';
     'data-test'?: string;
@@ -108,22 +110,43 @@ export function Button(props: ButtonProps) {
         size,
         square,
         bleed,
+        busy,
         asChild = false,
         type = 'button',
         className,
+        children,
         ...rest
     } = props;
     const Component = asChild ? Slot : 'button';
     const formId = useFormId();
     const submit = !asChild && type === 'submit';
+    const working = !asChild && busy;
 
     return (
         <Component
             type={asChild ? undefined : type}
             form={submit ? formId : undefined}
-            className={buttonClass({ variant, size, square, bleed, className })}
+            aria-busy={working || undefined}
+            className={buttonClass({
+                variant,
+                size,
+                square,
+                bleed,
+                className: cn(working && '[&>svg]:hidden', className),
+            })}
             {...rest}
-            disabled={rest.disabled || undefined}
-        />
+            disabled={rest.disabled || working || undefined}
+        >
+            {working ? (
+                <>
+                    <span className="contents">
+                        <LoaderCircle className="animate-spin" />
+                    </span>
+                    {children}
+                </>
+            ) : (
+                children
+            )}
+        </Component>
     );
 }
