@@ -2,7 +2,7 @@ import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from './lib/utils';
-import { useCloseOnBack } from './modal';
+import { useCloseOnBack } from './modal-history';
 import { useUi } from './provider';
 
 export const Popover = PopoverPrimitive.Root;
@@ -51,7 +51,7 @@ export const PopoverAnchor = PopoverPrimitive.Anchor;
 export const PopoverClose = PopoverPrimitive.Close;
 
 const floatingClass =
-    'border border-border rounded bg-surface text-foreground shadow-xl data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in z-50 outline-none';
+    'border border-border rounded bg-surface text-foreground shadow-overlay data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in z-50 outline-none';
 
 type Props = {
     align?: 'start' | 'center' | 'end';
@@ -69,7 +69,7 @@ export function PopoverContent(props: Props) {
                 align={align}
                 className={cn(
                     floatingClass,
-                    'origin-(--radix-popover-content-transform-origin) data-[side=bottom]:mt-sm data-[side=left]:me-sm data-[side=right]:ms-sm data-[side=top]:mb-sm',
+                    'origin-(--radix-popover-content-transform-origin) data-[side=bottom]:mt-8px data-[side=left]:me-8px data-[side=right]:ms-8px data-[side=top]:mb-8px',
                     className,
                 )}
                 {...rest}

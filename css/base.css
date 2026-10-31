@@ -1,17 +1,10 @@
 @layer base {
-    :root {
-        --gutter: var(--padding-md);
-        --row-inset: var(--padding-md);
-        --drawer-gap: calc(var(--spacing) * 3);
-        --page-top: calc(var(--spacing) * 6);
-    }
-
-
     body {
         @apply bg-background font-sans font-medium tracking-wide text-foreground antialiased;
         transition:
             background-color 200ms ease-out,
             color 200ms ease-out;
+        -webkit-touch-callout: none;
         -webkit-user-select: none;
         user-select: none;
         overflow-anchor: none;

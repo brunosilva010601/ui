@@ -3,13 +3,16 @@ import { cn } from './lib/utils';
 
 const widths = {
     narrow: 'max-w-sm',
+    column: 'max-w-lg',
     bar: 'max-w-3xl',
     page: 'max-w-6xl',
     full: 'max-w-none',
 };
 
+export type ContainerWidth = keyof typeof widths;
+
 type Props = {
-    width?: keyof typeof widths;
+    width?: ContainerWidth;
     padded?: boolean;
     className?: string;
     children: ReactNode;

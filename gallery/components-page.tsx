@@ -69,9 +69,39 @@ import {
     TabsList,
     TabsTrigger,
     Textarea,
+    AppShell,
+    AuthScreen,
+    Columns,
+    Container,
+    ControlStrut,
+    Cover,
+    ErrorScreen,
+    FieldError,
+    FloatingButton,
+    HighlightInput,
+    ItemText,
+    MainColumn,
+    ModalClose,
+    ModalCloseButton,
+    NavItem,
+    Page,
+    PageFooter,
+    PageHeader,
+    paletteBorder,
+    paletteColors,
+    paletteFill,
+    paletteText,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+    SideColumn,
+    Sortable,
+    Surface,
+    touchClass,
     useCarousel,
     useFilePicker,
     useHold,
+    useModalValue,
     useOverflowing,
 } from '../src';
 import type {
@@ -111,12 +141,6 @@ const options = [
     { value: 'a', label: 'Option A' },
     { value: 'b', label: 'Option B' },
     { value: 'c', label: 'Option C' },
-];
-
-const emojiOptions = [
-    { value: 'a', label: 'Option A', emoji: '🍎' },
-    { value: 'b', label: 'Option B', emoji: '🍊' },
-    { value: 'c', label: 'Option C', emoji: '🍇' },
 ];
 
 const contentOptions = (['red', 'green', 'blue'] as const).map(
@@ -165,13 +189,16 @@ const snippet = `function greet(name: string) {
     return \`Hello, \${name}!\`;
 }`;
 
-const caption = 'font-mono text-xs text-foreground-faint';
+const caption = 'font-mono text-12px text-foreground-faint';
 
 export function ComponentsPage() {
     return (
-        <div className="flex flex-col gap-lg">
+        <div className="flex flex-col gap-20px">
             <Section title="Actions" collapsible remember="docs:actions">
                 <ButtonDemo />
+                <MarkedButtonDemo />
+                <FloatingButtonDemo />
+                <TouchClassDemo />
             </Section>
             <Section title="Choices" collapsible remember="docs:choices">
                 <ButtonGroupDemo />
@@ -190,6 +217,8 @@ export function ComponentsPage() {
                 <CodeInputDemo />
                 <ColorPickerDemo />
                 <FileInputDemo />
+                <HighlightInputDemo />
+                <FieldStatesDemo />
                 <FormDemo />
             </Section>
             <Section title="Display" collapsible remember="docs:display">
@@ -198,6 +227,8 @@ export function ComponentsPage() {
                 <IconBadgeDemo />
                 <ProgressBarDemo />
                 <HeadingDemo />
+                <ItemTextDemo />
+                <PaletteDemo />
                 <DetailDemo />
                 <StatDemo />
                 <BrandDemo />
@@ -208,15 +239,29 @@ export function ComponentsPage() {
                 <LoadingDemo />
             </Section>
             <Section title="Structure" collapsible remember="docs:structure">
+                <PageDemo />
+                <ScreensDemo />
+                <NavItemDemo />
+                <ContainerDemo />
+                <ColumnsDemo />
+                <ControlStrutDemo />
+                <SurfaceDemo />
+                <CoverDemo />
                 <SectionDemo />
+                <SortableDemo />
                 <ListDemo />
+                <ListItemStatesDemo />
                 <TabsDemo />
                 <CarouselDemo />
             </Section>
             <Section title="Overlays" collapsible remember="docs:overlays">
                 <ModalDemo />
+                <LockedModalDemo />
+                <UseModalValueDemo />
                 <ConfirmDialogDemo />
+                <ConfirmDialogToneDemo />
                 <DropdownMenuDemo />
+                <PopoverDemo />
                 <HintDemo />
                 <ImageViewerDemo />
                 <BackdropDemo />
@@ -236,7 +281,7 @@ function ButtonDemo() {
             variant="outlined"
             title="Button"
             description="Every variant in both sizes, with text, icon and text, icon only, disabled and busy. Without size, a link takes the size of the text around it."
-            meta='variant · size · square · bleed · busy · disabled · asChild'
+            meta="variant · size · square · bleed · busy · disabled · asChild"
             collapsible
             collapsed
             remember="docs:button"
@@ -244,7 +289,7 @@ function ButtonDemo() {
             {sizes.map((size) => (
                 <div
                     key={size}
-                    className="flex flex-col gap-md sm:grid sm:grid-cols-4 sm:items-center sm:justify-items-center"
+                    className="flex flex-col gap-12px sm:grid sm:grid-cols-4 sm:items-center sm:justify-items-center"
                 >
                     <div className="sm:contents">
                         <span className={caption}>size="{size}"</span>
@@ -261,7 +306,7 @@ function ButtonDemo() {
                     {buttonVariants.map((variant) => (
                         <div
                             key={variant}
-                            className="flex flex-wrap items-center gap-sm sm:contents"
+                            className="flex flex-wrap items-center gap-8px sm:contents"
                         >
                             <Button variant={variant} size={size}>
                                 {variant}
@@ -284,9 +329,9 @@ function ButtonDemo() {
                     ))}
                 </div>
             ))}
-            <div className="flex flex-col gap-sm">
+            <div className="flex flex-col gap-8px">
                 <span className={caption}>busy</span>
-                <div className="flex flex-wrap items-center gap-sm">
+                <div className="flex flex-wrap items-center gap-8px">
                     <Button busy>Sending</Button>
                     <Button busy>
                         <Plus />
@@ -303,20 +348,20 @@ function ButtonDemo() {
                     </Button>
                 </div>
             </div>
-            <div className="flex flex-col gap-sm">
+            <div className="flex flex-col gap-8px">
                 <span className={caption}>edge cases</span>
-                <div className="flex flex-wrap items-start gap-sm">
+                <div className="flex flex-wrap items-start gap-8px">
                     <Button>
-                        <Plus className="size-10" />
+                        <Plus className="size-40px" />
                         Big icon
                     </Button>
-                    <Button className="max-w-40 whitespace-normal">
+                    <Button className="max-w-[160px] whitespace-normal">
                         A longer label that wraps onto two lines
                     </Button>
                     <Button>Normal</Button>
                 </div>
             </div>
-            <p className="text-sm">
+            <p className="text-14px">
                 A link inside a sentence:{' '}
                 <Button variant="link" asChild>
                     <a href="#components">a source with a fairly long name</a>
@@ -326,7 +371,6 @@ function ButtonDemo() {
         </Section>
     );
 }
-
 
 function BadgeDemo() {
     return (
@@ -342,7 +386,7 @@ function BadgeDemo() {
             {sizes.map((size) => (
                 <div
                     key={size}
-                    className="flex flex-col gap-md sm:grid sm:grid-cols-3 sm:items-center sm:justify-items-start"
+                    className="flex flex-col gap-12px sm:grid sm:grid-cols-3 sm:items-center sm:justify-items-start"
                 >
                     <div className="sm:contents">
                         <span className={caption}>size="{size}"</span>
@@ -356,7 +400,7 @@ function BadgeDemo() {
                     {badgeTones.map((tone) => (
                         <div
                             key={tone}
-                            className="flex flex-wrap items-center gap-sm sm:contents"
+                            className="flex flex-wrap items-center gap-8px sm:contents"
                         >
                             <Badge tone={tone} size={size}>
                                 {tone}
@@ -395,7 +439,7 @@ function ButtonGroupDemo() {
             remember="docs:button-group"
         >
             {sizes.map((size) => (
-                <div key={size} className="flex flex-col gap-sm">
+                <div key={size} className="flex flex-col gap-8px">
                     <span className={caption}>size="{size}"</span>
                     <ButtonGroup
                         size={size}
@@ -418,7 +462,7 @@ function ButtonGroupDemo() {
                     />
                 </div>
             ))}
-            <div className="flex flex-col gap-sm">
+            <div className="flex flex-col gap-8px">
                 <span className={caption}>variant="ghost"</span>
                 <ButtonGroup
                     variant="ghost"
@@ -429,7 +473,7 @@ function ButtonGroupDemo() {
                     onChange={choose('ghost')}
                 />
             </div>
-            <div className="flex flex-col gap-sm">
+            <div className="flex flex-col gap-8px">
                 <span className={caption}>multiple</span>
                 <ButtonGroup
                     multiple
@@ -438,7 +482,7 @@ function ButtonGroupDemo() {
                     onChange={setMany}
                 />
             </div>
-            <div className="flex flex-col gap-sm">
+            <div className="flex flex-col gap-8px">
                 <span className={caption}>layout="fill"</span>
                 <ButtonGroup
                     layout="fill"
@@ -447,7 +491,7 @@ function ButtonGroupDemo() {
                     onChange={choose('fill')}
                 />
             </div>
-            <div className="flex flex-col gap-sm">
+            <div className="flex flex-col gap-8px">
                 <span className={caption}>layout="segmented"</span>
                 <ButtonGroup
                     layout="segmented"
@@ -479,7 +523,7 @@ function ButtonGroupDemo() {
                     </ButtonGroupItem>
                 </ButtonGroup>
             </div>
-            <div className="flex flex-col gap-sm">
+            <div className="flex flex-col gap-8px">
                 <span className={caption}>ButtonGroupItem</span>
                 <ButtonGroup value={view} onChange={setView}>
                     <ButtonGroupItem value="list">
@@ -495,7 +539,6 @@ function ButtonGroupDemo() {
         </Section>
     );
 }
-
 
 function SwitchDemo() {
     const [described, setDescribed] = useState(true);
@@ -588,8 +631,8 @@ function SelectDemo() {
         <Section
             variant="outlined"
             title="Select"
-            description="Pick one option from a menu, or a sheet on touch screens: plain, with emoji, with free content, and with description and hint."
-            meta="options · options[].emoji · options[].content · description · hint"
+            description="Pick one option from a menu, or a sheet on touch screens: plain, with free content, and with description, hint and error."
+            meta="options · options[].content · description · hint · optional · error · disabled"
             collapsible
             collapsed
             remember="docs:select"
@@ -602,9 +645,17 @@ function SelectDemo() {
             />
             <Select
                 label="Label"
-                value={valueOf('emoji')}
-                options={emojiOptions}
-                onChange={choose('emoji')}
+                error="Error message"
+                value={valueOf('error')}
+                options={options}
+                onChange={choose('error')}
+            />
+            <Select
+                label="Label"
+                disabled
+                value={valueOf('disabled')}
+                options={options}
+                onChange={choose('disabled')}
             />
             <Select
                 label="Label"
@@ -638,7 +689,11 @@ function SearchInputDemo() {
             collapsed
             remember="docs:search-input"
         >
-            <SearchInput value={empty} placeholder="Search" onChange={setEmpty} />
+            <SearchInput
+                value={empty}
+                placeholder="Search"
+                onChange={setEmpty}
+            />
             <SearchInput
                 value={filled}
                 placeholder="Search"
@@ -664,7 +719,7 @@ function NumberInputDemo() {
             collapsed
             remember="docs:number-input"
         >
-            <div className="grid gap-md sm:grid-cols-3">
+            <div className="grid gap-12px sm:grid-cols-3">
                 <NumberInput
                     label="min · max"
                     value={plain}
@@ -709,7 +764,7 @@ function MonthInputDemo() {
             collapsed
             remember="docs:month-input"
         >
-            <div className="grid gap-md sm:grid-cols-2">
+            <div className="grid gap-12px sm:grid-cols-2">
                 <MonthInput
                     label="Month"
                     value={month}
@@ -846,7 +901,7 @@ function FormDemo() {
             <Form onSubmit={submit}>
                 <FormActions inline>
                     <Button type="submit">Submit</Button>
-                    <span className="text-sm text-foreground-muted">
+                    <span className="text-14px text-foreground-muted">
                         Submitted {sent} times
                     </span>
                 </FormActions>
@@ -866,7 +921,7 @@ function AvatarDemo() {
             collapsed
             remember="docs:avatar"
         >
-            <div className="grid grid-cols-5 items-center justify-items-start gap-md">
+            <div className="grid grid-cols-5 items-center justify-items-start gap-12px">
                 <span />
                 {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
                     <span key={size} className={caption}>
@@ -879,7 +934,12 @@ function AvatarDemo() {
                 ))}
                 <span className={caption}>src</span>
                 {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-                    <Avatar key={size} name="Example" src={sample} size={size} />
+                    <Avatar
+                        key={size}
+                        name="Example"
+                        src={sample}
+                        size={size}
+                    />
                 ))}
             </div>
         </Section>
@@ -897,7 +957,7 @@ function ColorDotDemo() {
             collapsed
             remember="docs:color-dot"
         >
-            <div className="flex flex-wrap items-center gap-md">
+            <div className="flex flex-wrap items-center gap-12px">
                 {paletteSample.map((color) => (
                     <ColorDot key={color} color={color} />
                 ))}
@@ -918,7 +978,7 @@ function IconBadgeDemo() {
             collapsed
             remember="docs:icon-badge"
         >
-            <div className="grid grid-cols-4 items-center justify-items-start gap-md">
+            <div className="grid grid-cols-4 items-center justify-items-start gap-12px">
                 <span />
                 <span className={caption}>sm</span>
                 <span className={caption}>md</span>
@@ -986,13 +1046,13 @@ function DetailDemo() {
         <Section
             variant="outlined"
             title="Detail"
-            description="Label and value pairs, stacked or inline, with Copyable for selectable text."
-            meta="label · inline · Copyable"
+            description="Label and value pairs, stacked, inline or side by side, with an action beside them and Copyable for selectable text."
+            meta="label · inline · side · action · Copyable"
             collapsible
             collapsed
             remember="docs:detail"
         >
-            <dl className="grid grid-cols-2 gap-md">
+            <dl className="grid grid-cols-2 gap-12px">
                 <Detail label="Label">Value</Detail>
                 <Detail label="Copyable">
                     <Copyable>
@@ -1000,12 +1060,38 @@ function DetailDemo() {
                     </Copyable>
                 </Detail>
             </dl>
-            <dl className="grid grid-cols-[auto_1fr] gap-x-lg gap-y-sm">
+            <dl className="grid grid-cols-[auto_1fr] gap-x-20px gap-y-8px">
                 <Detail label="Label" inline>
                     Value
                 </Detail>
                 <Detail label="Other label" inline>
                     Other value
+                </Detail>
+            </dl>
+            <dl className="flex flex-col gap-8px">
+                <Detail label="Label" side>
+                    Value
+                </Detail>
+                <Detail
+                    label="With an action"
+                    action={
+                        <Button variant="ghost" square>
+                            <Copy />
+                        </Button>
+                    }
+                >
+                    Value
+                </Detail>
+                <Detail
+                    label="Side with an action"
+                    side
+                    action={
+                        <Button variant="ghost" square>
+                            <Copy />
+                        </Button>
+                    }
+                >
+                    Value
                 </Detail>
             </dl>
         </Section>
@@ -1043,7 +1129,7 @@ function BrandDemo() {
             collapsed
             remember="docs:brand"
         >
-            <div className="flex flex-wrap items-end gap-lg">
+            <div className="flex flex-wrap items-end gap-20px">
                 {(['sm', 'md', 'lg'] as const).map((size) => (
                     <Brand
                         key={size}
@@ -1064,12 +1150,12 @@ function EmptyStateDemo() {
             variant="outlined"
             title="EmptyState"
             description="Placeholder for empty lists and pages, with and without an action, and with the title alone."
-            meta="icon · title · description · action"
+            meta="icon · title · description · action · compact"
             collapsible
             collapsed
             remember="docs:empty-state"
         >
-            <div className="grid gap-md sm:grid-cols-2">
+            <div className="grid gap-12px sm:grid-cols-2">
                 <EmptyState
                     icon={FolderOpen}
                     title="Title"
@@ -1081,6 +1167,12 @@ function EmptyStateDemo() {
                     }}
                 />
                 <EmptyState icon={Inbox} title="Title" />
+                <EmptyState compact title="Compact, for inside a card." />
+                <EmptyState
+                    compact
+                    title="Compact with an action."
+                    action={{ label: 'Add', icon: Plus, onClick: () => {} }}
+                />
                 <EmptyState title="Nothing here yet" />
             </div>
         </Section>
@@ -1118,7 +1210,7 @@ function BannerDemo() {
             >
                 With an action beside the text
             </Banner>
-            <div className="flex flex-col gap-sm rounded border border-border bg-surface p-md [--bleed:var(--padding-md)]">
+            <div className="flex flex-col gap-8px rounded border border-border bg-surface p-12px [--bleed:var(--spacing-12px)]">
                 <span className={caption}>bleed inside a card</span>
                 <Banner tone="danger" bleed>
                     Edge to edge, up to the padding of the area
@@ -1177,7 +1269,7 @@ function CodeBlockDemo() {
             <CodeBlock code={snippet} />
             <CodeBlock
                 language="css"
-                code={'.card {\n    padding: var(--padding-md);\n}'}
+                code={'.card {\n    padding: var(--spacing-12px);\n}'}
             />
         </Section>
     );
@@ -1189,21 +1281,21 @@ function LoadingDemo() {
             variant="outlined"
             title="Spinner and Skeleton"
             description="Loading indicators: the spinner, every skeleton shape and the ready made section placeholder."
-            meta='Spinner · Skeleton shape · SectionSkeleton'
+            meta="Spinner · Skeleton shape · SectionSkeleton"
             collapsible
             collapsed
             remember="docs:loading"
         >
             <Spinner />
-            <div className="flex items-center gap-md">
+            <div className="flex items-center gap-12px">
                 <Skeleton shape="avatar" />
-                <div className="flex flex-1 flex-col gap-sm">
+                <div className="flex flex-1 flex-col gap-8px">
                     <Skeleton shape="title" className="w-1/2" />
                     <Skeleton shape="line" />
                     <Skeleton shape="line" className="w-3/4" />
                 </div>
             </div>
-            <Skeleton className="h-16 rounded" />
+            <Skeleton className="h-[64px] rounded" />
             <SectionSkeleton />
         </Section>
     );
@@ -1220,8 +1312,11 @@ function SectionDemo() {
             collapsed
             remember="docs:section"
         >
-            <Section title="Flat" description="No border, on the page background.">
-                <p className="text-sm">Content.</p>
+            <Section
+                title="Flat"
+                description="No border, on the page background."
+            >
+                <p className="text-14px">Content.</p>
             </Section>
             <Section
                 variant="outlined"
@@ -1249,16 +1344,16 @@ function SectionDemo() {
                     ),
                 }}
             >
-                <p className="text-sm">Content.</p>
+                <p className="text-14px">Content.</p>
             </Section>
             <Section variant="outlined" title="Collapsed" collapsible collapsed>
-                <p className="text-sm">Content.</p>
+                <p className="text-14px">Content.</p>
             </Section>
             <Section title="Flat collapsible" note={2} collapsible>
-                <p className="text-sm">Content.</p>
+                <p className="text-14px">Content.</p>
             </Section>
             <Section description="Collapsible with a quiet label" collapsible>
-                <p className="text-sm">Content.</p>
+                <p className="text-14px">Content.</p>
             </Section>
             <Section
                 title="Action on hover"
@@ -1270,7 +1365,7 @@ function SectionDemo() {
                     </Button>
                 }
             >
-                <p className="text-sm">Content.</p>
+                <p className="text-14px">Content.</p>
             </Section>
             <Section
                 variant="outlined"
@@ -1316,11 +1411,11 @@ function ListDemo() {
             <div className="overflow-hidden rounded border border-border bg-surface">
                 <List>
                     <ListItem>
-                        <span className="text-sm">Static item</span>
+                        <span className="text-14px">Static item</span>
                     </ListItem>
                     <ListItem onClick={() => notify({ title: 'Item clicked' })}>
                         <IconBadge icon={Inbox} size="sm" />
-                        <span className="flex-1 text-sm">Clickable item</span>
+                        <span className="flex-1 text-14px">Clickable item</span>
                         <Badge>3</Badge>
                     </ListItem>
                     <ListItem
@@ -1328,7 +1423,7 @@ function ListDemo() {
                         menu={{ label: 'Options', items: menuItems }}
                     >
                         <Avatar name="Example" size="sm" />
-                        <span className="flex-1 text-sm">With a menu</span>
+                        <span className="flex-1 text-14px">With a menu</span>
                         <Button
                             variant="ghost"
                             size="sm"
@@ -1341,23 +1436,25 @@ function ListDemo() {
                     </ListItem>
                     <ListItem
                         onClick={() => notify({ title: 'Item clicked' })}
-                        menu={{ label: 'Options', items: menuItems, hover: true }}
+                        menu={{
+                            label: 'Options',
+                            items: menuItems,
+                            hover: true,
+                        }}
                     >
-                        <span className="flex-1 text-sm">
-                            Menu on hover
-                        </span>
+                        <span className="flex-1 text-14px">Menu on hover</span>
                     </ListItem>
                     <ListItem
                         active
                         onClick={() => notify({ title: 'Item clicked' })}
                     >
-                        <span className="text-sm">Active item</span>
+                        <span className="text-14px">Active item</span>
                     </ListItem>
                     <ListItem
                         selected
                         onClick={() => notify({ title: 'Item clicked' })}
                     >
-                        <span className="text-sm">Selected item</span>
+                        <span className="text-14px">Selected item</span>
                     </ListItem>
                 </List>
             </div>
@@ -1375,7 +1472,7 @@ function ListDemo() {
                 <List organizing={organizing} onReorder={setSorted}>
                     {sorted.map((item) => (
                         <ListItem key={item} sortId={item}>
-                            <span className="text-sm">{item}</span>
+                            <span className="text-14px">{item}</span>
                         </ListItem>
                     ))}
                 </List>
@@ -1387,7 +1484,7 @@ function ListDemo() {
                         key={item}
                         onClick={() => notify({ title: item })}
                     >
-                        <span className="text-sm">{item}</span>
+                        <span className="text-14px">{item}</span>
                     </ListItem>
                 ))}
             </List>
@@ -1395,7 +1492,7 @@ function ListDemo() {
             <List variant="bare">
                 {items.slice(0, 2).map((item) => (
                     <ListItem key={item}>
-                        <span className="text-sm">{item}</span>
+                        <span className="text-14px">{item}</span>
                     </ListItem>
                 ))}
             </List>
@@ -1403,7 +1500,7 @@ function ListDemo() {
                 <List columns>
                     {items.map((item) => (
                         <ListItem key={item}>
-                            <span className="text-sm">{item}</span>
+                            <span className="text-14px">{item}</span>
                         </ListItem>
                     ))}
                 </List>
@@ -1412,7 +1509,7 @@ function ListDemo() {
                 <List horizontal>
                     {items.slice(0, 3).map((item) => (
                         <ListItem key={item}>
-                            <span className="text-sm">{item}</span>
+                            <span className="text-14px">{item}</span>
                         </ListItem>
                     ))}
                 </List>
@@ -1490,9 +1587,9 @@ function CarouselDemo() {
         Array.from({ length: count }, (_, index) => (
             <div
                 key={index}
-                className="flex h-28 w-40 items-center justify-center rounded border border-border bg-control"
+                className="flex h-[112px] w-[160px] items-center justify-center rounded border border-border bg-control"
             >
-                <Image className="size-icon-lg text-foreground-faint" />
+                <Image className="size-icon-24px text-foreground-faint" />
             </div>
         ));
 
@@ -1507,19 +1604,19 @@ function CarouselDemo() {
             remember="docs:carousel"
         >
             <CarouselFrame control={many} arrows={manyOverflowing}>
-                <CarouselTrack control={many} className="gap-sm">
+                <CarouselTrack control={many} className="gap-8px">
                     {slides(10)}
                 </CarouselTrack>
             </CarouselFrame>
-            <div className="rounded bg-surface-raised p-md">
+            <div className="rounded bg-surface-raised p-12px">
                 <CarouselFrame control={raised} arrows={raisedOverflowing}>
-                    <CarouselTrack control={raised} className="gap-sm">
+                    <CarouselTrack control={raised} className="gap-8px">
                         {slides(10)}
                     </CarouselTrack>
                 </CarouselFrame>
             </div>
             <CarouselFrame control={few} arrows={fewOverflowing}>
-                <CarouselTrack control={few} className="gap-sm">
+                <CarouselTrack control={few} className="gap-8px">
                     {slides(2)}
                 </CarouselTrack>
             </CarouselFrame>
@@ -1558,7 +1655,7 @@ function ModalDemo() {
             collapsed
             remember="docs:modal"
         >
-            <div className="flex flex-wrap gap-md">
+            <div className="flex flex-wrap gap-12px">
                 {modalCases.map((each) => (
                     <Button
                         key={each.label}
@@ -1582,7 +1679,7 @@ function ModalDemo() {
                     title="Title"
                     description={each.label}
                 >
-                    <p className="text-sm">Content.</p>
+                    <p className="text-14px">Content.</p>
                     <ModalFooter>
                         <Button onClick={close}>Ok</Button>
                     </ModalFooter>
@@ -1594,7 +1691,7 @@ function ModalDemo() {
                 className="max-w-4xl"
                 title="Title"
             >
-                <p className="text-sm">Content.</p>
+                <p className="text-14px">Content.</p>
             </Modal>
         </Section>
     );
@@ -1654,7 +1751,7 @@ function DropdownMenuDemo() {
             collapsed
             remember="docs:dropdown-menu"
         >
-            <div className="flex flex-wrap items-center gap-md">
+            <div className="flex flex-wrap items-center gap-12px">
                 <DropdownMenu
                     label="Options"
                     trigger={
@@ -1711,7 +1808,9 @@ function DropdownMenuDemo() {
                         <RowTrigger
                             icon={Bell}
                             label="Reminder"
-                            value={options.find((o) => o.value === chosen)?.label}
+                            value={
+                                options.find((o) => o.value === chosen)?.label
+                            }
                             set
                         />
                     }
@@ -1770,7 +1869,7 @@ function ImageViewerDemo() {
                 <img
                     src={sample}
                     alt="Example"
-                    className="h-24 w-36 rounded object-cover"
+                    className="h-[96px] w-[144px] rounded object-cover"
                 />
             </button>
             <ImageViewer
@@ -1827,8 +1926,8 @@ function NotifyDemo() {
             collapsed
             remember="docs:notify"
         >
-            <div className="flex flex-wrap gap-md">
-                {(['success', 'info', 'warning', 'error'] as const).map(
+            <div className="flex flex-wrap gap-12px">
+                {(['success', 'primary', 'warning', 'danger'] as const).map(
                     (tone) => (
                         <Button
                             key={tone}
@@ -1840,7 +1939,7 @@ function NotifyDemo() {
                     ),
                 )}
             </div>
-            <div className="flex flex-wrap gap-md">
+            <div className="flex flex-wrap gap-12px">
                 <Button
                     variant="outline"
                     onClick={() =>
@@ -1896,15 +1995,15 @@ function UseHoldDemo() {
             collapsed
             remember="docs:use-hold"
         >
-            <div className="flex items-center gap-md">
+            <div className="flex items-center gap-12px">
                 <img
                     src={sample}
                     alt="Example"
                     draggable={false}
-                    className="h-24 w-36 rounded object-cover select-none"
+                    className="h-[96px] w-[144px] rounded object-cover select-none"
                     {...hold}
                 />
-                <span className="text-sm text-foreground-muted">
+                <span className="text-14px text-foreground-muted">
                     Held {count} times
                 </span>
             </div>
@@ -1926,17 +2025,653 @@ function UseFilePickerDemo() {
             collapsed
             remember="docs:use-file-picker"
         >
-            <div className="flex flex-wrap items-center gap-md">
+            <div className="flex flex-wrap items-center gap-12px">
                 <Button variant="outline" onClick={filePicker.open}>
                     Choose files
                 </Button>
                 {filePicker.picker}
                 {files.length > 0 && (
-                    <span className="text-sm text-foreground-muted">
+                    <span className="text-14px text-foreground-muted">
                         {files.map((file) => file.name).join(', ')}
                     </span>
                 )}
             </div>
+        </Section>
+    );
+}
+
+function MarkedButtonDemo() {
+    const [chosen, setChosen] = useState('success');
+    const marks = ['success', 'warning', 'danger', 'violet'] as const;
+
+    return (
+        <Section
+            variant="outlined"
+            title="Marked button"
+            description="A button that shows the choice made in the color of what it means, such as a move in a game. The color comes from a tone or the palette."
+            meta="mark · aria-pressed"
+            collapsible
+            collapsed
+            remember="docs:marked-button"
+        >
+            <div className="flex flex-wrap gap-8px">
+                {marks.map((mark) => (
+                    <Button
+                        key={mark}
+                        variant="outline"
+                        aria-pressed={chosen === mark}
+                        mark={chosen === mark ? mark : undefined}
+                        onClick={() => setChosen(mark)}
+                    >
+                        {mark}
+                    </Button>
+                ))}
+            </div>
+        </Section>
+    );
+}
+
+function FloatingButtonDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="FloatingButton"
+            description="The round action that floats over the page, with its shadow and bigger icon."
+            meta="same props as Button"
+            collapsible
+            collapsed
+            remember="docs:floating-button"
+        >
+            <div>
+                <FloatingButton>
+                    <Plus />
+                </FloatingButton>
+            </div>
+        </Section>
+    );
+}
+
+function TouchClassDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="touchClass"
+            description="Grows the touch area of any small piece to 44 px, without changing how it looks."
+            meta="touchClass"
+            collapsible
+            collapsed
+            remember="docs:touch-class"
+        >
+            <div>
+                <Button variant="ghost" size="sm" square className={touchClass}>
+                    <Star />
+                </Button>
+            </div>
+        </Section>
+    );
+}
+
+function HighlightInputDemo() {
+    const [value, setValue] = useState('Buy milk tomorrow');
+
+    return (
+        <Section
+            variant="outlined"
+            title="HighlightInput"
+            description="A text field that colors parts of what was typed: with a frame and without."
+            meta="ranges · bare · same props as the other fields"
+            collapsible
+            collapsed
+            remember="docs:highlight-input"
+        >
+            <HighlightInput
+                label="Label"
+                value={value}
+                ranges={[[9, 17]]}
+                onChange={setValue}
+            />
+            <HighlightInput
+                label="Label"
+                hideLabel
+                bare
+                value={value}
+                ranges={[[0, 3]]}
+                onChange={setValue}
+            />
+        </Section>
+    );
+}
+
+function FieldStatesDemo() {
+    const [number, setNumber] = useState<number | ''>(1984);
+    const [text, setText] = useState('Value');
+
+    return (
+        <Section
+            variant="outlined"
+            title="Field states"
+            description="Every field takes the same props. FieldError is the error line on its own, and NumberInput has a frameless form with a big value and a hold that speeds up."
+            meta="label · hideLabel · description · hint · optional · error · disabled · FieldError · NumberInput bare · NumberInput rush"
+            collapsible
+            collapsed
+            remember="docs:field-states"
+        >
+            <Input
+                label="Disabled"
+                value={text}
+                disabled
+                onChange={(event) => setText(event.target.value)}
+            />
+            <Textarea
+                label="Disabled"
+                value={text}
+                disabled
+                onChange={(event) => setText(event.target.value)}
+            />
+            <Input
+                label="Optional with a hint"
+                optional
+                hint="Hint text."
+                value={text}
+                onChange={(event) => setText(event.target.value)}
+            />
+            <NumberInput
+                label="Disabled"
+                disabled
+                value={number}
+                min={0}
+                max={9999}
+                onChange={setNumber}
+            />
+            <NumberInput
+                label="Bare"
+                hideLabel
+                bare
+                rush
+                className="self-center"
+                value={number}
+                min={0}
+                max={9999}
+                onChange={setNumber}
+            />
+            <FieldError message="Error message" />
+        </Section>
+    );
+}
+
+function ItemTextDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="ItemText"
+            description="The title and secondary line of an item, for any row or card."
+            meta="title · secondary"
+            collapsible
+            collapsed
+            remember="docs:item-text"
+        >
+            <ItemText title="Title" secondary="Secondary line" />
+            <ItemText
+                title="A title long enough that it does not fit in the available space and has to be cut"
+                secondary="A secondary line long enough that it does not fit in the available space and has to be cut"
+            />
+        </Section>
+    );
+}
+
+function PaletteDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="Palette"
+            description="The colors the user picks for items, as text, border and fill with readable text."
+            meta="paletteText · paletteStroke · paletteBorder · paletteFill"
+            collapsible
+            collapsed
+            remember="docs:palette"
+        >
+            <div className="grid grid-cols-3 gap-4px sm:grid-cols-6">
+                {paletteColors.map((color) => (
+                    <div key={color} className={cn('flex flex-col gap-4px')}>
+                        <span
+                            className={cn(
+                                'truncate text-12px',
+                                paletteText(color),
+                            )}
+                        >
+                            {color}
+                        </span>
+                        <span
+                            className={cn(
+                                'h-16px rounded border',
+                                paletteBorder(color),
+                            )}
+                        />
+                        <span
+                            className={cn('h-16px rounded', paletteFill(color))}
+                        />
+                    </div>
+                ))}
+            </div>
+        </Section>
+    );
+}
+
+function PageDemo() {
+    const [footer, setFooter] = useState(false);
+
+    return (
+        <Section
+            variant="outlined"
+            title="Page"
+            description="The frame of a screen: the shell with a side bar, the header, the content and a footer stuck to the bottom, which tells notify how much to clear. Everything respects the safe areas."
+            meta="AppShell · Page · PageHeader · PageBottom · PageFooter"
+            collapsible
+            collapsed
+            remember="docs:page"
+        >
+            <Button variant="outline" onClick={() => setFooter(!footer)}>
+                Toggle footer
+            </Button>
+            <div className="overflow-clip rounded border border-border">
+                <AppShell className="min-h-0">
+                    <Page
+                        className="min-h-0"
+                        width="column"
+                        header={
+                            <PageHeader
+                                title="Title"
+                                detail="Detail"
+                                description="Description, only on wide screens."
+                                onBack={() => {}}
+                                actions={
+                                    <Button variant="ghost" square bleed>
+                                        <Settings />
+                                    </Button>
+                                }
+                            />
+                        }
+                        bottom={
+                            footer && (
+                                <PageFooter>
+                                    <Button>Footer action</Button>
+                                </PageFooter>
+                            )
+                        }
+                    >
+                        <p className="ui-note">Content.</p>
+                    </Page>
+                </AppShell>
+            </div>
+        </Section>
+    );
+}
+
+function ScreensDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="AuthScreen and ErrorScreen"
+            description="The whole screen around a sign-in form or an error. The brand, the action and what stays behind come from the app."
+            meta="brand · title · description · status · backdrop"
+            collapsible
+            collapsed
+            remember="docs:screens"
+        >
+            <div className="overflow-clip rounded border border-border">
+                <AuthScreen
+                    className="min-h-0"
+                    brand={<span className="text-48px font-bold">Brand</span>}
+                    title="Title"
+                    description="Description."
+                >
+                    <Button>Action</Button>
+                </AuthScreen>
+            </div>
+            <div className="overflow-clip rounded border border-border">
+                <ErrorScreen
+                    className="min-h-0 py-32px"
+                    status={404}
+                    title="Title"
+                    description="Description."
+                >
+                    <Button>Action</Button>
+                </ErrorScreen>
+            </div>
+        </Section>
+    );
+}
+
+function NavItemDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="NavItem"
+            description="A row of the side navigation: a link, a button, or any element with asChild. The current page gets a light background."
+            meta="active · href · onClick · asChild"
+            collapsible
+            collapsed
+            remember="docs:nav-item"
+        >
+            <div className="flex max-w-xs flex-col gap-4px">
+                <NavItem href="#components" active>
+                    <Inbox />
+                    Active
+                </NavItem>
+                <NavItem href="#components">
+                    <Star />
+                    Link
+                </NavItem>
+                <NavItem onClick={() => {}}>
+                    <Settings />
+                    Button
+                </NavItem>
+            </div>
+        </Section>
+    );
+}
+
+function ContainerDemo() {
+    const widths = ['narrow', 'column', 'bar', 'page', 'full'] as const;
+
+    return (
+        <Section
+            variant="outlined"
+            title="Container"
+            description="The width of a page or column, with the side margin of the page when padded."
+            meta="width · padded"
+            collapsible
+            collapsed
+            remember="docs:container"
+        >
+            {widths.map((width) => (
+                <Container
+                    key={width}
+                    width={width}
+                    padded
+                    className="rounded bg-surface-raised"
+                >
+                    <p className={caption}>{width}</p>
+                </Container>
+            ))}
+        </Section>
+    );
+}
+
+function ColumnsDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="Columns"
+            description="A main column and a side column on very wide screens, one after the other below that. The side column sticks while it fits the screen."
+            meta="Columns · empty · MainColumn · SideColumn"
+            collapsible
+            collapsed
+            remember="docs:columns"
+        >
+            <Columns>
+                <MainColumn>
+                    <Surface>Main column</Surface>
+                    <Surface>Main column</Surface>
+                </MainColumn>
+                <SideColumn>
+                    <Surface>Side column</Surface>
+                </SideColumn>
+            </Columns>
+        </Section>
+    );
+}
+
+function ControlStrutDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="ControlStrut"
+            description="Invisible and without width, it holds a row at the height of a control even when the row only has text or bleeding buttons."
+            meta="no props"
+            collapsible
+            collapsed
+            remember="docs:control-strut"
+        >
+            <div className="flex items-center gap-8px rounded border border-border px-12px">
+                <ControlStrut />
+                <span>Row with the height of a control</span>
+            </div>
+        </Section>
+    );
+}
+
+function SurfaceDemo() {
+    const [selected, setSelected] = useState(false);
+
+    return (
+        <Section
+            variant="outlined"
+            title="Surface"
+            description="The card: background, border, radius and inner space, with the whole block clickable when it has an action."
+            meta="flush · selected · disabled · onClick · href · external"
+            collapsible
+            collapsed
+            remember="docs:surface"
+        >
+            <Surface>Static</Surface>
+            <Surface onClick={() => setSelected(!selected)} selected={selected}>
+                Clickable, click to select
+            </Surface>
+            <Surface href="#components">Link</Surface>
+            <Surface disabled onClick={() => {}}>
+                Disabled
+            </Surface>
+            <Surface flush>
+                <List>
+                    <ListItem>Flush, with a list inside</ListItem>
+                </List>
+            </Surface>
+        </Section>
+    );
+}
+
+function CoverDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="Cover"
+            description="The invisible layer that makes a whole block clickable, as a link or a button. Whatever needs its own click stays above it."
+            meta="href · external · onClick · className"
+            collapsible
+            collapsed
+            remember="docs:cover"
+        >
+            <div className="relative rounded border border-border p-12px hover:bg-surface-hover">
+                <Cover onClick={() => notify({ title: 'Clicked' })} />
+                <span className="pointer-events-none relative">
+                    Click anywhere
+                </span>
+            </div>
+        </Section>
+    );
+}
+
+function SortableDemo() {
+    const [order, setOrder] = useState(['Section 1', 'Section 2', 'Section 3']);
+
+    return (
+        <Section
+            variant="outlined"
+            title="Sortable"
+            description="Reorders the sections inside it by the handle in their left inset."
+            meta="onReorder · organizing"
+            collapsible
+            collapsed
+            remember="docs:sortable"
+        >
+            <Sortable organizing onReorder={setOrder}>
+                {order.map((title) => (
+                    <Section
+                        key={title}
+                        title={title}
+                        sortId={title}
+                        collapsible
+                    >
+                        <p className="ui-note">Content.</p>
+                    </Section>
+                ))}
+            </Sortable>
+        </Section>
+    );
+}
+
+function ListItemStatesDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="ListItem states"
+            description="An item that cannot be used now, and one whose action is running. Neither takes clicks nor opens its menu."
+            meta="disabled · busy"
+            collapsible
+            collapsed
+            remember="docs:list-item-states"
+        >
+            <List variant="cards">
+                <ListItem disabled onClick={() => {}}>
+                    <ItemText title="Disabled" secondary="Secondary line" />
+                </ListItem>
+                <ListItem busy onClick={() => {}}>
+                    <ItemText title="Busy" secondary="Secondary line" />
+                </ListItem>
+            </List>
+        </Section>
+    );
+}
+
+function LockedModalDemo() {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <Section
+            variant="outlined"
+            title="Modal that waits for an answer"
+            description="Escape, the click outside and the close button are gone, because leaving without answering would keep others waiting. ModalCloseButton is the close button on its own, for a custom header."
+            meta="dismissible · ModalCloseButton"
+            collapsible
+            collapsed
+            remember="docs:locked-modal"
+        >
+            <div className="flex flex-wrap items-center gap-12px">
+                <Button variant="outline" onClick={() => setOpen(true)}>
+                    Open
+                </Button>
+                <Modal
+                    trigger={
+                        <Button variant="outline">With ModalCloseButton</Button>
+                    }
+                    hideClose
+                >
+                    <div className="flex items-center justify-between gap-12px">
+                        <p className="ui-note">Custom header.</p>
+                        <ModalCloseButton />
+                    </div>
+                </Modal>
+            </div>
+            <Modal open={open} dismissible={false} title="Title">
+                <p className="text-14px">Content.</p>
+                <ModalFooter>
+                    <Button onClick={() => setOpen(false)}>Answer</Button>
+                </ModalFooter>
+            </Modal>
+        </Section>
+    );
+}
+
+function UseModalValueDemo() {
+    const [value, setValue] = useState<string | null>(null);
+    const modal = useModalValue(value);
+
+    return (
+        <Section
+            variant="outlined"
+            title="useModalValue"
+            description="Keeps showing what a modal was opened with while it closes, when the app has already cleared the value."
+            meta="value · key · open"
+            collapsible
+            collapsed
+            remember="docs:use-modal-value"
+        >
+            <div>
+                <Button variant="outline" onClick={() => setValue('Option A')}>
+                    Open
+                </Button>
+            </div>
+            <Modal
+                key={modal.key}
+                open={modal.open}
+                onClose={() => setValue(null)}
+                title={modal.value}
+            >
+                <ModalClose asChild>
+                    <Button variant="outline">Clear the value</Button>
+                </ModalClose>
+            </Modal>
+        </Section>
+    );
+}
+
+function ConfirmDialogToneDemo() {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <Section
+            variant="outlined"
+            title="ConfirmDialog that only redoes"
+            description="Red is for what destroys something. The primary tone is for what only redoes, and the cancel label can take the word of the case."
+            meta="tone · cancelLabel"
+            collapsible
+            collapsed
+            remember="docs:confirm-dialog-tone"
+        >
+            <div>
+                <Button variant="outline" onClick={() => setOpen(true)}>
+                    Open
+                </Button>
+            </div>
+            <ConfirmDialog
+                open={open}
+                title="Title"
+                description="Description."
+                confirmLabel="Draw again"
+                cancelLabel="Keep"
+                tone="primary"
+                onConfirm={() => setOpen(false)}
+                onClose={() => setOpen(false)}
+            />
+        </Section>
+    );
+}
+
+function PopoverDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="Popover"
+            description="A floating box anchored to any element, for what is not a list of options."
+            meta="Popover · PopoverTrigger · PopoverContent · align"
+            collapsible
+            collapsed
+            remember="docs:popover"
+        >
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button variant="outline" className="self-start">
+                        Open
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                    align="start"
+                    className="ui-note max-w-xs p-12px"
+                >
+                    Content.
+                </PopoverContent>
+            </Popover>
         </Section>
     );
 }

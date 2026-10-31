@@ -3,6 +3,21 @@ import { LoaderCircle } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { useFormId } from './form/form';
 import { cn } from './lib/utils';
+import { palette } from './palette';
+import type { PaletteColor } from './palette';
+import { tones } from './tones';
+import type { Tone } from './tones';
+
+const markClass =
+    'border-current bg-current/10 hover:bg-current/10 active:bg-current/10';
+
+export type ButtonMark = Tone | PaletteColor;
+
+function markText(mark: ButtonMark): string {
+    return mark in tones
+        ? tones[mark as Tone].text
+        : palette[mark as PaletteColor].text;
+}
 
 export const ghostHoverClass = 'hover:bg-foreground/5 active:bg-foreground/5';
 
@@ -21,7 +36,7 @@ const variants = {
 
 const shapes = {
     box: 'inline-flex shrink-0 items-center justify-center rounded-full whitespace-nowrap select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
-    link: 'has-[svg]:inline-flex has-[svg]:shrink-0 has-[svg]:items-center has-[svg]:gap-sm disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+    link: 'has-[svg]:inline-flex has-[svg]:shrink-0 has-[svg]:items-center has-[svg]:gap-8px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
 };
 
 const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
@@ -33,27 +48,23 @@ const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
 };
 
 const bleedSides =
-    'px-[calc(var(--gap-md)/2)] -mx-[calc(var(--gap-md)/2_+_var(--spacing)*0.25)]';
+    'px-6px -mx-[calc(var(--spacing-6px)_+_1px)] -my-[calc(var(--pad-y)_+_1px)]';
 
 const bleedBackdrop =
-    'relative isolate before:absolute before:inset-y-0 before:-inset-x-[calc(var(--pad)_-_var(--gap-md)/2)] before:-z-10 before:rounded-full before:transition-colors hover:bg-transparent active:bg-transparent data-[state=open]:bg-transparent hover:before:bg-foreground/5 active:before:bg-foreground/5 data-[state=open]:before:bg-foreground/5';
+    'relative isolate before:absolute before:inset-y-0 before:-inset-x-[calc(var(--pad)_-_var(--spacing-6px))] before:-z-10 before:rounded-full before:transition-colors hover:bg-transparent active:bg-transparent data-[state=open]:bg-transparent hover:before:bg-foreground/5 active:before:bg-foreground/5 data-[state=open]:before:bg-foreground/5';
 
 const sizes = {
     md: {
-        text: '[--pad:--spacing(4)] px-(--pad) py-2.5 text-sm',
-        textBleed: '-my-2.75',
-        square: '[--pad:--spacing(3)] p-(--pad)',
-        squareBleed: '-my-3.25',
-        link: 'text-sm',
-        icon: "gap-sm [&_svg:not([class*='size-'])]:size-icon-sm",
+        text: '[--pad:var(--spacing-16px)] [--pad-y:var(--spacing-10px)] px-(--pad) py-(--pad-y) text-14px',
+        square: "[--pad:var(--spacing-10px)] [--pad-y:var(--spacing-10px)] p-(--pad) [&_svg:not([class*='size-'])]:size-icon-20px",
+        link: 'text-14px',
+        icon: "gap-8px [&_svg:not([class*='size-'])]:size-icon-16px",
     },
     sm: {
-        text: '[--pad:--spacing(3)] px-(--pad) py-1.5 text-xs',
-        textBleed: '-my-1.75',
-        square: '[--pad:--spacing(1.5)] p-(--pad)',
-        squareBleed: '-my-1.75',
-        link: 'text-xs',
-        icon: "gap-xs [&_svg:not([class*='size-'])]:size-icon-xs",
+        text: '[--pad:var(--spacing-12px)] [--pad-y:var(--spacing-6px)] px-(--pad) py-(--pad-y) text-12px',
+        square: "[--pad:var(--spacing-6px)] [--pad-y:var(--spacing-6px)] p-(--pad) [&_svg:not([class*='size-'])]:size-icon-16px",
+        link: 'text-12px',
+        icon: "gap-4px [&_svg:not([class*='size-'])]:size-icon-14px",
     },
 };
 
@@ -67,6 +78,7 @@ type ButtonProps = Omit<ComponentProps<'button'>, 'type'> & {
     square?: boolean;
     bleed?: boolean;
     busy?: boolean;
+    mark?: ButtonMark;
     asChild?: boolean;
     type?: 'button' | 'submit';
     'data-test'?: string;
@@ -99,7 +111,6 @@ export function buttonClass({
         isBox && (square ? box.square : box.text),
         bleed && isBox && bleedSides,
         bleed && isBox && bleedBackdrop,
-        bleed && isBox && (square ? box.squareBleed : box.textBleed),
         className,
     );
 }
@@ -111,6 +122,7 @@ export function Button(props: ButtonProps) {
         square,
         bleed,
         busy,
+        mark,
         asChild = false,
         type = 'button',
         className,
@@ -132,7 +144,11 @@ export function Button(props: ButtonProps) {
                 size,
                 square,
                 bleed,
-                className: cn(working && '[&>svg]:hidden', className),
+                className: cn(
+                    working && '[&>svg]:hidden',
+                    mark && [markClass, markText(mark)],
+                    className,
+                ),
             })}
             {...rest}
             disabled={rest.disabled || working || undefined}
@@ -148,5 +164,20 @@ export function Button(props: ButtonProps) {
                 children
             )}
         </Component>
+    );
+}
+
+export function FloatingButton(props: ButtonProps) {
+    const { className, ...rest } = props;
+
+    return (
+        <Button
+            square
+            className={cn(
+                "p-12px shadow-floating [&_svg:not([class*='size-'])]:size-icon-24px",
+                className,
+            )}
+            {...rest}
+        />
     );
 }

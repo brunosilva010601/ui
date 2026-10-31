@@ -1,33 +1,20 @@
-import {
-    ChevronRight,
-    CircleCheck,
-    CircleX,
-    Info,
-    TriangleAlert,
-} from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { toast, Toaster as Sonner } from 'sonner';
 import { Button } from './button';
 import { cn } from './lib/utils';
+import { tones } from './tones';
+import type { Tone } from './tones';
 
 const DURATION_MS = 5000;
 
 const abovePageBottom = {
-    bottom: 'calc(var(--page-bottom, env(safe-area-inset-bottom)) + var(--gap-sm))',
-};
-
-export type NoticeTone = 'success' | 'info' | 'warning' | 'error';
-
-const tones: Record<NoticeTone, { icon: LucideIcon; className: string }> = {
-    success: { icon: CircleCheck, className: 'text-success' },
-    info: { icon: Info, className: 'text-primary-text' },
-    warning: { icon: TriangleAlert, className: 'text-warning' },
-    error: { icon: CircleX, className: 'text-danger' },
+    bottom: 'calc(var(--page-bottom, var(--spacing-safe-bottom)) + var(--spacing-8px))',
 };
 
 type Notice = {
-    tone?: NoticeTone;
+    tone?: Tone;
     title: ReactNode;
     description?: ReactNode;
     onOpen?: () => void;
@@ -42,23 +29,21 @@ function ToastCard(props: ToastCardProps) {
     const tone = tones[props.tone ?? 'success'];
     const content = (
         <>
-            <tone.icon
-                className={cn('size-icon-md shrink-0', tone.className)}
-            />
+            <tone.icon className={cn('size-icon-20px shrink-0', tone.text)} />
             <span className="flex min-w-0 flex-1 flex-col text-left">
-                <span className="text-sm font-semibold">{props.title}</span>
+                <span className="text-14px font-semibold">{props.title}</span>
                 {props.description && (
-                    <span className="text-xs text-foreground-muted">
+                    <span className="text-12px text-foreground-muted">
                         {props.description}
                     </span>
                 )}
             </span>
             {props.onOpen && (
-                <ChevronRight className="size-icon-sm shrink-0 text-foreground-muted" />
+                <ChevronRight className="size-icon-16px shrink-0 text-foreground-muted" />
             )}
         </>
     );
-    const contentClass = 'flex min-w-0 flex-1 items-center gap-md px-md py-md';
+    const contentClass = 'flex min-w-0 flex-1 items-center gap-12px p-12px';
 
     return (
         <div className="relative flex w-full items-center transition-colors has-[>[data-layer]:active]:bg-surface-hover [@media(hover:hover)]:has-[>[data-layer]:hover]:bg-surface-hover">
@@ -81,7 +66,7 @@ function ToastCard(props: ToastCardProps) {
                 <div className={contentClass}>{content}</div>
             )}
             {props.action && (
-                <div className="pointer-events-none relative shrink-0 pe-md *:pointer-events-auto">
+                <div className="pointer-events-none relative shrink-0 pe-12px *:pointer-events-auto">
                     <Button
                         variant="outline"
                         size="sm"
@@ -124,7 +109,7 @@ export function Toaster(props: ToasterProps) {
                 classNames: {
                     toast: cn(
                         inverse,
-                        'pointer-events-auto w-full overflow-hidden rounded border border-border bg-surface text-foreground shadow-lg',
+                        'pointer-events-auto w-full overflow-hidden rounded border border-border bg-surface text-foreground shadow-floating',
                     ),
                 },
             }}

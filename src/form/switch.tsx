@@ -5,32 +5,34 @@ type Props = {
     label: string;
     description?: string;
     checked: boolean;
+    disabled?: boolean;
     onChange: (checked: boolean) => void;
     children?: ReactNode;
 };
 
 export function Switch(props: Props) {
     return (
-        <div className="flex flex-col gap-md">
+        <div className="flex flex-col gap-12px">
             <button
                 type="button"
                 role="switch"
                 aria-checked={props.checked}
+                disabled={props.disabled}
                 onClick={() => props.onChange(!props.checked)}
-                className="flex w-full cursor-pointer items-center gap-md text-start"
+                className="flex w-full cursor-pointer items-center gap-12px text-start disabled:pointer-events-none disabled:opacity-50"
             >
-                <span className="flex min-w-0 flex-1 flex-col gap-2xs">
-                    <span className="text-sm font-semibold">{props.label}</span>
+                <span className="flex min-w-0 flex-1 flex-col gap-2px">
+                    <span className="text-14px font-semibold">
+                        {props.label}
+                    </span>
                     {props.description && (
-                        <span className="text-sm text-foreground-muted">
-                            {props.description}
-                        </span>
+                        <span className="ui-note">{props.description}</span>
                     )}
                 </span>
                 <span
                     aria-hidden
                     className={cn(
-                        'relative h-6 w-11 shrink-0 rounded-full border transition-colors',
+                        'relative h-24px w-[44px] shrink-0 rounded-full border transition-colors',
                         props.checked
                             ? 'border-primary bg-primary'
                             : 'border-border bg-control',
@@ -38,14 +40,14 @@ export function Switch(props: Props) {
                 >
                     <span
                         className={cn(
-                            'absolute start-px top-px size-icon-md rounded-full bg-background shadow-sm transition-transform',
-                            props.checked && 'translate-x-5',
+                            'absolute start-px top-px size-icon-20px rounded-full bg-background shadow-control transition-transform',
+                            props.checked && 'translate-x-20px',
                         )}
                     />
                 </span>
             </button>
             {props.checked && props.children && (
-                <div className="flex flex-col gap-md">{props.children}</div>
+                <div className="flex flex-col gap-12px">{props.children}</div>
             )}
         </div>
     );

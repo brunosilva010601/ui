@@ -1,5 +1,17 @@
 # Roadmap
 
+## Refatoração aprovada
+
+Objetivo: os apps usam o pacote e não criam tamanho de fonte nem nada próprio de aparência, com diferenças só por classe de caso, como `w-full`. Ordem de execução:
+
+1. Trocar no pacote todas as classes para a escala nova (`gap-md` para `gap-12px`, `text-sm` para `text-14px`, números soltos) e absorver 20 px de texto em 18 e 36 px em 30.
+2. Criar no pacote a moldura da página (cabeçalho, página com rodapé fixo, área segura, medida do rodapé para o `notify`), a superfície de cartão, `disabled` e `busy` no `ListItem`, `Cover` exportado, telas de autenticação e erro, item de navegação, botão flutuante e larguras no `Container`.
+3. Completar o que já existe: `Detail` lado a lado com ação, par título e linha secundária, `EmptyState` compacto, props iguais em todos os campos, `NumberInput` sem moldura e com valor grande, borda e fundo na paleta, botão marcado na cor do significado.
+4. Limpar: exportações em lista explícita, sem as sem uso e as classes internas; um mapa de tons, com `danger` no `notify`; moldura compartilhada entre abas e grupo; `Section` e `Modal` divididas; sem `emoji` no `Select`; sombras com nome; variáveis todas em `tokens.css`; formatador no pacote.
+5. Completar a galeria com `Columns`, `MainColumn`, `SideColumn`, `Container`, `ControlStrut`, `Sortable`, `Popover`, `useModalValue`, `ModalCloseButton`, `touchClass` e `FieldError`, e com as escalas novas.
+6. Migrar os apps um a um, primeiro o Salalas e depois o Mylo, que então declara a própria cor e larga `--gutter` e `size-icon-md`. O Salalas perde a altura de linha própria e passa a usar `ui-label`, `ui-prompt` e `ui-display` do pacote.
+7. Remover os nomes antigos e o multiplicador `--spacing` na versão em que o Loremy adotar, com um lint contra número puro.
+
 ## Pacote
 
 - Escolher o nome definitivo do pacote, hoje `ui`.
@@ -18,10 +30,9 @@ O Salalas já usa o pacote. O que a troca decidiu:
 - O emoji do jogo entra como conteúdo do botão e do título da seção, que aceitam qualquer coisa. Não há prop de emoji nem escala de texto só para ele.
 - A coluna de 32 rem do app é o `max-w-lg` do Tailwind, no shell da tela, que é do app.
 - O botão de linha cheia recebe `w-full` em cada uso, e os nomes de leitor de tela do app viram `aria-label`, que o botão já repassa.
-- Pergunta grande e placar do jogo continuam no app: são tipografia de produto, e nenhum outro app tem.
 - `ButtonGroup` ficou para escolha entre opções (tema, som, vibração, opções do jogo). Os botões de jogada que marcam a escolha feita, como "Duvido" ou "Verdade", continuam `Button` com `aria-pressed`: a cor ali é o significado da jogada, e inverter o escolhido apagaria isso.
 - O menu da sala e o do jogador viram modal `sheet` com botões de linha cheia, sem o botão "Voltar" que o fechar já faz.
-- O app instala o pacote por caminho local (`file:../ui`), e `vite.config.ts` e `tsconfig.app.json` apontam `react`, `react-dom` e `lucide-react` para a cópia do app, senão os tipos do pacote e os do app não se reconhecem. O mesmo `vite.config.ts` libera a pasta do pacote em `server.fs.allow`, senão as fontes não carregam no servidor de desenvolvimento.
+- O app instala o pacote pela tag, como os outros, sem os ajustes que o caminho local pedia.
 
 O que a adoção pediu ao pacote: `disabled` no `Input`, `cancelLabel` e `tone` no `ConfirmDialog`, `dismissible` no `Modal`, `disabled` no `ButtonGroup` e no `ButtonGroupItem`, `aria-label` no item, `layout="segmented"` no grupo e `sideEffects` no `package.json`, que tirou do app o realce de código que ele nunca mostra.
 

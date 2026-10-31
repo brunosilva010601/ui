@@ -3,19 +3,17 @@ import { useId } from 'react';
 import type { ReactNode } from 'react';
 import { DropdownItem, DropdownMenu } from '../dropdown-menu';
 import { Field, fieldClass } from './field';
+import type { FieldProps } from './field';
 
 type Option<T extends string> = {
     value: T;
     label: string;
-    emoji?: string;
     lang?: string;
     content?: ReactNode;
 };
 
-type Props<T extends string> = {
+type Props<T extends string> = Omit<FieldProps, 'label'> & {
     label: string;
-    description?: string;
-    hint?: string;
     value: T;
     options: Option<T>[];
     className?: string;
@@ -29,16 +27,11 @@ type OptionTextProps<T extends string> = {
 function OptionText<T extends string>(props: OptionTextProps<T>) {
     return (
         <span
-            className="flex min-w-0 flex-1 items-center gap-sm"
+            className="flex min-w-0 flex-1 items-center gap-8px"
             lang={props.option.lang}
         >
             {props.option.content ?? (
-                <>
-                    {props.option.emoji && (
-                        <span aria-hidden>{props.option.emoji}</span>
-                    )}
-                    <span className="truncate">{props.option.label}</span>
-                </>
+                <span className="truncate">{props.option.label}</span>
             )}
         </span>
     );
@@ -54,8 +47,11 @@ export function Select<T extends string>(props: Props<T>) {
         <Field
             id={id}
             label={props.label}
+            hideLabel={props.hideLabel}
             description={props.description}
             hint={props.hint}
+            optional={props.optional}
+            error={props.error}
             className={props.className}
         >
             <DropdownMenu
@@ -67,10 +63,12 @@ export function Select<T extends string>(props: Props<T>) {
                     <button
                         id={id}
                         type="button"
-                        className={`${fieldClass} flex cursor-pointer items-center gap-sm text-left`}
+                        disabled={props.disabled}
+                        aria-invalid={props.error ? true : undefined}
+                        className={`${fieldClass} flex cursor-pointer items-center gap-8px text-left`}
                     >
                         {current && <OptionText option={current} />}
-                        <ChevronDown className="size-icon-sm shrink-0 text-foreground-muted" />
+                        <ChevronDown className="size-icon-16px shrink-0 text-foreground-muted" />
                     </button>
                 }
             >

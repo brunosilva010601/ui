@@ -71,42 +71,86 @@ const colorGroups = [
 ];
 
 const textSizes = [
-    'text-xs',
-    'text-sm',
-    'text-base',
-    'text-lg',
-    'text-xl',
-    'text-2xl',
+    'text-12px',
+    'text-14px',
+    'text-16px',
+    'text-18px',
+    'text-24px',
+    'text-30px',
+    'text-48px',
+    'text-60px',
+];
+
+const textRoles = [
+    'ui-page-title',
+    'ui-item-title',
+    'ui-note',
+    'ui-label',
+    'ui-prompt',
+    'ui-display',
+    'ui-hero',
 ];
 
 const weights = ['font-normal', 'font-medium', 'font-semibold', 'font-bold'];
 
 const gaps = [
-    { className: 'gap-px', px: 1 },
-    { className: 'gap-2xs', px: 2 },
-    { className: 'gap-xs', px: 4 },
-    { className: 'gap-sm', px: 8 },
-    { className: 'gap-md', px: 12 },
-    { className: 'gap-lg', px: 20 },
-    { className: 'gap-xl', px: 32 },
+    'gap-px',
+    'gap-2px',
+    'gap-4px',
+    'gap-6px',
+    'gap-8px',
+    'gap-10px',
+    'gap-12px',
+    'gap-16px',
+    'gap-20px',
+    'gap-24px',
+    'gap-32px',
+    'gap-40px',
+    'gap-48px',
 ];
 
 const paddings = [
-    { className: 'p-px', px: 1 },
-    { className: 'p-2xs', px: 2 },
-    { className: 'p-xs', px: 4 },
-    { className: 'p-sm', px: 8 },
-    { className: 'p-md', px: 12 },
-    { className: 'p-lg', px: 20 },
-    { className: 'p-xl', px: 32 },
+    'p-px',
+    'p-2px',
+    'p-4px',
+    'p-6px',
+    'p-8px',
+    'p-10px',
+    'p-12px',
+    'p-16px',
+    'p-20px',
+    'p-24px',
+    'p-32px',
+    'p-40px',
+    'p-48px',
 ];
 
 const sizes = [
-    { className: 'size-icon-xs', px: 14, shape: 'rounded-sm bg-foreground-muted' },
-    { className: 'size-icon-sm', px: 16, shape: 'rounded-sm bg-foreground-muted' },
-    { className: 'size-icon-md', px: 20, shape: 'rounded-sm bg-foreground-muted' },
-    { className: 'size-icon-lg', px: 24, shape: 'rounded-sm bg-foreground-muted' },
-    { className: 'size-icon-xl', px: 32, shape: 'rounded-sm bg-foreground-muted' },
+    {
+        className: 'size-icon-14px',
+        px: 14,
+        shape: 'rounded bg-foreground-muted',
+    },
+    {
+        className: 'size-icon-16px',
+        px: 16,
+        shape: 'rounded bg-foreground-muted',
+    },
+    {
+        className: 'size-icon-20px',
+        px: 20,
+        shape: 'rounded bg-foreground-muted',
+    },
+    {
+        className: 'size-icon-24px',
+        px: 24,
+        shape: 'rounded bg-foreground-muted',
+    },
+    {
+        className: 'size-icon-32px',
+        px: 32,
+        shape: 'rounded bg-foreground-muted',
+    },
     {
         className: 'size-touch',
         px: 44,
@@ -121,6 +165,8 @@ const surfaces = [
     { label: 'control', className: 'border border-border bg-control' },
 ];
 
+const shadows = ['shadow-control', 'shadow-floating', 'shadow-overlay'];
+
 const animations = [
     'animate-fade-in',
     'animate-pop-in',
@@ -129,7 +175,7 @@ const animations = [
     'animate-slide-in-left',
 ];
 
-const heightRowClass = 'flex flex-wrap items-start gap-sm *:shrink-0';
+const heightRowClass = 'flex flex-wrap items-start gap-8px *:shrink-0';
 
 const choices = [
     { value: 'a', label: 'Option A' },
@@ -174,10 +220,10 @@ export function Gallery() {
 
     return (
         <UiProvider labels={labels} locale="en-US">
-            <div className="mx-auto flex min-h-screen max-w-3xl flex-col gap-xl px-md pb-xl sm:px-lg">
-                <header className="sticky top-0 z-40 -mx-md flex flex-col gap-sm border-b border-border bg-background/90 px-md py-sm backdrop-blur-md sm:-mx-lg sm:flex-row sm:items-center sm:gap-md sm:px-lg">
-                    <h1 className="text-xl font-semibold">ui</h1>
-                    <div className="flex flex-1 items-center gap-sm sm:justify-between">
+            <div className="mx-auto flex min-h-screen max-w-3xl flex-col gap-32px px-12px pb-32px sm:px-20px">
+                <header className="sticky top-0 z-40 -mx-12px flex flex-col gap-8px border-b border-border bg-background/90 px-12px py-8px backdrop-blur-md sm:-mx-20px sm:flex-row sm:items-center sm:gap-12px sm:px-20px">
+                    <h1 className="text-18px font-semibold">ui</h1>
+                    <div className="flex flex-1 items-center gap-8px sm:justify-between">
                         <Tabs value={page} onValueChange={changePage}>
                             <TabsList fit>
                                 {pages.map((option) => (
@@ -216,7 +262,7 @@ function ThemePage() {
     const [choice, setChoice] = useState('a');
 
     return (
-        <div className="flex flex-col gap-lg">
+        <div className="flex flex-col gap-20px">
             <Section title="Colors" collapsible remember="docs:colors">
                 {colorGroups.map((group) => (
                     <Section
@@ -228,16 +274,19 @@ function ThemePage() {
                         collapsible
                         remember={`docs:colors-${group.title}`}
                     >
-                        <div className="grid grid-cols-2 gap-sm sm:grid-cols-4">
+                        <div className="grid grid-cols-2 gap-8px sm:grid-cols-4">
                             {group.tokens.map((token) => (
-                                <div key={token} className="flex flex-col gap-xs">
+                                <div
+                                    key={token}
+                                    className="flex flex-col gap-4px"
+                                >
                                     <div
-                                        className="h-12 rounded border border-border"
+                                        className="h-48px rounded border border-border"
                                         style={{
                                             background: `var(--color-${token})`,
                                         }}
                                     />
-                                    <span className="truncate font-mono text-xs text-foreground-soft">
+                                    <span className="truncate font-mono text-12px text-foreground-soft">
                                         {token}
                                     </span>
                                 </div>
@@ -250,14 +299,29 @@ function ThemePage() {
                 <Section
                     variant="outlined"
                     title="Sizes"
-                    description="Tailwind text sizes in Outfit."
-                    meta="text-xs … text-2xl"
+                    description="The closed text scale, in Outfit. Apps use the roles below day to day."
+                    meta="text-12px … text-60px"
                     collapsible
                 >
-                    <div className="flex flex-col gap-sm">
+                    <div className="flex flex-col gap-8px">
                         {textSizes.map((size) => (
                             <p key={size} className={size}>
-                                {size} Lorem ipsum dolor
+                                {size} Lorem ipsum
+                            </p>
+                        ))}
+                    </div>
+                </Section>
+                <Section
+                    variant="outlined"
+                    title="Roles"
+                    description="Size, weight and color decided together, so no app picks its own."
+                    meta="ui-page-title · ui-item-title · ui-note · ui-label · ui-prompt · ui-display · ui-hero"
+                    collapsible
+                >
+                    <div className="flex flex-col gap-8px">
+                        {textRoles.map((role) => (
+                            <p key={role} className={role}>
+                                {role}
                             </p>
                         ))}
                     </div>
@@ -269,7 +333,7 @@ function ThemePage() {
                     meta="font-normal · font-medium · font-semibold · font-bold"
                     collapsible
                 >
-                    <div className="flex flex-wrap gap-md">
+                    <div className="flex flex-wrap gap-12px">
                         {weights.map((weight) => (
                             <span key={weight} className={weight}>
                                 {weight}
@@ -278,7 +342,11 @@ function ThemePage() {
                     </div>
                 </Section>
             </Section>
-            <Section title="Control heights" collapsible remember="docs:heights">
+            <Section
+                title="Control heights"
+                collapsible
+                remember="docs:heights"
+            >
                 <Section
                     variant="outlined"
                     title="Side by side"
@@ -286,7 +354,7 @@ function ThemePage() {
                     meta="padding + font size + border"
                     collapsible
                 >
-                    <span className="font-mono text-xs text-foreground-muted">
+                    <span className="font-mono text-12px text-foreground-muted">
                         md
                     </span>
                     <div className={heightRowClass}>
@@ -294,7 +362,7 @@ function ThemePage() {
                             label="Field"
                             hideLabel
                             placeholder="Field"
-                            className="w-28"
+                            className="w-[112px]"
                         />
                         <Button>Button</Button>
                         <Button variant="outline" square>
@@ -307,7 +375,7 @@ function ThemePage() {
                             </TabsList>
                         </Tabs>
                     </div>
-                    <span className="font-mono text-xs text-foreground-muted">
+                    <span className="font-mono text-12px text-foreground-muted">
                         sm
                     </span>
                     <div className={heightRowClass}>
@@ -324,15 +392,15 @@ function ThemePage() {
                         <Badge size="md">Badge md</Badge>
                         <Badge>Badge sm</Badge>
                     </div>
-                    <span className="font-mono text-xs text-foreground-muted">
+                    <span className="font-mono text-12px text-foreground-muted">
                         big icon and wrapping text
                     </span>
                     <div className={heightRowClass}>
                         <Button>
-                            <Plus className="size-10" />
+                            <Plus className="size-40px" />
                             Big icon
                         </Button>
-                        <Button className="max-w-40 whitespace-normal">
+                        <Button className="max-w-[160px] whitespace-normal">
                             A longer label that wraps onto two lines
                         </Button>
                         <Button>Normal</Button>
@@ -343,25 +411,22 @@ function ThemePage() {
                 <Section
                     variant="outlined"
                     title="Gaps"
-                    description="Space between items. Margins use the same scale."
-                    meta="gap-{size} · m-{size}"
+                    description="Space between items. Margins, positions and sizes use the same scale, named by its pixels."
+                    meta="gap-{px} · m-{px} · size-{px}"
                     collapsible
                 >
-                    <div className="flex flex-col gap-sm">
+                    <div className="flex flex-col gap-8px">
                         {gaps.map((gap) => (
                             <div
-                                key={gap.className}
-                                className="flex items-center gap-md"
+                                key={gap}
+                                className="flex items-center gap-12px"
                             >
-                                <span className="w-16 font-mono text-xs text-foreground-soft">
-                                    {gap.className}
+                                <span className="w-[64px] font-mono text-12px text-foreground-soft">
+                                    {gap}
                                 </span>
-                                <span className="w-10 text-xs text-foreground-faint">
-                                    {gap.px} px
-                                </span>
-                                <div className={`${gap.className} flex`}>
-                                    <div className="h-4 w-6 rounded-sm bg-primary" />
-                                    <div className="h-4 w-6 rounded-sm bg-primary" />
+                                <div className={`${gap} flex`}>
+                                    <div className="h-16px w-24px rounded bg-primary" />
+                                    <div className="h-16px w-24px rounded bg-primary" />
                                 </div>
                             </div>
                         ))}
@@ -371,25 +436,22 @@ function ThemePage() {
                     variant="outlined"
                     title="Paddings"
                     description="Space from the edge to the content, same scale as gaps."
-                    meta="p-{size} · px-{size} · py-{size}"
+                    meta="p-{px} · px-{px} · py-{px}"
                     collapsible
                 >
-                    <div className="flex flex-wrap items-end gap-lg">
+                    <div className="flex flex-wrap items-end gap-20px">
                         {paddings.map((padding) => (
                             <div
-                                key={padding.className}
-                                className="flex flex-col items-center gap-xs"
+                                key={padding}
+                                className="flex flex-col items-center gap-4px"
                             >
                                 <div
-                                    className={`${padding.className} rounded-sm border border-border bg-surface-raised`}
+                                    className={`${padding} rounded border border-border bg-surface-raised`}
                                 >
-                                    <div className="size-6 rounded-sm bg-primary" />
+                                    <div className="size-24px rounded bg-primary" />
                                 </div>
-                                <span className="font-mono text-xs text-foreground-soft">
-                                    {padding.className}
-                                </span>
-                                <span className="text-xs text-foreground-faint">
-                                    {padding.px} px
+                                <span className="font-mono text-12px text-foreground-soft">
+                                    {padding}
                                 </span>
                             </div>
                         ))}
@@ -401,20 +463,22 @@ function ThemePage() {
                     variant="outlined"
                     title="Icons and touch"
                     description="Icon sizes, and the minimum touch area of small controls."
-                    meta="size-icon-{size} · size-touch"
+                    meta="size-icon-{px} · size-touch"
                     collapsible
                 >
-                    <div className="flex flex-wrap items-end gap-lg">
+                    <div className="flex flex-wrap items-end gap-20px">
                         {sizes.map((size) => (
                             <div
                                 key={size.className}
-                                className="flex flex-col items-center gap-xs"
+                                className="flex flex-col items-center gap-4px"
                             >
-                                <div className={`${size.className} ${size.shape}`} />
-                                <span className="font-mono text-xs text-foreground-soft">
+                                <div
+                                    className={`${size.className} ${size.shape}`}
+                                />
+                                <span className="font-mono text-12px text-foreground-soft">
                                     {size.className.replace('size-', '')}
                                 </span>
-                                <span className="text-xs text-foreground-faint">
+                                <span className="text-12px text-foreground-faint">
                                     {size.px} px
                                 </span>
                             </div>
@@ -430,13 +494,31 @@ function ThemePage() {
                     meta="rounded · bg-surface · bg-surface-raised · bg-control"
                     collapsible
                 >
-                    <div className="grid grid-cols-3 gap-sm">
+                    <div className="grid grid-cols-3 gap-8px">
                         {surfaces.map((surface) => (
                             <div
                                 key={surface.label}
-                                className={`rounded p-md font-mono text-xs ${surface.className}`}
+                                className={`rounded p-12px font-mono text-12px ${surface.className}`}
                             >
                                 {surface.label}
+                            </div>
+                        ))}
+                    </div>
+                </Section>
+                <Section
+                    variant="outlined"
+                    title="Shadows"
+                    description="A switch knob, things floating over the page, and overlays."
+                    meta="shadow-control · shadow-floating · shadow-overlay"
+                    collapsible
+                >
+                    <div className="grid grid-cols-3 gap-8px">
+                        {shadows.map((shadow) => (
+                            <div
+                                key={shadow}
+                                className={`rounded bg-surface p-12px font-mono text-12px ${shadow}`}
+                            >
+                                {shadow.replace('shadow-', '')}
                             </div>
                         ))}
                     </div>
@@ -450,7 +532,7 @@ function ThemePage() {
                     meta="animate-{name}"
                     collapsible
                 >
-                    <div className="grid grid-cols-2 gap-sm sm:grid-cols-3">
+                    <div className="grid grid-cols-2 gap-8px sm:grid-cols-3">
                         {animations.map((animation) => (
                             <button
                                 key={animation}
@@ -461,11 +543,11 @@ function ThemePage() {
                                         [animation]: (runs[animation] ?? 0) + 1,
                                     })
                                 }
-                                className="flex h-20 cursor-pointer items-center justify-center overflow-hidden rounded border border-border bg-surface hover:bg-surface-hover"
+                                className="flex h-[80px] cursor-pointer items-center justify-center overflow-hidden rounded border border-border bg-surface hover:bg-surface-hover"
                             >
                                 <span
                                     key={runs[animation] ?? 0}
-                                    className={`${animation} rounded-full bg-primary px-sm py-xs text-xs text-primary-foreground`}
+                                    className={`${animation} rounded-full bg-primary px-8px py-4px text-12px text-primary-foreground`}
                                 >
                                     {animation.replace('animate-', '')}
                                 </span>

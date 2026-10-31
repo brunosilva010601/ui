@@ -6,11 +6,17 @@ import { bareFieldClass, Field, fieldClass } from './field';
 import type { FieldProps } from './field';
 
 type Props = FieldProps & {
-    hint?: string;
-    optional?: boolean;
     bare?: boolean;
     ref?: Ref<HTMLInputElement>;
-    type?: 'email' | 'search' | 'date' | 'time' | 'password';
+    type?:
+        | 'email'
+        | 'search'
+        | 'date'
+        | 'time'
+        | 'password'
+        | 'tel'
+        | 'url'
+        | 'number';
     min?: string;
     max?: string;
     maxLength?: number;
@@ -20,7 +26,6 @@ type Props = FieldProps & {
     autoComplete?: string;
     autoCapitalize?: 'none' | 'words';
     autoFocus?: boolean;
-    disabled?: boolean;
     enterKeyHint?: 'next' | 'done';
     inputMode?: 'decimal' | 'numeric';
     required?: boolean;

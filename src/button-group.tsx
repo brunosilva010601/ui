@@ -5,17 +5,16 @@ import type { ReactNode } from 'react';
 import { Button } from './button';
 import type { ButtonSize } from './button';
 import { cn } from './lib/utils';
+import { trackClass, trackItemClass } from './track';
 
 const layouts = {
-    wrap: 'flex flex-wrap gap-sm',
-    row: 'flex gap-xs',
-    fill: 'flex gap-xs *:min-w-0 *:flex-1',
-    segmented:
-        'flex w-full items-center gap-xs rounded-full border border-border bg-control p-xs text-foreground-soft',
+    wrap: 'flex flex-wrap gap-8px',
+    row: 'flex gap-4px',
+    fill: 'flex gap-4px *:min-w-0 *:flex-1',
+    segmented: cn(trackClass, 'items-center gap-4px'),
 };
 
-const segmentedItem =
-    'min-w-0 flex-1 border-transparent px-2 py-2 data-[state=on]:bg-foreground data-[state=on]:text-background';
+const segmentedItem = cn(trackItemClass, 'min-w-0');
 
 type GroupVariant = 'outline' | 'ghost';
 

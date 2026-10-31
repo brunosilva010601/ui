@@ -1,10 +1,10 @@
 import { cn } from './lib/utils';
 
 const sizes = {
-    xs: 'size-6 text-xs',
-    sm: 'size-8 text-sm',
-    md: 'size-10 text-sm',
-    lg: 'size-12 text-lg',
+    xs: 'size-24px text-12px',
+    sm: 'size-32px text-14px',
+    md: 'size-40px text-14px',
+    lg: 'size-48px text-18px',
 };
 
 type Props = {

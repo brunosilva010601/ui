@@ -5,11 +5,10 @@ import { cn } from '../lib/utils';
 import { paletteColors, paletteText } from '../palette';
 import type { PaletteColor } from '../palette';
 import { Field } from './field';
+import type { FieldProps } from './field';
 
-type Props = {
-    label: string;
+type Props = FieldProps & {
     value: PaletteColor | null;
-    error?: string;
     onChange: (color: PaletteColor | null) => void;
 };
 
@@ -18,12 +17,16 @@ export function ColorPicker(props: Props) {
     const colors = [null, ...paletteColors];
 
     return (
-        <Field id={id} label={props.label} error={props.error}>
-            <div
-                id={id}
-                role="radiogroup"
-                className="flex flex-wrap gap-xs"
-            >
+        <Field
+            id={id}
+            label={props.label}
+            hideLabel={props.hideLabel}
+            description={props.description}
+            hint={props.hint}
+            optional={props.optional}
+            error={props.error}
+        >
+            <div id={id} role="radiogroup" className="flex flex-wrap gap-4px">
                 {colors.map((color) => {
                     const chosen = color === props.value;
 
@@ -33,6 +36,7 @@ export function ColorPicker(props: Props) {
                             type="button"
                             role="radio"
                             aria-checked={chosen}
+                            disabled={props.disabled}
                             onClick={() => props.onChange(color)}
                             className={cn(
                                 buttonClass({
@@ -45,9 +49,9 @@ export function ColorPicker(props: Props) {
                                 chosen && 'border-current',
                             )}
                         >
-                            <span className="flex size-icon-md items-center justify-center rounded-full bg-current">
+                            <span className="flex size-icon-20px items-center justify-center rounded-full bg-current">
                                 {chosen && (
-                                    <Check className="size-icon-xs text-background" />
+                                    <Check className="size-icon-14px text-background" />
                                 )}
                             </span>
                         </button>

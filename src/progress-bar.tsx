@@ -16,7 +16,7 @@ export function ProgressBar(props: Props) {
             aria-valuemin={0}
             aria-valuemax={props.max}
             aria-valuenow={props.value}
-            className="h-1.5 overflow-hidden rounded-full bg-surface-raised"
+            className="h-6px overflow-hidden rounded-full bg-surface-raised"
         >
             <div
                 className={cn(

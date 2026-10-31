@@ -20,6 +20,15 @@ const HOLD_START_MS = 150;
 const HOLD_FASTEST_MS = 30;
 const HOLD_SPEEDUP = 0.85;
 
+const RUSH_STAGES = [
+    { after: 30, factor: 25 },
+    { after: 12, factor: 5 },
+];
+
+function rushFactor(ticks: number): number {
+    return RUSH_STAGES.find((stage) => ticks >= stage.after)?.factor ?? 1;
+}
+
 type Props = FieldProps & {
     value: number | '';
     min: number;
@@ -28,6 +37,10 @@ type Props = FieldProps & {
     pad?: number;
     start?: number;
     wrap?: boolean;
+    bare?: boolean;
+    rush?: boolean;
+    className?: string;
+    onBlur?: () => void;
     onChange: (value: number | '') => void;
 };
 
@@ -35,6 +48,7 @@ export function NumberInput(props: Props) {
     const inputId = useId();
     const timer = useRef<number | undefined>(undefined);
     const current = useRef(0);
+    const ticks = useRef(0);
     const size = props.step ?? 1;
 
     useEffect(() => () => window.clearTimeout(timer.current), []);
@@ -56,14 +70,28 @@ export function NumberInput(props: Props) {
         return value < props.min ? top : value;
     };
 
+    const rushed = (delta: number): number => {
+        const factor = props.rush ? rushFactor(ticks.current) : 1;
+        const jump = Math.abs(delta) * factor;
+        const aligned =
+            factor === 1
+                ? current.current
+                : delta > 0
+                  ? Math.floor(current.current / jump) * jump
+                  : Math.ceil(current.current / jump) * jump;
+
+        return aligned + Math.sign(delta) * jump;
+    };
+
     const step = (delta: number): boolean => {
-        current.current = next(current.current + delta);
+        current.current = next(rushed(delta));
         props.onChange(current.current);
 
         return next(current.current + delta) !== current.current;
     };
 
     const startFrom = (delta: number) => {
+        ticks.current = 0;
         current.current =
             props.value !== ''
                 ? props.value
@@ -72,6 +100,8 @@ export function NumberInput(props: Props) {
 
     const hold = (delta: number, delay: number) => {
         timer.current = window.setTimeout(() => {
+            ticks.current++;
+
             if (step(delta)) {
                 hold(delta, Math.max(HOLD_FASTEST_MS, delay * HOLD_SPEEDUP));
             }
@@ -113,11 +143,12 @@ export function NumberInput(props: Props) {
             type="button"
             tabIndex={-1}
             disabled={
-                !props.wrap &&
-                props.value !== '' &&
-                (delta > 0
-                    ? props.value >= props.max
-                    : props.value <= props.min)
+                props.disabled ||
+                (!props.wrap &&
+                    props.value !== '' &&
+                    (delta > 0
+                        ? props.value >= props.max
+                        : props.value <= props.min))
             }
             onPointerDown={() => press(delta)}
             onPointerUp={release}
@@ -136,9 +167,18 @@ export function NumberInput(props: Props) {
             label={props.label}
             hideLabel={props.hideLabel}
             description={props.description}
+            hint={props.hint}
+            optional={props.optional}
             error={props.error}
         >
-            <div className={stepperClass}>
+            <div
+                className={cn(
+                    props.bare
+                        ? 'grid w-fit grid-cols-[auto_auto_auto] items-center gap-8px has-aria-invalid:text-danger'
+                        : stepperClass,
+                    props.className,
+                )}
+            >
                 {stepButton(-size)}
                 <input
                     id={inputId}
@@ -146,6 +186,8 @@ export function NumberInput(props: Props) {
                     role="spinbutton"
                     inputMode="numeric"
                     autoComplete="off"
+                    disabled={props.disabled}
+                    size={props.bare ? String(props.max).length : undefined}
                     aria-valuemin={props.min}
                     aria-valuemax={props.max}
                     aria-valuenow={props.value === '' ? undefined : props.value}
@@ -159,11 +201,20 @@ export function NumberInput(props: Props) {
                         const digits = event.target.value.replace(/\D/g, '');
                         props.onChange(digits === '' ? '' : Number(digits));
                     }}
-                    onBlur={() =>
-                        props.value !== '' && props.onChange(clamp(props.value))
-                    }
+                    onBlur={() => {
+                        if (props.value !== '') {
+                            props.onChange(clamp(props.value));
+                        }
+
+                        props.onBlur?.();
+                    }}
                     onKeyDown={arrowKeys}
-                    className="min-w-0 bg-transparent py-sm text-center font-semibold text-foreground tabular-nums outline-none"
+                    className={cn(
+                        'min-w-0 bg-transparent py-8px text-center text-foreground tabular-nums outline-none disabled:cursor-not-allowed disabled:opacity-50',
+                        props.bare
+                            ? 'w-auto text-30px font-bold'
+                            : 'font-semibold',
+                    )}
                 />
                 {stepButton(size)}
             </div>

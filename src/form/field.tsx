@@ -4,7 +4,7 @@ import { cn } from '../lib/utils';
 import { useUiLabels } from '../provider';
 
 export const fieldClass =
-    'border border-border rounded bg-control text-foreground placeholder:text-foreground-muted w-full min-w-0 px-md py-sm transition-shadow outline-none focus-visible:border-primary focus-visible:ring-primary focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger aria-invalid:focus-visible:ring-danger';
+    'border border-border rounded bg-control text-foreground placeholder:text-foreground-muted w-full min-w-0 px-12px py-8px transition-shadow outline-none focus-visible:border-primary focus-visible:ring-primary focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger aria-invalid:focus-visible:ring-danger';
 
 export const bareFieldClass =
     'w-full min-w-0 bg-transparent outline-none [text-decoration:inherit] placeholder:text-foreground-muted disabled:cursor-not-allowed disabled:opacity-50';
@@ -13,7 +13,10 @@ export type FieldProps = {
     label?: ReactNode;
     hideLabel?: boolean;
     description?: ReactNode;
+    hint?: ReactNode;
+    optional?: boolean;
     error?: string;
+    disabled?: boolean;
 };
 
 type LabelProps = {
@@ -27,7 +30,7 @@ function Label(props: LabelProps) {
 
     return (
         <label
-            className={cn('block text-sm text-foreground', className)}
+            className={cn('block text-14px text-foreground', className)}
             {...rest}
         />
     );
@@ -42,13 +45,11 @@ export function FieldError(props: FieldErrorProps) {
         return null;
     }
 
-    return <p className="text-sm text-danger">{props.message}</p>;
+    return <p className="text-14px text-danger">{props.message}</p>;
 }
 
-type Props = FieldProps & {
+type Props = Omit<FieldProps, 'disabled'> & {
     id?: string;
-    optional?: boolean;
-    hint?: ReactNode;
     descriptionAside?: boolean;
     className?: string;
     children: ReactNode;
@@ -62,24 +63,22 @@ export function Field(props: Props) {
     }
 
     const description = props.description && (
-        <p
-            className={cn(
-                'text-sm text-foreground-muted',
-                props.descriptionAside && 'text-right',
-            )}
-        >
+        <p className={cn('ui-note', props.descriptionAside && 'text-right')}>
             {props.description}
         </p>
     );
 
     return (
         <div
-            className={cn('grid min-w-0 content-start gap-sm', props.className)}
+            className={cn(
+                'grid min-w-0 content-start gap-8px',
+                props.className,
+            )}
         >
             {props.label && (
                 <div
                     className={cn(
-                        'flex items-baseline justify-between gap-md',
+                        'flex items-baseline justify-between gap-12px',
                         props.hideLabel &&
                             !props.hint &&
                             !props.descriptionAside &&

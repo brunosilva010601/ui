@@ -10,8 +10,8 @@ export function useFormId(): string | undefined {
 }
 
 const gaps = {
-    md: 'gap-md',
-    lg: 'gap-lg',
+    md: 'gap-12px',
+    lg: 'gap-20px',
 };
 
 type Props = {
@@ -53,8 +53,8 @@ export function FormActions(props: FormActionsProps) {
     return (
         <div
             className={cn(
-                'mt-sm flex',
-                props.inline ? 'items-center gap-sm' : 'flex-col gap-md',
+                'mt-8px flex',
+                props.inline ? 'items-center gap-8px' : 'flex-col gap-12px',
             )}
         >
             {props.children}

@@ -7,7 +7,8 @@ import { Backdrop } from './backdrop';
 import { IconBadge } from './icon-badge';
 import { touch } from './lib/device';
 import { cn } from './lib/utils';
-import { Modal, ModalClose, useCloseOnBack } from './modal';
+import { Modal, ModalClose } from './modal';
+import { useCloseOnBack } from './modal-history';
 import {
     keepOpenOnOutsidePress,
     Popover,
@@ -21,7 +22,7 @@ import {
 import { useUi } from './provider';
 
 const itemClass =
-    "flex w-full cursor-pointer items-center gap-sm rounded border border-transparent px-(--row-inset) py-2.5 text-left text-sm text-foreground transition-colors select-none hover:bg-foreground/5 active:bg-foreground/5 data-[state=on]:bg-foreground/5 [&_svg]:shrink-0 [&_svg]:text-foreground-muted [&_svg:not([class*='size-'])]:size-icon-sm";
+    "flex w-full cursor-pointer items-center gap-8px rounded border border-transparent px-(--row-inset) py-10px text-left text-14px text-foreground transition-colors select-none hover:bg-foreground/5 active:bg-foreground/5 data-[state=on]:bg-foreground/5 [&_svg]:shrink-0 [&_svg]:text-foreground-muted [&_svg:not([class*='size-'])]:size-icon-16px";
 
 type DropdownMenuProps = {
     trigger?: ReactElement;
@@ -59,7 +60,9 @@ function ChoiceModal(props: DropdownMenuProps) {
                 title={props.label}
             >
                 <MenuClose value={ModalClose}>
-                    <div className="flex flex-col gap-xs">{props.children}</div>
+                    <div className="flex flex-col gap-4px">
+                        {props.children}
+                    </div>
                 </MenuClose>
             </Modal>
         </>
@@ -94,8 +97,10 @@ function PopoverMenu(props: DropdownMenuProps) {
                 align={props.align ?? 'end'}
                 onPointerDownOutside={keepOpenOnOutsidePress}
                 className={cn(
-                    'flex max-h-(--radix-popover-content-available-height) flex-col gap-xs overflow-y-auto p-xs',
-                    props.wide ? 'w-(--radix-popover-trigger-width)' : 'w-52',
+                    'flex max-h-(--radix-popover-content-available-height) flex-col gap-4px overflow-y-auto p-4px',
+                    props.wide
+                        ? 'w-(--radix-popover-trigger-width)'
+                        : 'w-[208px]',
                 )}
             >
                 {props.children}
@@ -118,7 +123,7 @@ export function RowTrigger(props: RowTriggerProps) {
         <button
             type="button"
             className={cn(
-                'flex w-full cursor-pointer items-center gap-md px-(--row-inset) py-md text-left text-sm transition-colors hover:bg-surface-hover focus-visible:-outline-offset-2 active:bg-surface-hover data-[state=open]:bg-surface-hover',
+                'flex w-full cursor-pointer items-center gap-12px px-(--row-inset) py-12px text-left text-14px transition-colors hover:bg-surface-hover focus-visible:-outline-offset-2 active:bg-surface-hover data-[state=open]:bg-surface-hover',
                 className,
             )}
             {...rest}
@@ -133,7 +138,7 @@ export function RowTrigger(props: RowTriggerProps) {
             >
                 {value}
             </span>
-            <ChevronRight className="size-icon-sm shrink-0 text-foreground-muted" />
+            <ChevronRight className="size-icon-16px shrink-0 text-foreground-muted" />
         </button>
     );
 }

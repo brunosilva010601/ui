@@ -4,7 +4,7 @@
 
 - `theme.css`: entrada do tema. Junta os arquivos de `css/` e registra `src/` para o Tailwind gerar as classes dos componentes.
 - `css/`: escalas e tamanhos (`tokens.css`), cores do claro e do escuro (`palettes.css`), animações, fonte e estilos base. Em `css/fonts/` ficam os arquivos da Noto Color Emoji, copiados do que o Google Fonts serve, porque a versão do `@fontsource` carrega e não desenha nada: o texto some e o espaço fica. A Outfit continua vindo do `@fontsource`.
-- `src/`: os componentes, todos exportados por `src/index.ts`.
+- `src/`: os componentes. `src/index.ts` lista o que é público. `Section` e `Modal` são divididas em arquivos pelo assunto: histórico do navegador, gestos e formatos (`modal-*`), faixa recolhível e estado aberto (`section-*`).
 - `gallery/`: página de consulta do tema e dos componentes. Não vai para os apps.
 
 O pacote se chama `@brunosilva010601/ui` e vai como código TypeScript, sem etapa de build, com duas entradas: `@brunosilva010601/ui` (componentes) e `@brunosilva010601/ui/theme.css` (tema).
@@ -18,7 +18,7 @@ O repositório `brunosilva010601/ui` é público, e os apps instalam direto dele
 O pacote entra no `package.json` do app apontando para a tag:
 
 ```json
-"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.5.0"
+"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.6.0"
 ```
 
 A tag `v0.1.0` aponta para um commit de antes do nome atual e não serve para instalar.
@@ -43,9 +43,9 @@ Regras da adoção:
 
 1. No CSS do app, importar o Tailwind e depois `@brunosilva010601/ui/theme.css`, e remover os arquivos de tema próprios que ele substitui (tokens, paletas, animações, fonte) e a fonte de emoji carregada pelo app, porque o pacote já traz a Noto Color Emoji. Em seguida, sobrescrever as variáveis da cor principal no claro (`:root, .light`) e no escuro (`.dark`).
 2. O modo escuro é a classe `dark` no `html`.
-3. A margem lateral da página é `--gutter`, que vale o recuo das linhas e muda no CSS do app quando a tela pede outra. É o que o `Container` com `padded` aplica, o que a seção usa para sangrar o cabeçalho clicável e o recuo que uma faixa ou lista com `bleed` devolve, então um valor errado aqui desalinha a página inteira.
+3. A margem lateral é `--gutter`, de 16 px, igual em todos os apps, e o app não a muda. É o que o `Container` com `padded` aplica, o que a modal usa de recuo, o que a seção usa para sangrar o cabeçalho clicável e o recuo que uma faixa ou lista com `bleed` devolve.
 4. Envolver o app com `UiProvider`, que recebe o componente de link do roteador, os textos internos, o idioma, o início da semana e o aviso de saída de página (`onLeave`). Sem ele, tudo funciona com textos em português e links comuns.
-5. Montar o `Toaster` uma vez na raiz, passando claro ou escuro. Mensagens vindas do servidor ficam no app, chamando `notify`.
+5. Montar o `Toaster` uma vez na raiz, passando claro ou escuro. Mensagens vindas do servidor ficam no app, chamando `notify`. O aviso sobe sozinho acima de um `PageBottom` ou `PageFooter` montado, que declaram a altura em `--page-bottom`.
 6. A escolha entre claro, escuro e sistema usa o `AppearancePicker`, mas guardar a escolha e aplicar a classe `dark` ficam no app.
 
 No Inertia, duas ligações ficam no app:

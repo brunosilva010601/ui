@@ -5,8 +5,8 @@ import { bareFieldClass, Field, fieldClass } from './field';
 import type { FieldProps } from './field';
 
 const sizes = {
-    md: 'max-h-42 min-h-20',
-    lg: 'max-h-96 min-h-48',
+    md: 'max-h-[168px] min-h-[80px]',
+    lg: 'max-h-[384px] min-h-[192px]',
 };
 
 type Props = FieldProps & {
@@ -15,7 +15,7 @@ type Props = FieldProps & {
     bare?: boolean;
     className?: string;
     autoFocus?: boolean;
-    optional?: boolean;
+    required?: boolean;
     rows?: number;
     placeholder?: string;
     name?: string;
@@ -33,6 +33,7 @@ export function Textarea(props: Props) {
         label,
         hideLabel,
         description,
+        hint,
         optional,
         error,
         size,
@@ -60,6 +61,7 @@ export function Textarea(props: Props) {
                 )
             }
             descriptionAside={counted}
+            hint={hint}
             optional={optional}
             error={error}
         >

@@ -99,7 +99,7 @@ function YearPicker(props: YearPickerProps) {
     );
 
     return (
-        <div className="grid max-h-72 w-64 grid-cols-4 gap-xs overflow-y-auto p-sm">
+        <div className="grid max-h-[288px] w-[256px] grid-cols-4 gap-4px overflow-y-auto p-8px">
             {years.map((year) => (
                 <button
                     key={year}
@@ -111,7 +111,7 @@ function YearPicker(props: YearPickerProps) {
                     }}
                     onClick={() => props.onChange(year)}
                     className={cn(
-                        'cursor-pointer rounded py-sm text-sm transition-colors hover:bg-control-hover',
+                        'cursor-pointer rounded py-8px text-14px transition-colors hover:bg-control-hover',
                         year === props.value &&
                             'bg-foreground text-background hover:bg-foreground',
                     )}
@@ -182,13 +182,15 @@ export function MonthInput(props: Props) {
             label={props.label}
             hideLabel={props.hideLabel}
             description={props.description}
+            hint={props.hint}
+            optional={props.optional}
             error={props.error}
         >
             <div className={stepperClass}>
                 <button
                     type="button"
                     tabIndex={-1}
-                    disabled={atMin}
+                    disabled={props.disabled || atMin}
                     className={stepButtonClass}
                     {...previous}
                 >
@@ -203,8 +205,9 @@ export function MonthInput(props: Props) {
                             aria-valuenow={current.current}
                             aria-valuetext={text}
                             aria-invalid={props.error ? true : undefined}
+                            disabled={props.disabled}
                             onKeyDown={arrowKeys}
-                            className="cursor-pointer py-sm text-center font-semibold text-foreground outline-none"
+                            className="cursor-pointer py-8px text-center font-semibold text-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             {text}
                         </button>
@@ -224,7 +227,7 @@ export function MonthInput(props: Props) {
                 <button
                     type="button"
                     tabIndex={-1}
-                    disabled={atMax}
+                    disabled={props.disabled || atMax}
                     className={stepButtonClass}
                     {...next}
                 >

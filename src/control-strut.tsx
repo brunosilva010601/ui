@@ -10,7 +10,7 @@ export function ControlStrut() {
                 'invisible w-0 overflow-hidden border-x-0 px-0',
             )}
         >
-            <span className="block size-icon-md" />
+            <span className="block size-icon-20px" />
         </span>
     );
 }

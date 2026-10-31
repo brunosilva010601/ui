@@ -16,6 +16,7 @@ export type UiLinkProps = {
     onClick?: () => void;
     'data-test'?: string;
     'data-layer'?: boolean;
+    'aria-current'?: 'page';
     children?: ReactNode;
 };
 

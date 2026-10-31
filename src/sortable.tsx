@@ -8,7 +8,7 @@ const SHIFT_MS = 150;
 const Organizing = createContext(false);
 
 export const sortItemClass =
-    'data-[dragging]:relative data-[dragging]:z-10 data-[dragging]:shadow-lg';
+    'data-[dragging]:relative data-[dragging]:z-10 data-[dragging]:shadow-floating';
 
 type Measure = {
     top: number;
@@ -63,7 +63,9 @@ export function useSortable(
                     ? event.target.closest('[data-sort-handle]')
                     : null;
             const items = sortables(container);
-            const dragged = items.find((item) => handle && item.contains(handle));
+            const dragged = items.find(
+                (item) => handle && item.contains(handle),
+            );
 
             if (!handle || !dragged) {
                 return;
@@ -183,7 +185,7 @@ export function SortHandle() {
                     : 'hidden [@media(hover:hover)]:group-hover/sort:flex',
             )}
         >
-            <GripVertical className="size-icon-xs" />
+            <GripVertical className="size-icon-14px" />
         </span>
     );
 }

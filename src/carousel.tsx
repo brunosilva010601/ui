@@ -143,7 +143,7 @@ export function useOverflowing(control: CarouselControl): boolean {
 }
 
 const arrowClass =
-    'absolute top-1/2 z-10 hidden -translate-y-1/2 opacity-0 shadow-lg transition-opacity group-hover/carousel:opacity-100 focus-visible:opacity-100 pointer-fine:inline-flex';
+    'absolute top-1/2 z-10 hidden -translate-y-1/2 opacity-0 shadow-floating transition-opacity group-hover/carousel:opacity-100 focus-visible:opacity-100 pointer-fine:inline-flex';
 
 type CarouselFrameProps = {
     control: CarouselControl;
@@ -162,7 +162,7 @@ export function CarouselFrame(props: CarouselFrameProps) {
                     <Button
                         variant="outline"
                         square
-                        className={`${arrowClass} start-2`}
+                        className={`${arrowClass} start-8px`}
                         onClick={() => go(-1)}
                     >
                         <ArrowLeft />
@@ -170,7 +170,7 @@ export function CarouselFrame(props: CarouselFrameProps) {
                     <Button
                         variant="outline"
                         square
-                        className={`${arrowClass} end-2`}
+                        className={`${arrowClass} end-8px`}
                         onClick={() => go(1)}
                     >
                         <ArrowRight />

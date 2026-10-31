@@ -1,28 +1,24 @@
-import { ChevronDown, ChevronRight, ChevronUp, Ellipsis } from 'lucide-react';
+import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { useState } from 'react';
-import { Button, touchClass } from './button';
 import { Cover } from './cover';
-import { DropdownMenu } from './dropdown-menu';
 import { Heading } from './heading';
 import { HeldMenu } from './held-menu';
 import { Hint } from './hint';
 import { IconBadge } from './icon-badge';
 import { cn } from './lib/utils';
-import { SortHandle, sortItemClass } from './sortable';
+import { hoverClass, SectionBand } from './section-band';
+import type { SectionMenu } from './section-band';
+import { useOpen } from './section-open';
+import { sortItemClass } from './sortable';
+import { surfaceClass } from './surface';
 
 const variants = {
-    flat: 'flex flex-col gap-md [--row-surface:var(--color-background)]',
-    outlined: 'border border-border rounded bg-surface',
+    flat: 'flex flex-col gap-12px [--row-surface:var(--color-background)]',
+    outlined: surfaceClass,
 };
 
-const hoverClass =
-    'focus-within:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/header:opacity-100';
-
 const bandClass = 'flex flex-col [--row-surface:var(--color-background)]';
-
-export const sectionPadding = { all: 'p-md', x: 'px-md' };
 
 type SectionProps = {
     title?: ReactNode;
@@ -36,7 +32,7 @@ type SectionProps = {
     collapsible?: boolean;
     collapsed?: boolean;
     remember?: string;
-    menu?: { label: string; items: ReactNode };
+    menu?: SectionMenu;
     sortId?: string;
     flush?: boolean;
     hover?: boolean;
@@ -57,7 +53,7 @@ type SectionTextProps = {
 
 function SectionText(props: SectionTextProps) {
     return (
-        <div className="flex min-w-0 flex-1 items-center gap-md text-left">
+        <div className="flex min-w-0 flex-1 items-center gap-12px text-left">
             {props.icon && <IconBadge icon={props.icon} size="sm" />}
             <Heading
                 title={
@@ -82,113 +78,8 @@ function SectionText(props: SectionTextProps) {
     );
 }
 
-
-function storedOpen(key: string | undefined, fallback: boolean): boolean {
-    try {
-        const stored = key && window.localStorage.getItem(`section:${key}`);
-
-        return stored ? stored === 'open' : fallback;
-    } catch {
-        return fallback;
-    }
-}
-
-function storeOpen(key: string | undefined, open: boolean): void {
-    try {
-        if (key) {
-            window.localStorage.setItem(
-                `section:${key}`,
-                open ? 'open' : 'closed',
-            );
-        }
-    } catch {
-        return;
-    }
-}
-
-function useOpen(props: SectionProps): [boolean, (next: boolean) => void] {
-    const [open, setOpenState] = useState(() =>
-        storedOpen(props.remember, !props.collapsed),
-    );
-
-    return [
-        open,
-        (next) => {
-            setOpenState(next);
-            storeOpen(props.remember, next);
-        },
-    ];
-}
-
-type BandHeaderProps = {
-    title?: ReactNode;
-    description?: ReactNode;
-    note?: ReactNode;
-    open: boolean;
-    onToggle: () => void;
-    action?: ReactNode;
-    menu?: SectionProps['menu'];
-    sortable: boolean;
-    hover: boolean;
-};
-
-function BandHeader(props: BandHeaderProps) {
-    const Chevron = props.open ? ChevronDown : ChevronRight;
-
-    return (
-        <div
-            className={cn(
-                'group/header group/sort relative -mx-(--row-inset) flex items-center gap-sm py-sm',
-                sectionPadding.x,
-            )}
-        >
-            <Cover aria-expanded={props.open} onClick={props.onToggle} />
-            {props.sortable && <SortHandle />}
-            <Chevron className="pointer-events-none relative size-icon-sm shrink-0 text-foreground-muted" />
-            {props.title ? (
-                <h2 className="pointer-events-none relative min-w-0 truncate font-semibold">
-                    {props.title}
-                </h2>
-            ) : (
-                <p className="pointer-events-none relative min-w-0 truncate text-sm text-foreground-muted">
-                    {props.description}
-                </p>
-            )}
-            {props.note !== undefined && (
-                <span className="pointer-events-none relative shrink-0 text-sm text-foreground-muted">
-                    {props.note}
-                </span>
-            )}
-            {(props.action || props.menu) && (
-                <div
-                    className={cn(
-                        'relative ml-auto flex shrink-0 items-center gap-xs',
-                        props.hover && hoverClass,
-                    )}
-                >
-                    {props.action}
-                    {props.menu && (
-                        <DropdownMenu
-                            label={props.menu.label}
-                            trigger={
-                                <Button
-                                    variant="ghost"
-                                    square
-                                    title={props.menu.label}
-                                    className={`p-xs ${touchClass}`}
-                                >
-                                    <Ellipsis className="size-icon-md" />
-                                </Button>
-                            }
-                        >
-                            {props.menu.items}
-                        </DropdownMenu>
-                    )}
-                </div>
-            )}
-        </div>
-    );
-}
+const chevronClass =
+    'pointer-events-none relative size-icon-20px shrink-0 text-foreground-muted';
 
 export function Section(props: SectionProps) {
     const collapsible = props.collapsible ?? false;
@@ -199,14 +90,13 @@ export function Section(props: SectionProps) {
         collapsible &&
         Boolean(props.title || props.description);
     const isOutlined = variant !== 'flat';
-    const headerPadding = isOutlined && sectionPadding.all;
     const isClickable = Boolean(props.onClick || props.href);
     const hasText = Boolean(props.title || props.description || props.meta);
     const action =
         props.action ??
         (props.hint && <Hint>{props.hint}</Hint>) ??
         (isClickable && hasText && (
-            <ChevronRight className="size-icon-md text-foreground-muted" />
+            <ChevronRight className="size-icon-20px text-foreground-muted" />
         ));
     const hasHeader = hasText || Boolean(action);
     const showContent = Boolean(props.children) && (!collapsible || open);
@@ -216,11 +106,20 @@ export function Section(props: SectionProps) {
         'transition-colors hover:bg-surface-hover focus-visible:outline-2 active:bg-surface-hover',
         isOutlined
             ? 'inset-0 rounded-t-[inherit]'
-            : '-inset-y-(--gap-sm) max-xl:-inset-x-(--gutter) xl:-inset-x-(--gap-sm)',
+            : '-inset-y-8px max-xl:-inset-x-(--gutter) xl:-inset-x-8px',
+    );
+    const text = (
+        <SectionText
+            title={props.title}
+            note={props.note}
+            description={props.description}
+            meta={props.meta}
+            icon={props.icon}
+        />
     );
 
     const header = band ? (
-        <BandHeader
+        <SectionBand
             title={props.title}
             description={props.description}
             note={props.note}
@@ -235,8 +134,8 @@ export function Section(props: SectionProps) {
         hasHeader && (
             <div
                 className={cn(
-                    'group/header flex items-center gap-md',
-                    headerPadding,
+                    'group/header flex items-center gap-12px',
+                    isOutlined && 'p-12px',
                     (headerLink || collapsible) && 'relative',
                 )}
             >
@@ -254,14 +153,8 @@ export function Section(props: SectionProps) {
                             onClick={() => setOpen(!open)}
                             className="inset-0 rounded-t-[inherit]"
                         />
-                        <div className="pointer-events-none relative flex min-w-0 flex-1 items-center gap-md [&_a]:pointer-events-auto">
-                            <SectionText
-                                title={props.title}
-                                note={props.note}
-                                description={props.description}
-                                meta={props.meta}
-                                icon={props.icon}
-                            />
+                        <div className="pointer-events-none relative flex min-w-0 flex-1 items-center gap-12px [&_a]:pointer-events-auto">
+                            {text}
                         </div>
                     </>
                 ) : (
@@ -271,19 +164,13 @@ export function Section(props: SectionProps) {
                             headerLink && 'pointer-events-none relative',
                         )}
                     >
-                        <SectionText
-                            title={props.title}
-                            note={props.note}
-                            description={props.description}
-                            meta={props.meta}
-                            icon={props.icon}
-                        />
+                        {text}
                     </div>
                 )}
                 {action && (!collapsible || open) && (
                     <div
                         className={cn(
-                            'shrink-0 [&_svg]:size-icon-md!',
+                            'shrink-0',
                             props.hover && hoverClass,
                             (headerLink || collapsible) && 'relative',
                             !props.action && props.hint && 'self-start',
@@ -294,13 +181,11 @@ export function Section(props: SectionProps) {
                 )}
                 {collapsible &&
                     (open ? (
-                        <ChevronUp className="pointer-events-none relative size-icon-md shrink-0 text-foreground-muted" />
+                        <ChevronUp className={chevronClass} />
                     ) : (
-                        <ChevronDown className="pointer-events-none relative size-icon-md shrink-0 text-foreground-muted" />
+                        <ChevronDown className={chevronClass} />
                     ))}
-                {headerLink && (
-                    <ChevronRight className="pointer-events-none relative size-icon-md shrink-0 text-foreground-muted" />
-                )}
+                {headerLink && <ChevronRight className={chevronClass} />}
             </div>
         )
     );
@@ -312,7 +197,7 @@ export function Section(props: SectionProps) {
                 band ? bandClass : variants[variant],
                 props.sortId !== undefined && [
                     sortItemClass,
-                    'data-[dragging]:-mx-[var(--bleed,var(--padding-md))] data-[dragging]:bg-background data-[dragging]:px-[var(--bleed,var(--padding-md))]',
+                    'data-[dragging]:-mx-[var(--bleed,var(--spacing-12px))] data-[dragging]:bg-background data-[dragging]:px-[var(--bleed,var(--spacing-12px))]',
                 ],
                 isOutlined && props.flush && 'overflow-clip',
                 isClickable &&
@@ -330,12 +215,10 @@ export function Section(props: SectionProps) {
             {showContent && (
                 <div
                     className={cn(
-                        'flex flex-1 flex-col gap-md',
+                        'flex flex-1 flex-col gap-12px',
                         isOutlined &&
-                            !props.flush && [
-                                sectionPadding.all,
-                                '[--bleed:var(--padding-md)]',
-                            ],
+                            !props.flush &&
+                            'p-12px [--bleed:var(--spacing-12px)]',
                         isOutlined && hasHeader && 'border-t border-border',
                     )}
                 >

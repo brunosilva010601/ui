@@ -26,6 +26,8 @@ export function CodeInput(props: Props) {
             label={props.label}
             hideLabel={props.hideLabel}
             description={props.description}
+            hint={props.hint}
+            optional={props.optional}
             error={props.error}
             className="justify-items-center text-center"
         >
@@ -40,25 +42,26 @@ export function CodeInput(props: Props) {
                     onlyDigits(pasted).slice(0, CODE_LENGTH)
                 }
                 autoFocus={props.autoFocus}
+                disabled={props.disabled}
                 onComplete={() =>
                     props.submitOnComplete &&
                     input.current?.form?.requestSubmit()
                 }
                 aria-invalid={props.error ? true : undefined}
-                containerClassName="flex items-center justify-center gap-sm has-[:disabled]:opacity-50"
+                containerClassName="flex items-center justify-center gap-8px has-[:disabled]:opacity-50"
                 render={({ slots }) => (
                     <>
                         {slots.map((slot, index) => (
                             <div
                                 key={index}
                                 className={cn(
-                                    'relative flex w-11 items-center justify-center rounded border border-border bg-control py-sm font-bold transition-shadow',
+                                    'relative flex w-[44px] items-center justify-center rounded border border-border bg-control py-8px font-bold transition-shadow',
                                     slot.isActive &&
                                         'border-primary ring-1 ring-primary',
                                     props.error && 'border-danger',
                                 )}
                             >
-                                {slot.char ?? ' '}
+                                {slot.char ?? ' '}
                             </div>
                         ))}
                     </>

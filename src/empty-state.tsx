@@ -17,10 +17,11 @@ export type EmptyStateProps = {
     title: string;
     description?: string;
     action?: EmptyAction;
+    compact?: boolean;
     className?: string;
 };
 
-function ActionButton(props: EmptyAction) {
+function ActionButton(props: EmptyAction & { size?: 'sm' }) {
     const { link: Link } = useUi();
     const content = (
         <>
@@ -30,19 +31,38 @@ function ActionButton(props: EmptyAction) {
     );
 
     return props.href ? (
-        <Button asChild>
+        <Button asChild size={props.size}>
             <Link href={props.href}>{content}</Link>
         </Button>
     ) : (
-        <Button onClick={props.onClick}>{content}</Button>
+        <Button size={props.size} onClick={props.onClick}>
+            {content}
+        </Button>
     );
 }
 
 export function EmptyState(props: EmptyStateProps) {
+    if (props.compact) {
+        return (
+            <div
+                className={cn(
+                    'flex items-center gap-12px p-12px',
+                    props.className,
+                )}
+            >
+                <p className="ui-note min-w-0 flex-1">
+                    {props.title}
+                    {props.description && ` ${props.description}`}
+                </p>
+                {props.action && <ActionButton {...props.action} size="sm" />}
+            </div>
+        );
+    }
+
     return (
         <div
             className={cn(
-                'flex flex-col items-center gap-md py-xl text-center',
+                'flex flex-col items-center gap-12px py-32px text-center',
                 props.className,
             )}
         >

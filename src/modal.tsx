@@ -4,484 +4,28 @@ import {
     createContext,
     useCallback,
     useContext,
-    useEffect,
     useRef,
     useState,
 } from 'react';
-import type { PointerEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { backdropClass } from './backdrop';
 import { buttonClass } from './button';
 import { HeadingDescription, HeadingTitle, headingClass } from './heading';
 import { cn } from './lib/utils';
+import { useDrawerDrag, usePullToClose } from './modal-gestures';
+import { focusOpener, keepUnlessOnTop, useCloseOnBack } from './modal-history';
+import {
+    centered,
+    desktopFor,
+    desktopLayouts,
+    mobileLayouts,
+} from './modal-layouts';
+import type { ModalDesktop, ModalMobile } from './modal-layouts';
+
+export type { ModalDesktop, ModalMobile };
 
 export const ModalClose = DialogPrimitive.Close;
-
-const CLOSE_DISTANCE = 0.25;
-
-const CLOSE_VELOCITY = 0.5;
-
-const TAP_DISTANCE = 6;
-const FOCUS_HISTORY = 10;
-
-const FOCUSABLE = 'button, a, input, textarea, select, [tabindex]';
-
-const openModals: (() => void)[] = [];
-
-const recentFocus: Element[] = [];
-
-function rememberFocus(event: Event) {
-    const element =
-        event.target instanceof Element
-            ? event.target.closest(FOCUSABLE)
-            : null;
-
-    if (!element) {
-        return;
-    }
-
-    const index = recentFocus.indexOf(element);
-
-    if (index >= 0) {
-        recentFocus.splice(index, 1);
-    }
-
-    recentFocus.push(element);
-
-    if (recentFocus.length > FOCUS_HISTORY) {
-        recentFocus.shift();
-    }
-}
-
-function focusOpener(content: Element | null) {
-    const opener = recentFocus.findLast(
-        (element) => element.isConnected && !content?.contains(element),
-    );
-
-    if (opener instanceof HTMLElement) {
-        opener.focus({ preventScroll: true });
-    }
-}
-
-const backHistory: {
-    depth: number;
-    skipNext: boolean;
-    url: string;
-    latest: unknown;
-} = { depth: 0, skipNext: false, url: '', latest: null };
-
-function closeOnBack(event: PopStateEvent) {
-    if (backHistory.skipNext) {
-        backHistory.skipNext = false;
-        event.stopImmediatePropagation();
-        window.history.replaceState(backHistory.latest, '');
-
-        return;
-    }
-
-    if (!backHistory.depth || !openModals.length) {
-        return;
-    }
-
-    event.stopImmediatePropagation();
-    backHistory.depth--;
-    const top = openModals[openModals.length - 1];
-    top();
-    window.setTimeout(() => {
-        if (openModals.includes(top)) {
-            window.history.pushState(window.history.state, '');
-            backHistory.depth++;
-        }
-    });
-}
-
-export function visitReplacesModalEntry(visit: {
-    url: string;
-    method: string;
-}): boolean {
-    if (!backHistory.depth) {
-        return false;
-    }
-
-    if (visit.method.toLowerCase() !== 'get') {
-        return true;
-    }
-
-    if (visit.url !== backHistory.url) {
-        backHistory.depth = 0;
-
-        return true;
-    }
-
-    return false;
-}
-
-window.addEventListener('popstate', closeOnBack, { capture: true });
-document.addEventListener('focusin', rememberFocus);
-document.addEventListener('pointerdown', rememberFocus, { capture: true });
-
-export function useCloseOnBack(
-    close: () => void,
-    active: boolean,
-): () => boolean {
-    const latest = useRef(close);
-    const own = useRef<(() => void) | null>(null);
-
-    useEffect(() => {
-        latest.current = close;
-    });
-
-    useEffect(() => {
-        if (!active) {
-            return;
-        }
-
-        const run = () => latest.current();
-
-        openModals.push(run);
-        own.current = run;
-
-        if (!backHistory.depth) {
-            backHistory.url = window.location.href;
-        }
-
-        window.history.pushState(window.history.state, '');
-        backHistory.depth++;
-
-        return () => {
-            own.current = null;
-            openModals.splice(openModals.indexOf(run), 1);
-            window.setTimeout(() => {
-                const unused = backHistory.depth - openModals.length;
-
-                if (unused <= 0) {
-                    return;
-                }
-
-                backHistory.depth -= unused;
-
-                if (window.location.href === backHistory.url) {
-                    backHistory.latest = window.history.state;
-                    backHistory.skipNext = true;
-                    window.history.go(-unused);
-                }
-            });
-        };
-    }, [active]);
-
-    return () => own.current !== null && openModals.at(-1) === own.current;
-}
-
-export function keepUnlessOnTop(onTop: () => boolean) {
-    return (event: Event) => {
-        if (!onTop()) {
-            event.preventDefault();
-        }
-    };
-}
-
-type Motion = {
-    start: number;
-    last: number;
-    time: number;
-    speed: number;
-};
-
-type Drag = Motion & {
-    pointer: number;
-    onHandle: boolean;
-};
-
-function isWide(): boolean {
-    return window.matchMedia('(min-width: 40rem)').matches;
-}
-
-function follow(motion: Motion, position: number, time: number) {
-    motion.speed = (position - motion.last) / Math.max(time - motion.time, 1);
-    motion.last = position;
-    motion.time = time;
-}
-
-function closes(motion: Motion, height: number): boolean {
-    return (
-        motion.last - motion.start > height * CLOSE_DISTANCE ||
-        motion.speed > CLOSE_VELOCITY
-    );
-}
-
-function settleIfKept(element: HTMLElement) {
-    window.setTimeout(() => {
-        if (element.dataset.state === 'open') {
-            element.style.transition = '';
-            element.style.transform = '';
-        }
-    });
-}
-
-function useDrawerDrag(close: () => void) {
-    const drag = useRef<Drag | null>(null);
-
-    const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
-        const target = event.target as Element;
-
-        if (
-            isWide() ||
-            !event.currentTarget.contains(target) ||
-            !target.closest('[data-drawer-drag]') ||
-            target.closest('button, a, input, [role=button]')
-        ) {
-            return;
-        }
-
-        event.currentTarget.setPointerCapture(event.pointerId);
-        event.currentTarget.style.transition = 'none';
-        drag.current = {
-            pointer: event.pointerId,
-            start: event.clientY,
-            last: event.clientY,
-            time: event.timeStamp,
-            speed: 0,
-            onHandle: Boolean(target.closest('[data-drawer-handle]')),
-        };
-    };
-
-    const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
-        const current = drag.current;
-
-        if (!current || current.pointer !== event.pointerId) {
-            return;
-        }
-
-        follow(current, event.clientY, event.timeStamp);
-        event.currentTarget.style.transform = `translateY(${Math.max(event.clientY - current.start, 0)}px)`;
-    };
-
-    const onPointerUp = (event: PointerEvent<HTMLDivElement>) => {
-        const current = drag.current;
-
-        if (!current || current.pointer !== event.pointerId) {
-            return;
-        }
-
-        drag.current = null;
-        current.last = event.clientY;
-        const element = event.currentTarget;
-        const tapped =
-            current.onHandle &&
-            Math.abs(current.last - current.start) < TAP_DISTANCE;
-
-        if (closes(current, element.offsetHeight) || tapped) {
-            close();
-            settleIfKept(element);
-
-            return;
-        }
-
-        element.style.transition = '';
-        element.style.transform = '';
-    };
-
-    return {
-        onPointerDown,
-        onPointerMove,
-        onPointerUp,
-        onPointerCancel: onPointerUp,
-    };
-}
-
-type Pull = Motion & {
-    startX: number;
-    pulling: boolean;
-};
-
-function scrolledAbove(target: EventTarget | null, panel: Element): boolean {
-    for (
-        let element = target instanceof Element ? target : null;
-        element && element !== panel;
-        element = element.parentElement
-    ) {
-        if (element.scrollTop > 0) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function usePullToClose(
-    element: HTMLDivElement | null,
-    active: boolean,
-    close: () => void,
-) {
-    const latest = useRef(close);
-
-    useEffect(() => {
-        latest.current = close;
-    });
-
-    useEffect(() => {
-        if (!active || !element) {
-            return;
-        }
-
-        let pull: Pull | null = null;
-
-        const reset = () => {
-            element.style.transition = '';
-            element.style.transform = '';
-        };
-
-        const onStart = (event: TouchEvent) => {
-            const target = event.target as Element;
-
-            pull =
-                event.touches.length === 1 &&
-                !isWide() &&
-                target.closest('[data-drawer-body]') &&
-                !scrolledAbove(target, element)
-                    ? {
-                          start: event.touches[0].clientY,
-                          startX: event.touches[0].clientX,
-                          last: event.touches[0].clientY,
-                          time: event.timeStamp,
-                          speed: 0,
-                          pulling: false,
-                      }
-                    : null;
-        };
-
-        const onMove = (event: TouchEvent) => {
-            if (!pull) {
-                return;
-            }
-
-            const touch = event.touches[0];
-            const distance = touch.clientY - pull.start;
-
-            if (!pull.pulling) {
-                if (
-                    distance <= 0 ||
-                    Math.abs(touch.clientX - pull.startX) > distance
-                ) {
-                    pull = null;
-
-                    return;
-                }
-
-                pull.pulling = true;
-                element.style.transition = 'none';
-            }
-
-            event.preventDefault();
-            follow(pull, touch.clientY, event.timeStamp);
-            element.style.transform = `translateY(${Math.max(distance, 0)}px)`;
-        };
-
-        const onEnd = () => {
-            const current = pull;
-            pull = null;
-
-            if (!current?.pulling) {
-                return;
-            }
-
-            if (closes(current, element.offsetHeight)) {
-                latest.current();
-                settleIfKept(element);
-            } else {
-                reset();
-            }
-        };
-
-        element.addEventListener('touchstart', onStart, { passive: true });
-        element.addEventListener('touchmove', onMove, { passive: false });
-        element.addEventListener('touchend', onEnd);
-        element.addEventListener('touchcancel', onEnd);
-
-        return () => {
-            element.removeEventListener('touchstart', onStart);
-            element.removeEventListener('touchmove', onMove);
-            element.removeEventListener('touchend', onEnd);
-            element.removeEventListener('touchcancel', onEnd);
-        };
-    }, [element, active]);
-}
-
-export type ModalMobile = 'dialog' | 'top' | 'left' | 'right' | 'sheet' | 'full';
-
-export type ModalDesktop = 'dialog' | 'top' | 'left' | 'right';
-
-type Layout = {
-    overlay: string;
-    panel: string;
-};
-
-const desktopFor: Record<ModalMobile, ModalDesktop> = {
-    dialog: 'dialog',
-    top: 'top',
-    left: 'left',
-    right: 'right',
-    sheet: 'dialog',
-    full: 'right',
-};
-
-const mobileLayouts: Record<ModalMobile, Layout> = {
-    dialog: {
-        overlay:
-            'max-sm:items-center max-sm:justify-center max-sm:p-md max-sm:pt-[max(var(--padding-md),env(safe-area-inset-top))] max-sm:pb-[max(var(--padding-md),env(safe-area-inset-bottom))] max-sm:data-[state=closed]:animate-fade-out max-sm:data-[state=open]:animate-fade-in',
-        panel: 'max-sm:max-h-full max-sm:w-full max-sm:data-[state=closed]:animate-pop-out max-sm:data-[state=open]:animate-pop-in',
-    },
-    top: {
-        overlay:
-            'max-sm:items-start max-sm:justify-center max-sm:p-md max-sm:pt-[max(var(--padding-md),env(safe-area-inset-top))] max-sm:pb-[max(var(--padding-md),env(safe-area-inset-bottom))] max-sm:data-[state=closed]:animate-fade-out max-sm:data-[state=open]:animate-fade-in',
-        panel: 'max-sm:max-h-full max-sm:w-full max-sm:data-[state=closed]:animate-pop-out max-sm:data-[state=open]:animate-pop-in',
-    },
-    left: {
-        overlay:
-            'max-sm:justify-start max-sm:p-(--drawer-gap) max-sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] max-sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
-        panel: 'max-sm:h-full max-sm:w-full max-sm:max-w-xs max-sm:data-[state=closed]:animate-slide-out-left max-sm:data-[state=open]:animate-slide-in-left',
-    },
-    right: {
-        overlay:
-            'max-sm:justify-end max-sm:p-(--drawer-gap) max-sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] max-sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
-        panel: 'max-sm:h-full max-sm:w-full max-sm:max-w-xs max-sm:data-[state=closed]:animate-slide-out-right max-sm:data-[state=open]:animate-slide-in-right',
-    },
-    sheet: {
-        overlay:
-            'max-sm:flex-col max-sm:justify-end max-sm:pt-[max(--spacing(14),env(safe-area-inset-top))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
-        panel: 'max-sm:max-h-full max-sm:min-h-1/3 max-sm:w-full max-sm:rounded-b-none max-sm:border-b-0 max-sm:data-[state=closed]:animate-slide-out-bottom max-sm:data-[state=open]:animate-slide-in-bottom',
-    },
-    full: {
-        overlay:
-            'max-sm:flex-col max-sm:justify-end max-sm:pt-[max(--spacing(14),env(safe-area-inset-top))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
-        panel: 'max-sm:h-full max-sm:w-full max-sm:rounded-b-none max-sm:border-b-0 max-sm:data-[state=closed]:animate-slide-out-bottom max-sm:data-[state=open]:animate-slide-in-bottom',
-    },
-};
-
-const desktopLayouts: Record<ModalDesktop, Layout> = {
-    dialog: {
-        overlay:
-            'sm:items-center sm:justify-center sm:p-md sm:pt-[max(var(--padding-md),env(safe-area-inset-top))] sm:pb-[max(var(--padding-md),env(safe-area-inset-bottom))] sm:data-[state=closed]:animate-fade-out sm:data-[state=open]:animate-fade-in',
-        panel: 'sm:max-h-full sm:w-full sm:data-[state=closed]:animate-pop-out sm:data-[state=open]:animate-pop-in',
-    },
-    top: {
-        overlay:
-            'sm:items-start sm:justify-center sm:p-md sm:pt-[12vh] sm:data-[state=closed]:animate-fade-out sm:data-[state=open]:animate-fade-in',
-        panel: 'sm:max-h-full sm:w-full sm:data-[state=closed]:animate-pop-out sm:data-[state=open]:animate-pop-in',
-    },
-    left: {
-        overlay:
-            'sm:justify-start sm:p-(--drawer-gap) sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))] sm:data-[state=closed]:animate-drawer-overlay-out sm:data-[state=open]:animate-drawer-overlay-in',
-        panel: 'sm:h-full sm:w-full sm:max-w-md sm:data-[state=closed]:animate-slide-out-left sm:data-[state=open]:animate-slide-in-left',
-    },
-    right: {
-        overlay:
-            'sm:justify-end sm:p-(--drawer-gap) sm:pt-[max(var(--drawer-gap),env(safe-area-inset-top))] sm:pb-[max(var(--drawer-gap),env(safe-area-inset-bottom))] sm:data-[state=closed]:animate-drawer-overlay-out sm:data-[state=open]:animate-drawer-overlay-in',
-        panel: 'sm:h-full sm:w-full sm:max-w-md sm:data-[state=closed]:animate-slide-out-right sm:data-[state=open]:animate-slide-in-right',
-    },
-};
-
-const centered: ModalDesktop[] = ['dialog', 'top'];
 
 function isSheet(props: ModalProps): boolean {
     return props.mobile === 'sheet' || props.mobile === 'full';
@@ -553,7 +97,7 @@ function ModalPanel(props: ModalProps) {
                     backdropClass,
                     small.overlay,
                     wide.overlay,
-                    props.bare && 'backdrop-blur-md lg:p-xl',
+                    props.bare && 'backdrop-blur-md lg:p-32px',
                 )}
             >
                 <DialogPrimitive.Content
@@ -573,18 +117,20 @@ function ModalPanel(props: ModalProps) {
                         focusOpener(content.current);
                         props.onClosed?.();
                     }}
-                    onEscapeKeyDown={(event) => locked && event.preventDefault()}
+                    onEscapeKeyDown={(event) =>
+                        locked && event.preventDefault()
+                    }
                     onInteractOutside={
                         locked
                             ? (event) => event.preventDefault()
                             : keepUnlessOnTop(onTop)
                     }
                     className={cn(
-                        'relative flex flex-col outline-none [--modal-padding:var(--padding-lg)]',
+                        'relative flex flex-col outline-none [--modal-padding:var(--gutter)]',
                         props.bare
                             ? 'pointer-events-none! h-full data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in'
                             : [
-                                  'overflow-hidden rounded border border-border bg-background shadow-xl transition-transform duration-200 ease-drawer',
+                                  'overflow-hidden rounded border border-border bg-background shadow-overlay transition-transform duration-200 ease-drawer',
                                   small.panel,
                                   wide.panel,
                                   (centered.includes(desktop) ||
@@ -627,7 +173,7 @@ function BareBody(props: ModalProps) {
                     'pointer-events-auto absolute top-0 right-0',
                 )}
             >
-                <X className="size-icon-md" />
+                <X />
             </DialogPrimitive.Close>
         </>
     );
@@ -645,7 +191,7 @@ export function ModalCloseButton(props: ModalCloseButtonProps) {
                 props.className,
             )}
         >
-            <X className="size-icon-md" />
+            <X />
         </DialogPrimitive.Close>
     );
 }
@@ -653,10 +199,9 @@ export function ModalCloseButton(props: ModalCloseButtonProps) {
 function FramedBody(props: ModalProps) {
     const isDrawer = isSheet(props);
     const [footer, setFooter] = useState<HTMLDivElement | null>(null);
-    const close = !props.hideClose &&
-        props.dismissible !== false && (
-            <ModalCloseButton className={cn(isDrawer && 'max-sm:hidden')} />
-        );
+    const close = !props.hideClose && props.dismissible !== false && (
+        <ModalCloseButton className={cn(isDrawer && 'max-sm:hidden')} />
+    );
 
     return (
         <>
@@ -664,9 +209,9 @@ function FramedBody(props: ModalProps) {
                 <div
                     data-drawer-drag
                     data-drawer-handle
-                    className="flex shrink-0 cursor-pointer touch-none justify-center py-md sm:hidden"
+                    className="flex shrink-0 cursor-pointer touch-none justify-center py-12px sm:hidden"
                 >
-                    <span className="h-1.5 w-10 rounded-full bg-border" />
+                    <span className="h-6px w-40px rounded-full bg-border" />
                 </div>
             )}
             {props.title && (
@@ -674,15 +219,15 @@ function FramedBody(props: ModalProps) {
                     data-drawer-drag={isDrawer || undefined}
                     className={cn(
                         headingClass,
-                        'shrink-0 px-(--modal-padding) py-md',
+                        'shrink-0 px-(--modal-padding) py-12px',
                         isDrawer && 'touch-none max-sm:pt-0',
                     )}
                 >
-                    <div className="flex items-start justify-between gap-md">
+                    <div className="flex items-start justify-between gap-12px">
                         <HeadingTitle as={DialogPrimitive.Title}>
                             {props.title}
                         </HeadingTitle>
-                        <div className="flex h-lh shrink-0 items-center gap-md">
+                        <div className="flex h-lh shrink-0 items-center gap-12px">
                             {props.actions}
                             {close}
                         </div>
@@ -697,14 +242,14 @@ function FramedBody(props: ModalProps) {
             <div
                 data-drawer-body={isDrawer || undefined}
                 className={cn(
-                    'relative flex min-h-0 flex-1 flex-col gap-md overflow-x-hidden overflow-y-auto overscroll-contain p-(--modal-padding) [&:not(:has(>:not(:empty)))]:hidden',
+                    'relative flex min-h-0 flex-1 flex-col gap-12px overflow-x-hidden overflow-y-auto overscroll-contain p-(--modal-padding) [&:not(:has(>:not(:empty)))]:hidden',
                     isDrawer && [
-                        'pb-[max(var(--modal-padding),env(safe-area-inset-bottom))]',
+                        'pb-[max(var(--modal-padding),var(--spacing-safe-bottom))]',
                         '[&:has(+*:not(:empty))]:pb-(--modal-padding)',
                     ],
                     props.title
                         ? 'border-t border-border'
-                        : isDrawer && 'max-sm:pt-sm',
+                        : isDrawer && 'max-sm:pt-8px',
                 )}
             >
                 <FooterSlot.Provider value={footer}>
@@ -719,9 +264,9 @@ function FramedBody(props: ModalProps) {
             <div
                 ref={setFooter}
                 className={cn(
-                    'flex shrink-0 gap-sm border-t border-border px-(--modal-padding) py-md empty:hidden',
+                    'flex shrink-0 gap-8px border-t border-border px-(--modal-padding) py-12px empty:hidden',
                     isDrawer &&
-                        'pb-[max(var(--padding-md),env(safe-area-inset-bottom))]',
+                        'pb-[max(var(--spacing-12px),var(--spacing-safe-bottom))]',
                 )}
             />
         </>
@@ -745,7 +290,7 @@ export function ModalFooter(props: ModalFooterProps) {
     return createPortal(
         <>
             {props.aside}
-            <div className="flex flex-1 justify-end gap-sm">
+            <div className="flex flex-1 justify-end gap-8px">
                 {props.children}
             </div>
         </>,

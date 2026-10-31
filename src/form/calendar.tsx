@@ -40,15 +40,14 @@ export function Calendar(props: Props) {
         variant: 'ghost',
         square: true,
         bleed: true,
-        className: '[&_svg]:size-icon-md',
     });
     const title = monthYear(locale, month, year);
 
     return (
-        <div className="flex flex-col gap-sm">
+        <div className="flex flex-col gap-8px">
             <div className="flex items-center">
                 <ControlStrut />
-                <div className="flex min-w-0 flex-1 items-center gap-md">
+                <div className="flex min-w-0 flex-1 items-center gap-12px">
                     <span className="min-w-0 flex-1 truncate font-semibold">
                         {title}
                     </span>
@@ -75,11 +74,11 @@ export function Calendar(props: Props) {
                     </button>
                 </div>
             </div>
-            <div className="grid grid-cols-7 gap-2xs text-center">
+            <div className="grid grid-cols-7 gap-2px text-center">
                 {Array.from({ length: 7 }, (_, index) => (
                     <span
                         key={index}
-                        className="text-xs font-semibold text-foreground-muted"
+                        className="text-12px font-semibold text-foreground-muted"
                     >
                         {weekdayName(locale, (index + offset) % 7, 'narrow')}
                     </span>
@@ -101,7 +100,7 @@ export function Calendar(props: Props) {
                                 props.onChange(day);
                             }}
                             className={cn(
-                                'mx-auto size-10 cursor-pointer rounded-full text-sm transition-colors hover:bg-control-hover disabled:pointer-events-none disabled:opacity-40',
+                                'mx-auto size-40px cursor-pointer rounded-full text-14px transition-colors hover:bg-control-hover disabled:pointer-events-none disabled:opacity-40',
                                 day.slice(0, 7) !== shown &&
                                     'text-foreground-faint',
                                 day === props.today &&

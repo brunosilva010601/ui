@@ -18,10 +18,10 @@ export function SearchInput(props: Props) {
         <div
             className={cn(
                 fieldClass,
-                'flex items-center gap-sm focus-within:border-primary focus-within:ring-1 focus-within:ring-primary',
+                'flex items-center gap-8px focus-within:border-primary focus-within:ring-1 focus-within:ring-primary',
             )}
         >
-            <Search className="size-icon-sm shrink-0 text-foreground-muted" />
+            <Search className="size-icon-16px shrink-0 text-foreground-muted" />
             <Input
                 type="search"
                 bare

@@ -60,7 +60,7 @@ function TaskBox(props: { done: boolean; line: number | undefined }) {
     const icon = (
         <Icon
             className={cn(
-                'size-icon-md',
+                'size-icon-20px',
                 props.done ? 'text-primary-text' : 'text-foreground-muted',
             )}
         />
@@ -86,17 +86,17 @@ function TaskBox(props: { done: boolean; line: number | undefined }) {
 }
 
 const components: Components = {
-    h1: (props) => <h2 className="text-xl font-bold">{props.children}</h2>,
-    h2: (props) => <h3 className="text-lg font-bold">{props.children}</h3>,
-    h3: (props) => <h4 className="text-base font-bold">{props.children}</h4>,
+    h1: (props) => <h2 className="text-18px font-bold">{props.children}</h2>,
+    h2: (props) => <h3 className="text-16px font-bold">{props.children}</h3>,
+    h3: (props) => <h4 className="text-14px font-bold">{props.children}</h4>,
     p: (props) => <p>{props.children}</p>,
     ul: (props) => (
         <ul
             className={cn(
-                'flex flex-col gap-xs',
+                'flex flex-col gap-4px',
                 props.className?.includes('contains-task-list')
                     ? 'list-none'
-                    : 'list-disc ps-lg',
+                    : 'list-disc ps-20px',
             )}
         >
             {props.children}
@@ -110,11 +110,11 @@ const components: Components = {
         }
 
         return (
-            <li className="flex items-start gap-sm">
+            <li className="flex items-start gap-8px">
                 <TaskBox done={done} line={props.node?.position?.start.line} />
                 <div
                     className={cn(
-                        'flex min-w-0 flex-1 flex-col gap-xs',
+                        'flex min-w-0 flex-1 flex-col gap-4px',
                         done && 'text-foreground-muted line-through',
                     )}
                 >
@@ -125,7 +125,7 @@ const components: Components = {
     },
     input: () => null,
     ol: (props) => (
-        <ol className="flex list-decimal flex-col gap-xs ps-lg">
+        <ol className="flex list-decimal flex-col gap-4px ps-20px">
             {props.children}
         </ol>
     ),
@@ -141,12 +141,14 @@ const components: Components = {
         </a>
     ),
     blockquote: (props) => (
-        <blockquote className="border-s-2 border-border ps-md text-foreground-soft">
+        <blockquote className="border-s-2 border-border ps-12px text-foreground-soft">
             {props.children}
         </blockquote>
     ),
     code: (props) => (
-        <code className="rounded bg-surface-raised px-xs">{props.children}</code>
+        <code className="rounded bg-surface-raised px-4px">
+            {props.children}
+        </code>
     ),
     pre: (props) => {
         const code = props.node?.children[0];
@@ -176,20 +178,20 @@ const components: Components = {
         </div>
     ),
     th: (props) => (
-        <th className="border-b border-border bg-surface px-md py-sm font-semibold whitespace-nowrap">
+        <th className="border-b border-border bg-surface px-12px py-8px font-semibold whitespace-nowrap">
             {props.children}
         </th>
     ),
     td: (props) => (
-        <td className="border-t border-border px-md py-sm whitespace-nowrap">
+        <td className="border-t border-border px-12px py-8px whitespace-nowrap">
             {props.children}
         </td>
     ),
 };
 
 const sizes = {
-    sm: 'text-sm',
-    md: 'text-base',
+    sm: 'text-14px',
+    md: 'text-16px',
 };
 
 type Props = {
@@ -202,7 +204,7 @@ export function Markdown(props: Props) {
     return (
         <div
             className={cn(
-                'flex flex-col gap-md [overflow-wrap:anywhere] select-text',
+                'flex flex-col gap-12px [overflow-wrap:anywhere] select-text',
                 sizes[props.size ?? 'sm'],
             )}
         >
