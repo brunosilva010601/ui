@@ -1,3 +1,4 @@
+import { Slot } from '@radix-ui/react-slot';
 import type { ReactNode } from 'react';
 import { Cover } from './cover';
 import { cn } from './lib/utils';
@@ -11,12 +12,27 @@ type Props = {
     onClick?: () => void;
     href?: string;
     external?: boolean;
+    asChild?: boolean;
     className?: string;
     children?: ReactNode;
 };
 
 export function Surface(props: Props) {
     const clickable = !props.disabled && Boolean(props.onClick || props.href);
+
+    if (props.asChild) {
+        return (
+            <Slot
+                className={cn(
+                    surfaceClass,
+                    'cursor-pointer p-12px transition-colors hover:bg-surface-hover active:bg-surface-hover disabled:cursor-default disabled:hover:bg-surface',
+                    props.className,
+                )}
+            >
+                {props.children}
+            </Slot>
+        );
+    }
 
     return (
         <div

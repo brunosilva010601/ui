@@ -205,7 +205,8 @@ export function Page(props: PageProps) {
                         width={width}
                         padded
                         className={cn(
-                            props.centered && 'flex flex-col justify-center',
+                            'flex flex-col',
+                            props.centered && 'justify-center',
                         )}
                     >
                         {props.children}

@@ -2449,7 +2449,7 @@ function SurfaceDemo() {
             variant="outlined"
             title="Surface"
             description="The card: background, border, radius and inner space, with the whole block clickable when it has an action."
-            meta="flush · selected · disabled · onClick · href · external"
+            meta="flush · selected · disabled · onClick · href · external · asChild"
             collapsible
             collapsed
             remember="docs:surface"
@@ -2459,6 +2459,11 @@ function SurfaceDemo() {
                 Clickable, click to select
             </Surface>
             <Surface href="#components">Link</Surface>
+            <Surface asChild>
+                <button type="button" className="text-left">
+                    Any element, with asChild
+                </button>
+            </Surface>
             <Surface disabled onClick={() => {}}>
                 Disabled
             </Surface>
