@@ -43,6 +43,8 @@ const iconSizes = [
     'icon-20px',
     'icon-24px',
     'icon-32px',
+    'dot',
+    'touch',
 ];
 
 const twMerge = extendTailwindMerge({

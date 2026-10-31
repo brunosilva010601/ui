@@ -28,9 +28,11 @@ export function AuthScreen(props: AuthScreenProps) {
                                     <h1 className="text-24px font-bold">
                                         {props.title}
                                     </h1>
-                                    <p className="text-foreground-muted">
-                                        {props.description}
-                                    </p>
+                                    {props.description && (
+                                        <p className="text-foreground-muted">
+                                            {props.description}
+                                        </p>
+                                    )}
                                 </div>
                             </>
                         ) : (

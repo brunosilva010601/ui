@@ -39,6 +39,7 @@ type PageHeaderProps = {
     center?: ReactNode;
     actions?: ReactNode;
     overlay?: ReactNode;
+    notice?: ReactNode;
     className?: string;
 };
 
@@ -48,7 +49,7 @@ export function PageHeader(props: PageHeaderProps) {
     return (
         <header
             className={cn(
-                'sticky top-0 z-20 flex w-full justify-center border-b border-border bg-background/95 pt-safe-top backdrop-blur lg:relative lg:bg-transparent lg:backdrop-blur-none',
+                'sticky top-0 z-20 flex w-full flex-col items-center border-b border-border bg-background/95 pt-safe-top backdrop-blur lg:relative lg:bg-transparent lg:backdrop-blur-none',
                 props.className,
             )}
         >
@@ -102,6 +103,14 @@ export function PageHeader(props: PageHeaderProps) {
                     </div>
                 </div>
             </Container>
+            {props.notice && (
+                <Container
+                    width={width}
+                    className="px-(--gutter) [--bleed:var(--gutter)]"
+                >
+                    {props.notice}
+                </Container>
+            )}
             {props.overlay}
         </header>
     );

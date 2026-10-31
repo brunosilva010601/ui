@@ -76,6 +76,7 @@ import {
     ControlStrut,
     Cover,
     ErrorScreen,
+    Field,
     FieldError,
     FloatingButton,
     HighlightInput,
@@ -83,8 +84,11 @@ import {
     MainColumn,
     ModalClose,
     ModalCloseButton,
+    ModalHiddenDescription,
+    ModalTitle,
     NavItem,
     Page,
+    PageBottom,
     PageFooter,
     PageHeader,
     paletteBorder,
@@ -329,6 +333,15 @@ function ButtonDemo() {
                     ))}
                 </div>
             ))}
+            <div className="flex flex-col gap-8px">
+                <span className={caption}>bleed, in a row with text</span>
+                <div className="flex items-center justify-between rounded border border-border px-12px py-12px">
+                    <span>Label</span>
+                    <Button variant="ghost" square bleed>
+                        <Settings />
+                    </Button>
+                </div>
+            </div>
             <div className="flex flex-col gap-8px">
                 <span className={caption}>busy</span>
                 <div className="flex flex-wrap items-center gap-8px">
@@ -2195,6 +2208,16 @@ function FieldStatesDemo() {
                 onChange={setNumber}
             />
             <FieldError message="Error message" />
+            <Field
+                id="field-demo"
+                label="Field around any control"
+                hint="Hint text."
+                description="Description."
+            >
+                <span id="field-demo" className="ui-note">
+                    Any control.
+                </span>
+            </Field>
         </Section>
     );
 }
@@ -2259,20 +2282,30 @@ function PaletteDemo() {
 
 function PageDemo() {
     const [footer, setFooter] = useState(false);
+    const [bottom, setBottom] = useState(false);
+    const [notice, setNotice] = useState(false);
 
     return (
         <Section
             variant="outlined"
             title="Page"
             description="The frame of a screen: the shell with a side bar, the header, the content and a footer stuck to the bottom, which tells notify how much to clear. Everything respects the safe areas."
-            meta="AppShell · Page · PageHeader · PageBottom · PageFooter"
+            meta="AppShell · Page · PageHeader · PageHeader notice · PageBottom · PageFooter"
             collapsible
             collapsed
             remember="docs:page"
         >
-            <Button variant="outline" onClick={() => setFooter(!footer)}>
-                Toggle footer
-            </Button>
+            <div className="flex flex-wrap gap-8px">
+                <Button variant="outline" onClick={() => setFooter(!footer)}>
+                    Toggle PageFooter
+                </Button>
+                <Button variant="outline" onClick={() => setBottom(!bottom)}>
+                    Toggle PageBottom
+                </Button>
+                <Button variant="outline" onClick={() => setNotice(!notice)}>
+                    Toggle notice
+                </Button>
+            </div>
             <div className="overflow-clip rounded border border-border">
                 <AppShell className="min-h-0">
                     <Page
@@ -2289,13 +2322,28 @@ function PageDemo() {
                                         <Settings />
                                     </Button>
                                 }
+                                notice={
+                                    notice && (
+                                        <Banner tone="warning" bleed>
+                                            Notice under the header.
+                                        </Banner>
+                                    )
+                                }
                             />
                         }
                         bottom={
-                            footer && (
+                            footer ? (
                                 <PageFooter>
                                     <Button>Footer action</Button>
                                 </PageFooter>
+                            ) : (
+                                bottom && (
+                                    <PageBottom className="flex justify-end px-(--gutter) pb-12px">
+                                        <FloatingButton>
+                                            <Plus />
+                                        </FloatingButton>
+                                    </PageBottom>
+                                )
                             )
                         }
                     >
@@ -2557,7 +2605,7 @@ function LockedModalDemo() {
             variant="outlined"
             title="Modal that waits for an answer"
             description="Escape, the click outside and the close button are gone, because leaving without answering would keep others waiting. ModalCloseButton is the close button on its own, for a custom header."
-            meta="dismissible · ModalCloseButton"
+            meta="dismissible · ModalCloseButton · ModalTitle · ModalHiddenDescription"
             collapsible
             collapsed
             remember="docs:locked-modal"
@@ -2573,7 +2621,10 @@ function LockedModalDemo() {
                     hideClose
                 >
                     <div className="flex items-center justify-between gap-12px">
-                        <p className="ui-note">Custom header.</p>
+                        <ModalTitle>Custom header</ModalTitle>
+                        <ModalHiddenDescription>
+                            Read only by screen readers.
+                        </ModalHiddenDescription>
                         <ModalCloseButton />
                     </div>
                 </Modal>

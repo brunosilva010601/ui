@@ -16,6 +16,10 @@
         user-select: text;
     }
 
+    input::placeholder {
+        overflow: visible;
+    }
+
     input[type='search'] {
         -webkit-appearance: none;
         appearance: none;

@@ -58,6 +58,7 @@ export function HighlightInput(props: Props) {
                     className={cn(
                         surface,
                         'pointer-events-none absolute inset-0 overflow-hidden whitespace-pre',
+                        props.disabled && 'opacity-50',
                     )}
                 >
                     <span
@@ -86,7 +87,9 @@ export function HighlightInput(props: Props) {
                     {...plainTextField}
                     autoFocus={props.autoFocus}
                     disabled={props.disabled}
-                    enterKeyHint={props.enterKeyHint}
+                    {...(props.enterKeyHint
+                        ? { enterKeyHint: props.enterKeyHint }
+                        : {})}
                     placeholder={props.placeholder}
                     maxLength={props.maxLength}
                     value={props.value}

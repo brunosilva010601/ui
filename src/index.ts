@@ -50,7 +50,6 @@ export { Select } from './form/select';
 export { Switch } from './form/switch';
 export { Textarea } from './form/textarea';
 export { Heading, ItemText } from './heading';
-export { HeldMenu, useHeldMenu } from './held-menu';
 export { Hint } from './hint';
 export { useHold } from './hold';
 export { IconBadge } from './icon-badge';

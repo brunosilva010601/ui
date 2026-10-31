@@ -3,6 +3,7 @@ import { useEffect, useId, useRef } from 'react';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { buttonClass } from '../button';
 import { cn } from '../lib/utils';
+import { useUiLabels } from '../provider';
 import { Field } from './field';
 import type { FieldProps } from './field';
 import { plainTextField } from './input';
@@ -15,10 +16,13 @@ export const stepButtonClass = cn(
     'py-0',
 );
 
+const bareStepButtonClass = buttonClass({ variant: 'ghost', square: true });
+
 const HOLD_DELAY_MS = 400;
 const HOLD_START_MS = 150;
 const HOLD_FASTEST_MS = 30;
 const HOLD_SPEEDUP = 0.85;
+const RUSH_TICK_MS = 80;
 
 const RUSH_STAGES = [
     { after: 30, factor: 25 },
@@ -46,6 +50,7 @@ type Props = FieldProps & {
 
 export function NumberInput(props: Props) {
     const inputId = useId();
+    const labels = useUiLabels();
     const timer = useRef<number | undefined>(undefined);
     const current = useRef(0);
     const ticks = useRef(0);
@@ -103,7 +108,12 @@ export function NumberInput(props: Props) {
             ticks.current++;
 
             if (step(delta)) {
-                hold(delta, Math.max(HOLD_FASTEST_MS, delay * HOLD_SPEEDUP));
+                hold(
+                    delta,
+                    props.rush
+                        ? RUSH_TICK_MS
+                        : Math.max(HOLD_FASTEST_MS, delay * HOLD_SPEEDUP),
+                );
             }
         }, delay);
     };
@@ -113,8 +123,8 @@ export function NumberInput(props: Props) {
 
         if (step(delta)) {
             timer.current = window.setTimeout(
-                () => hold(delta, HOLD_START_MS),
-                HOLD_DELAY_MS - HOLD_START_MS,
+                () => hold(delta, props.rush ? RUSH_TICK_MS : HOLD_START_MS),
+                HOLD_DELAY_MS - (props.rush ? RUSH_TICK_MS : HOLD_START_MS),
             );
         }
     };
@@ -128,7 +138,27 @@ export function NumberInput(props: Props) {
         }
     };
 
-    const arrowKeys = (event: KeyboardEvent) => {
+    const enterKey = (event: KeyboardEvent<HTMLInputElement>) => {
+        const fixed =
+            props.value === '' ? (props.start ?? '') : clamp(props.value);
+
+        if (fixed !== props.value) {
+            event.preventDefault();
+            props.onChange(fixed);
+        }
+
+        if (props.bare) {
+            event.currentTarget.blur();
+        }
+    };
+
+    const keys = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            enterKey(event);
+
+            return;
+        }
+
         const delta = { ArrowUp: size, ArrowDown: -size }[event.key];
 
         if (delta) {
@@ -142,6 +172,7 @@ export function NumberInput(props: Props) {
         <button
             type="button"
             tabIndex={-1}
+            aria-label={delta > 0 ? labels.increase : labels.decrease}
             disabled={
                 props.disabled ||
                 (!props.wrap &&
@@ -155,7 +186,7 @@ export function NumberInput(props: Props) {
             onPointerLeave={release}
             onPointerCancel={release}
             onClick={keyboardClick(delta)}
-            className={stepButtonClass}
+            className={props.bare ? bareStepButtonClass : stepButtonClass}
         >
             {delta > 0 ? <Plus /> : <Minus />}
         </button>
@@ -174,7 +205,7 @@ export function NumberInput(props: Props) {
             <div
                 className={cn(
                     props.bare
-                        ? 'grid w-fit grid-cols-[auto_auto_auto] items-center gap-8px has-aria-invalid:text-danger'
+                        ? 'grid w-fit grid-cols-[auto_auto_auto] items-center gap-8px'
                         : stepperClass,
                     props.className,
                 )}
@@ -187,7 +218,13 @@ export function NumberInput(props: Props) {
                     inputMode="numeric"
                     autoComplete="off"
                     disabled={props.disabled}
-                    size={props.bare ? String(props.max).length : undefined}
+                    style={
+                        props.bare
+                            ? {
+                                  width: `${Math.max(String(props.max).length, props.pad ?? 0) + 1}ch`,
+                              }
+                            : undefined
+                    }
                     aria-valuemin={props.min}
                     aria-valuemax={props.max}
                     aria-valuenow={props.value === '' ? undefined : props.value}
@@ -208,12 +245,11 @@ export function NumberInput(props: Props) {
 
                         props.onBlur?.();
                     }}
-                    onKeyDown={arrowKeys}
+                    onKeyDown={keys}
                     className={cn(
                         'min-w-0 bg-transparent py-8px text-center text-foreground tabular-nums outline-none disabled:cursor-not-allowed disabled:opacity-50',
-                        props.bare
-                            ? 'w-auto text-30px font-bold'
-                            : 'font-semibold',
+                        props.bare ? 'text-30px font-bold' : 'font-semibold',
+                        props.bare && props.error && 'text-danger',
                     )}
                 />
                 {stepButton(size)}

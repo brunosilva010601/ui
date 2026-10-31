@@ -20,7 +20,7 @@
 
 - Nenhum componente depende de roteador nem dos textos de um app. Link, textos, idioma e navegação chegam pelo `UiProvider` ou por props.
 - `src/index.ts` é uma lista explícita, e o que não está nela não é API. Classes de estilo e peças internas (`fieldClass`, `headingClass`, `useCloseOnBack`) ficam de fora; só `touchClass` é classe pública. App que precisa de uma classe interna está pedindo uma peça ou uma prop nova.
-- A moldura de tela é do pacote: `AppShell` (barra lateral, conteúdo e painel, com o fundo `canvas` no computador), `Page`, `PageHeader` e `PageFooter`. `PageBottom` é a base fixa ao pé da tela e mede a própria altura em `--page-bottom`, que é o que mantém o `notify` acima do rodapé. Um app monta só o que é dele por cima, como botões do cabeçalho.
+- A moldura de tela é do pacote: `AppShell` (barra lateral, conteúdo e painel, com o fundo `canvas` no computador), `Page`, `PageHeader` e `PageFooter`. `PageBottom` é a base fixa ao pé da tela e mede a própria altura em `--page-bottom`, que é o que mantém o `notify` acima do rodapé. Um app monta só o que é dele por cima, como botões do cabeçalho. Aviso que acompanha a tela entra em `notice`, dentro do cabeçalho fixo e alinhado à coluna.
 - A tela de autenticação (`AuthScreen`) e a de erro (`ErrorScreen`) são do pacote, e marca, ação e fundo chegam de fora.
 - Cartão é `Surface`: fundo, borda, canto e recuo, com o bloco inteiro clicável quando tem ação (por `Cover`). O par de título e linha secundária de um item é `ItemText`, e o resto da linha continua livre.
 - `ListItem` e `Surface` têm `disabled`; `ListItem` tem também `busy`, com o girador no fim. Nos dois casos o item não recebe clique nem abre menu.

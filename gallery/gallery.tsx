@@ -189,6 +189,8 @@ const labels: UiLabels = {
     light: 'Light',
     dark: 'Dark',
     system: 'System',
+    decrease: 'Decrease',
+    increase: 'Increase',
 };
 
 const schemes: { value: Scheme; label: string }[] = [
@@ -212,6 +214,14 @@ export function Gallery() {
     useEffect(() => {
         document.documentElement.className = scheme;
     }, [scheme]);
+
+    useEffect(() => {
+        const follow = () => setPage(readPage());
+
+        window.addEventListener('hashchange', follow);
+
+        return () => window.removeEventListener('hashchange', follow);
+    }, []);
 
     const changePage = (next: Page) => {
         window.location.hash = next;

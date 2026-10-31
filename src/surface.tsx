@@ -9,23 +9,42 @@ type Props = {
     flush?: boolean;
     selected?: boolean;
     disabled?: boolean;
-    onClick?: () => void;
-    href?: string;
-    external?: boolean;
-    asChild?: boolean;
     className?: string;
     children?: ReactNode;
-};
+} & (
+    | {
+          onClick?: () => void;
+          href?: string;
+          external?: boolean;
+          asChild?: false;
+      }
+    | {
+          asChild: true;
+          onClick?: never;
+          href?: never;
+          external?: never;
+      }
+);
 
 export function Surface(props: Props) {
     const clickable = !props.disabled && Boolean(props.onClick || props.href);
+    const shared = cn(
+        surfaceClass,
+        '[--row-surface:var(--color-surface)]',
+        !props.flush && 'p-12px [--bleed:var(--spacing-12px)]',
+        props.flush && 'overflow-clip',
+        props.selected && 'bg-foreground/10',
+        props.disabled && 'opacity-50',
+    );
 
     if (props.asChild) {
         return (
             <Slot
+                aria-disabled={props.disabled || undefined}
                 className={cn(
-                    surfaceClass,
-                    'cursor-pointer p-12px transition-colors hover:bg-surface-hover active:bg-surface-hover disabled:cursor-default disabled:hover:bg-surface',
+                    shared,
+                    'cursor-pointer transition-colors hover:bg-surface-hover active:bg-surface-hover disabled:cursor-default disabled:hover:bg-surface',
+                    props.disabled && 'pointer-events-none',
                     props.className,
                 )}
             >
@@ -38,14 +57,10 @@ export function Surface(props: Props) {
         <div
             aria-disabled={props.disabled || undefined}
             className={cn(
-                surfaceClass,
+                shared,
                 'relative',
-                !props.flush && 'p-12px [--bleed:var(--spacing-12px)]',
-                props.flush && 'overflow-clip',
-                props.selected && 'bg-foreground/10',
                 clickable &&
                     'transition-colors has-[>[data-layer]:active]:bg-surface-hover [@media(hover:hover)]:hover:bg-surface-hover',
-                props.disabled && 'opacity-50',
                 props.className,
             )}
         >
@@ -62,7 +77,7 @@ export function Surface(props: Props) {
                 className={cn(
                     'contents',
                     clickable &&
-                        'pointer-events-none relative block [&_a,&_button,&_input,&_label,&_select,&_textarea]:pointer-events-auto',
+                        '*:pointer-events-none *:relative [&_a,&_button,&_input,&_label,&_select,&_textarea]:pointer-events-auto',
                 )}
             >
                 {props.children}

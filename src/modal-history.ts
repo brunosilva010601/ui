@@ -94,9 +94,11 @@ export function visitReplacesModalEntry(visit: {
     return false;
 }
 
-window.addEventListener('popstate', closeOnBack, { capture: true });
-document.addEventListener('focusin', rememberFocus);
-document.addEventListener('pointerdown', rememberFocus, { capture: true });
+if (typeof window !== 'undefined') {
+    window.addEventListener('popstate', closeOnBack, { capture: true });
+    document.addEventListener('focusin', rememberFocus);
+    document.addEventListener('pointerdown', rememberFocus, { capture: true });
+}
 
 export function useCloseOnBack(
     close: () => void,

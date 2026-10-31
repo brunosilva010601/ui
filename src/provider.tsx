@@ -8,6 +8,8 @@ export type UiLabels = {
     light: string;
     dark: string;
     system: string;
+    decrease: string;
+    increase: string;
 };
 
 export type UiLinkProps = {
@@ -17,6 +19,7 @@ export type UiLinkProps = {
     'data-test'?: string;
     'data-layer'?: boolean;
     'aria-current'?: 'page';
+    title?: string;
     children?: ReactNode;
 };
 
@@ -36,6 +39,8 @@ const defaults: UiConfig = {
         light: 'Claro',
         dark: 'Escuro',
         system: 'Sistema',
+        decrease: 'Diminuir',
+        increase: 'Aumentar',
     },
     link: (props) => <a {...props} />,
     locale: 'pt-BR',

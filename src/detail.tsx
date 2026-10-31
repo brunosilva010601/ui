@@ -3,12 +3,21 @@ import { cn } from './lib/utils';
 
 type Props = {
     label: ReactNode;
-    inline?: boolean;
-    side?: boolean;
-    action?: ReactNode;
-    className?: string;
     children: ReactNode;
-};
+} & (
+    | {
+          inline: true;
+          side?: never;
+          action?: never;
+          className?: never;
+      }
+    | {
+          inline?: false;
+          side?: boolean;
+          action?: ReactNode;
+          className?: string;
+      }
+);
 
 export function Detail(props: Props) {
     if (props.inline) {
@@ -22,27 +31,35 @@ export function Detail(props: Props) {
 
     return (
         <div
-            className={cn('flex min-w-0 items-center gap-8px', props.className)}
+            className={cn(
+                'grid min-w-0 items-center gap-x-8px',
+                props.side
+                    ? 'grid-cols-[auto_minmax(0,1fr)_auto]'
+                    : 'grid-cols-[minmax(0,1fr)_auto] gap-y-4px',
+                props.className,
+            )}
         >
-            <div
-                className={cn(
-                    'flex min-w-0 flex-1',
-                    props.side
-                        ? 'items-center justify-between gap-12px'
-                        : 'flex-col gap-4px',
-                )}
-            >
-                <dt className="ui-note">{props.label}</dt>
-                <dd
+            <dt className="ui-note">{props.label}</dt>
+            <dd className="contents">
+                <div
                     className={cn(
                         'min-w-0 text-14px break-words',
-                        props.side && 'text-right',
+                        props.side ? 'text-right' : 'col-start-1',
                     )}
                 >
                     {props.children}
-                </dd>
-            </div>
-            {props.action}
+                </div>
+                {props.action && (
+                    <div
+                        className={cn(
+                            'flex items-center gap-8px',
+                            !props.side && 'col-start-2 row-span-2 row-start-1',
+                        )}
+                    >
+                        {props.action}
+                    </div>
+                )}
+            </dd>
         </div>
     );
 }
