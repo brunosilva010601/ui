@@ -8,21 +8,24 @@
 - A modal e a detecção de toque acessam a janela assim que o arquivo carrega, o que quebra a renderização no servidor que o Loremy usa.
 - Ideia: configurar o tema do app num bloco no CSS (`@plugin`), com só as chaves que o projeto pode mudar, como a cor principal.
 - A modal escuta o voltar do navegador assim que o arquivo carrega e empurra uma entrada de histórico por janela aberta (`src/modal.tsx`), o que ainda não foi testado contra um roteador que não seja o do Inertia, como o do Salalas.
+- A modal não dismissível (`dismissible={false}`) prende Escape e clique fora e esconde o X, mas o gesto de arrastar a gaveta para baixo ainda fecha.
 - Nome acessível: os `aria-label` foram removidos de todo o pacote, então botões só de ícone, setas, fechar e carregando não têm nome para leitor de tela. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
 
 ## Adoção pelo Salalas
 
-O Salalas vai adotar o pacote. O que já está decidido para a troca:
+O Salalas já usa o pacote. O que a troca decidiu:
 
-- O emoji do jogo entra como conteúdo do botão e do título da seção, que aceitam qualquer coisa, no tamanho da escala de ícone. Não há prop de emoji nem escala de texto só para ele.
+- O emoji do jogo entra como conteúdo do botão e do título da seção, que aceitam qualquer coisa. Não há prop de emoji nem escala de texto só para ele.
 - A coluna de 32 rem do app é o `max-w-lg` do Tailwind, no shell da tela, que é do app.
-- O botão de linha cheia recebe `w-full` em cada uso, e os dezenove nomes de leitor de tela do app viram `aria-label`, que o botão já repassa.
+- O botão de linha cheia recebe `w-full` em cada uso, e os nomes de leitor de tela do app viram `aria-label`, que o botão já repassa.
 - Pergunta grande e placar do jogo continuam no app: são tipografia de produto, e nenhum outro app tem.
+- `ButtonGroup` ficou para escolha entre opções (tema, som, vibração, opções do jogo). Os botões de jogada que marcam a escolha feita, como "Duvido" ou "Verdade", continuam `Button` com `aria-pressed`: a cor ali é o significado da jogada, e inverter o escolhido apagaria isso.
+- O menu da sala e o do jogador viram modal `sheet` com botões de linha cheia, sem o botão "Voltar" que o fechar já faz.
+- O app instala o pacote por caminho local (`file:../ui`), e `vite.config.ts` e `tsconfig.app.json` apontam `react`, `react-dom` e `lucide-react` para a cópia do app, senão os tipos do pacote e os do app não se reconhecem. O mesmo `vite.config.ts` libera a pasta do pacote em `server.fs.allow`, senão as fontes não carregam no servidor de desenvolvimento.
 
-O que falta decidir:
+O que a adoção pediu ao pacote: `disabled` no `Input`, `cancelLabel` e `tone` no `ConfirmDialog`, `dismissible` no `Modal`, `disabled` no `ButtonGroup` e no `ButtonGroupItem`, `aria-label` no item, `layout="segmented"` no grupo e `sideEffects` no `package.json`, que tirou do app o realce de código que ele nunca mostra.
 
-- O app tem dez botões que marcam escolha por `aria-pressed`. Pelos padrões, escolha entre opções é `ButtonGroup`, o que deixa o escolhido invertido em vez de realçado.
-- O tema do app é um atributo no `html` e o do pacote é a classe `dark`, com CSS do logo preso no atributo. Nada disso o TypeScript aponta: o app simplesmente nasce claro.
+O que falta: o voltar do navegador com modal aberta não foi testado contra o roteador do Salalas, e a galeria ainda não mostra o `dismissible` da modal, o `cancelLabel` e o `tone` da confirmação nem o `disabled` do campo.
 
 ## Vindo do Mylo, a discutir
 

@@ -4,34 +4,49 @@ import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
 import { Button } from './button';
 import type { ButtonSize } from './button';
+import { cn } from './lib/utils';
 
 const layouts = {
     wrap: 'flex flex-wrap gap-sm',
     row: 'flex gap-xs',
     fill: 'flex gap-xs *:min-w-0 *:flex-1',
+    segmented:
+        'flex w-full items-center gap-xs rounded-full border border-border bg-control p-xs text-foreground-soft',
 };
+
+const segmentedItem =
+    'min-w-0 flex-1 border-transparent px-2 py-2 data-[state=on]:bg-foreground data-[state=on]:text-background';
 
 type GroupVariant = 'outline' | 'ghost';
 
-const GroupContext = createContext<{ size: ButtonSize; variant: GroupVariant }>(
-    { size: 'md', variant: 'outline' },
-);
+const GroupContext = createContext<{
+    size: ButtonSize;
+    variant: GroupVariant;
+    itemClass?: string;
+}>({ size: 'md', variant: 'outline' });
 
 type ButtonGroupItemProps = {
     value: string;
     square?: boolean;
     title?: string;
+    disabled?: boolean;
+    'aria-label'?: string;
     className?: string;
     children: ReactNode;
 };
 
 export function ButtonGroupItem(props: ButtonGroupItemProps) {
-    const { value, ...rest } = props;
+    const { value, className, ...rest } = props;
     const group = useContext(GroupContext);
 
     return (
         <ToggleGroupPrimitive.Item value={value} asChild>
-            <Button variant={group.variant} size={group.size} {...rest} />
+            <Button
+                variant={group.variant}
+                size={group.size}
+                className={cn(group.itemClass, className)}
+                {...rest}
+            />
         </ToggleGroupPrimitive.Item>
     );
 }
@@ -50,6 +65,7 @@ type ButtonGroupProps<T extends string> = {
     variant?: GroupVariant;
     size?: ButtonSize;
     iconOnly?: boolean;
+    disabled?: boolean;
     children?: ReactNode;
 } & (
     | {
@@ -66,9 +82,11 @@ type ButtonGroupProps<T extends string> = {
 
 export function ButtonGroup<T extends string>(props: ButtonGroupProps<T>) {
     const layout = layouts[props.layout ?? 'wrap'];
+    const segmented = props.layout === 'segmented';
     const group = {
         size: props.size ?? 'md',
-        variant: props.variant ?? 'outline',
+        variant: segmented ? ('ghost' as const) : (props.variant ?? 'outline'),
+        itemClass: segmented ? segmentedItem : undefined,
     };
     const items =
         props.children ??
@@ -95,6 +113,7 @@ export function ButtonGroup<T extends string>(props: ButtonGroupProps<T>) {
                 <ToggleGroupPrimitive.Root
                     type="multiple"
                     className={layout}
+                    disabled={props.disabled}
                     value={props.value}
                     onValueChange={(value) => onChange(value as T[])}
                 >
@@ -111,6 +130,7 @@ export function ButtonGroup<T extends string>(props: ButtonGroupProps<T>) {
             <ToggleGroupPrimitive.Root
                 type="single"
                 className={layout}
+                disabled={props.disabled}
                 value={props.value}
                 onValueChange={(value) => value && onChange(value as T)}
             >

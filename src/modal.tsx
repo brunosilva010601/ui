@@ -497,6 +497,7 @@ type ModalProps = {
     bare?: boolean;
     actions?: ReactNode;
     hideClose?: boolean;
+    dismissible?: boolean;
     title?: ReactNode;
     description?: ReactNode;
     onClose?: () => void;
@@ -531,6 +532,7 @@ function ModalPanel(props: ModalProps) {
     const small = mobileLayouts[mobile];
     const wide = desktopLayouts[desktop];
     const sheet = isSheet(props);
+    const locked = props.dismissible === false;
     const closeButton = useRef<HTMLButtonElement>(null);
     const content = useRef<HTMLDivElement>(null);
     const [panel, setPanel] = useState<HTMLDivElement | null>(null);
@@ -571,7 +573,12 @@ function ModalPanel(props: ModalProps) {
                         focusOpener(content.current);
                         props.onClosed?.();
                     }}
-                    onInteractOutside={keepUnlessOnTop(onTop)}
+                    onEscapeKeyDown={(event) => locked && event.preventDefault()}
+                    onInteractOutside={
+                        locked
+                            ? (event) => event.preventDefault()
+                            : keepUnlessOnTop(onTop)
+                    }
                     className={cn(
                         'relative flex flex-col outline-none [--modal-padding:var(--padding-lg)]',
                         props.bare
@@ -646,9 +653,10 @@ export function ModalCloseButton(props: ModalCloseButtonProps) {
 function FramedBody(props: ModalProps) {
     const isDrawer = isSheet(props);
     const [footer, setFooter] = useState<HTMLDivElement | null>(null);
-    const close = !props.hideClose && (
-        <ModalCloseButton className={cn(isDrawer && 'max-sm:hidden')} />
-    );
+    const close = !props.hideClose &&
+        props.dismissible !== false && (
+            <ModalCloseButton className={cn(isDrawer && 'max-sm:hidden')} />
+        );
 
     return (
         <>

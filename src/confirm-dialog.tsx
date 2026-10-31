@@ -10,6 +10,8 @@ type Props = {
     title: ReactNode;
     description: ReactNode;
     confirmLabel: string;
+    cancelLabel?: string;
+    tone?: 'danger' | 'primary';
     blocked?: boolean;
     onConfirm: () => void | Promise<unknown>;
     onClose: () => void;
@@ -43,11 +45,13 @@ export function ConfirmDialog(props: Props) {
                 {props.children}
                 <ModalFooter>
                     <ModalClose asChild>
-                        <Button variant="outline">{labels.cancel}</Button>
+                        <Button variant="outline">
+                            {props.cancelLabel ?? labels.cancel}
+                        </Button>
                     </ModalClose>
                     <Button
                         type="submit"
-                        variant="danger"
+                        variant={props.tone ?? 'danger'}
                         disabled={sending || props.blocked}
                     >
                         {props.confirmLabel}

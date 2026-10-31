@@ -389,7 +389,7 @@ function ButtonGroupDemo() {
             variant="outlined"
             title="ButtonGroup"
             description="Outline or ghost buttons where one is selected, switching on click, or several with multiple, each turning on and off. Text, icon and text, and icon only in both sizes, then ghost, the layouts and custom items."
-            meta="variant · size · iconOnly · layout · multiple · ButtonGroupItem"
+            meta="variant · size · iconOnly · layout · multiple · disabled · ButtonGroupItem"
             collapsible
             collapsed
             remember="docs:button-group"
@@ -446,6 +446,38 @@ function ButtonGroupDemo() {
                     value={valueOf('fill')}
                     onChange={choose('fill')}
                 />
+            </div>
+            <div className="flex flex-col gap-sm">
+                <span className={caption}>layout="segmented"</span>
+                <ButtonGroup
+                    layout="segmented"
+                    options={options}
+                    value={valueOf('segmented')}
+                    onChange={choose('segmented')}
+                />
+                <ButtonGroup
+                    layout="segmented"
+                    size="sm"
+                    options={iconOptions}
+                    value={valueOf('segmented-sm')}
+                    onChange={choose('segmented-sm')}
+                />
+                <ButtonGroup
+                    layout="segmented"
+                    value={valueOf('segmented-item')}
+                    onChange={choose('segmented-item')}
+                >
+                    <ButtonGroupItem value="a">
+                        <ListIcon />
+                        List
+                    </ButtonGroupItem>
+                    <ButtonGroupItem value="b" aria-label="Grid">
+                        <Grid2x2 />
+                    </ButtonGroupItem>
+                    <ButtonGroupItem value="c" disabled>
+                        Disabled
+                    </ButtonGroupItem>
+                </ButtonGroup>
             </div>
             <div className="flex flex-col gap-sm">
                 <span className={caption}>ButtonGroupItem</span>

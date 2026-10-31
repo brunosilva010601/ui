@@ -18,8 +18,9 @@ type Props = FieldProps & {
     className?: string;
     placeholder?: string;
     autoComplete?: string;
-    autoCapitalize?: 'none';
+    autoCapitalize?: 'none' | 'words';
     autoFocus?: boolean;
+    disabled?: boolean;
     enterKeyHint?: 'next' | 'done';
     inputMode?: 'decimal' | 'numeric';
     required?: boolean;
