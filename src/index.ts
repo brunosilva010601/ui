@@ -53,6 +53,7 @@ export { Heading, ItemText } from './heading';
 export { Hint } from './hint';
 export { useHold } from './hold';
 export { IconBadge } from './icon-badge';
+export { IconGroup } from './icon-group';
 export { ImageViewer } from './image-viewer';
 export { cn } from './lib/utils';
 export { List, ListItem } from './list';
@@ -70,7 +71,7 @@ export {
 export type { ModalDesktop, ModalMobile } from './modal';
 export { visitReplacesModalEntry } from './modal-history';
 export { NavItem } from './nav-item';
-export { AppShell, Page, PageBottom, PageFooter, PageHeader } from './page';
+export { AppShell, Page, PageBottom, PageFooter } from './page';
 export {
     palette,
     paletteBorder,

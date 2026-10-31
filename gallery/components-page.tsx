@@ -90,7 +90,7 @@ import {
     Page,
     PageBottom,
     PageFooter,
-    PageHeader,
+    IconGroup,
     paletteBorder,
     paletteColors,
     paletteFill,
@@ -201,6 +201,7 @@ export function ComponentsPage() {
             <Section title="Actions" collapsible remember="docs:actions">
                 <ButtonDemo />
                 <MarkedButtonDemo />
+                <IconGroupDemo />
                 <FloatingButtonDemo />
                 <TouchClassDemo />
             </Section>
@@ -2084,6 +2085,35 @@ function MarkedButtonDemo() {
     );
 }
 
+function IconGroupDemo() {
+    return (
+        <Section
+            variant="outlined"
+            title="IconGroup"
+            description="Icon buttons side by side, as close as they get without their touch areas overlapping. The last icon lines up with the margin of the area it sits in."
+            meta="className"
+            collapsible
+            collapsed
+            remember="docs:icon-group"
+        >
+            <div className="flex items-center rounded border border-border px-12px py-4px">
+                <span className="min-w-0 flex-1 truncate">Label</span>
+                <IconGroup>
+                    <Button variant="ghost" square>
+                        <Star />
+                    </Button>
+                    <Button variant="ghost" square>
+                        <Bell />
+                    </Button>
+                    <Button variant="ghost" square>
+                        <Settings />
+                    </Button>
+                </IconGroup>
+            </div>
+        </Section>
+    );
+}
+
 function FloatingButtonDemo() {
     return (
         <Section
@@ -2283,14 +2313,13 @@ function PaletteDemo() {
 function PageDemo() {
     const [footer, setFooter] = useState(false);
     const [bottom, setBottom] = useState(false);
-    const [notice, setNotice] = useState(false);
 
     return (
         <Section
             variant="outlined"
             title="Page"
-            description="The frame of a screen: the shell with a side bar, the header, the content and a footer stuck to the bottom, which tells notify how much to clear. Everything respects the safe areas."
-            meta="AppShell · Page · PageHeader · PageHeader notice · PageBottom · PageFooter"
+            description="The frame of a screen: the shell with a side bar, the content, and a footer stuck to the bottom, which tells notify how much to clear. The header comes from the app."
+            meta="AppShell · Page · header · PageBottom · PageFooter"
             collapsible
             collapsed
             remember="docs:page"
@@ -2302,9 +2331,6 @@ function PageDemo() {
                 <Button variant="outline" onClick={() => setBottom(!bottom)}>
                     Toggle PageBottom
                 </Button>
-                <Button variant="outline" onClick={() => setNotice(!notice)}>
-                    Toggle notice
-                </Button>
             </div>
             <div className="overflow-clip rounded border border-border">
                 <AppShell className="min-h-0">
@@ -2312,24 +2338,16 @@ function PageDemo() {
                         className="min-h-0"
                         width="column"
                         header={
-                            <PageHeader
-                                title="Title"
-                                detail="Detail"
-                                description="Description, only on wide screens."
-                                onBack={() => {}}
-                                actions={
-                                    <Button variant="ghost" square bleed>
+                            <div className="flex w-full items-center border-b border-border px-(--gutter) py-4px">
+                                <h3 className="ui-page-title min-w-0 flex-1 truncate">
+                                    Header of the app
+                                </h3>
+                                <IconGroup>
+                                    <Button variant="ghost" square>
                                         <Settings />
                                     </Button>
-                                }
-                                notice={
-                                    notice && (
-                                        <Banner tone="warning" bleed>
-                                            Notice under the header.
-                                        </Banner>
-                                    )
-                                }
-                            />
+                                </IconGroup>
+                            </div>
                         }
                         bottom={
                             footer ? (

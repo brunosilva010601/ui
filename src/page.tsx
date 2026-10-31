@@ -1,10 +1,7 @@
-import { ArrowLeft } from 'lucide-react';
 import { createContext, useContext, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
-import { Button } from './button';
 import { Container } from './container';
 import type { ContainerWidth } from './container';
-import { ControlStrut } from './control-strut';
 import { cn } from './lib/utils';
 
 const PageWidth = createContext<ContainerWidth>('page');
@@ -25,94 +22,6 @@ export function AppShell(props: AppShellProps) {
                 {props.aside}
             </div>
         </div>
-    );
-}
-
-type PageHeaderProps = {
-    title?: ReactNode;
-    detail?: ReactNode;
-    description?: ReactNode;
-    icon?: ReactNode;
-    onBack?: () => void;
-    backLabel?: string;
-    start?: ReactNode;
-    center?: ReactNode;
-    actions?: ReactNode;
-    overlay?: ReactNode;
-    notice?: ReactNode;
-    className?: string;
-};
-
-export function PageHeader(props: PageHeaderProps) {
-    const width = useContext(PageWidth);
-
-    return (
-        <header
-            className={cn(
-                'sticky top-0 z-20 flex w-full flex-col items-center border-b border-border bg-background/95 pt-safe-top backdrop-blur lg:relative lg:bg-transparent lg:backdrop-blur-none',
-                props.className,
-            )}
-        >
-            <Container width={width}>
-                <div className="flex items-center px-(--gutter) py-4px lg:py-8px">
-                    <ControlStrut />
-                    <div className="flex min-w-0 flex-1 items-center gap-12px">
-                        {props.onBack ? (
-                            <Button
-                                square
-                                bleed
-                                variant="ghost"
-                                aria-label={props.backLabel}
-                                onClick={props.onBack}
-                            >
-                                <ArrowLeft />
-                            </Button>
-                        ) : (
-                            props.start
-                        )}
-                        {props.title ? (
-                            <div className="flex min-w-0 flex-1 flex-col gap-4px">
-                                <div className="flex min-w-0 items-center gap-8px">
-                                    {props.icon}
-                                    <h1 className="ui-page-title truncate">
-                                        {props.title}
-                                    </h1>
-                                    {props.detail && (
-                                        <span className="ui-note shrink-0">
-                                            {props.detail}
-                                        </span>
-                                    )}
-                                    <ControlStrut />
-                                </div>
-                                {props.description && (
-                                    <p className="hidden text-foreground-muted lg:block">
-                                        {props.description}
-                                    </p>
-                                )}
-                            </div>
-                        ) : (
-                            <div className="flex min-w-0 flex-1 items-center gap-20px">
-                                {props.center}
-                            </div>
-                        )}
-                        {props.actions && (
-                            <div className="flex shrink-0 items-center gap-12px">
-                                {props.actions}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </Container>
-            {props.notice && (
-                <Container
-                    width={width}
-                    className="px-(--gutter) [--bleed:var(--gutter)]"
-                >
-                    {props.notice}
-                </Container>
-            )}
-            {props.overlay}
-        </header>
     );
 }
 
