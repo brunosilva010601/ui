@@ -11,7 +11,7 @@ const layouts = {
     wrap: 'flex flex-wrap gap-8px',
     row: 'flex gap-4px',
     fill: 'flex gap-4px *:min-w-0 *:flex-1',
-    segmented: cn(trackClass, 'items-center gap-4px'),
+    segmented: cn(trackClass, 'items-stretch gap-4px'),
 };
 
 const segmentedItem = cn(trackItemClass, 'min-w-0');
