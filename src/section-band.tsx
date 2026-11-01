@@ -1,8 +1,9 @@
 import { ChevronDown, ChevronRight, Ellipsis } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { Button, touchClass } from './button';
+import { Button } from './button';
 import { Cover } from './cover';
 import { DropdownMenu } from './dropdown-menu';
+import { IconGroup } from './icon-group';
 import { cn } from './lib/utils';
 import { SortHandle } from './sortable';
 
@@ -49,9 +50,9 @@ export function SectionBand(props: Props) {
                 </span>
             )}
             {(props.action || props.menu) && (
-                <div
+                <IconGroup
                     className={cn(
-                        'relative ml-auto flex shrink-0 items-center gap-4px',
+                        'relative ml-auto -my-[calc(var(--spacing-10px)_+_1px)]',
                         props.hover && hoverClass,
                     )}
                 >
@@ -64,7 +65,6 @@ export function SectionBand(props: Props) {
                                     variant="ghost"
                                     square
                                     title={props.menu.label}
-                                    className={`p-4px ${touchClass}`}
                                 >
                                     <Ellipsis />
                                 </Button>
@@ -73,7 +73,7 @@ export function SectionBand(props: Props) {
                             {props.menu.items}
                         </DropdownMenu>
                     )}
-                </div>
+                </IconGroup>
             )}
         </div>
     );

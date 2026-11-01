@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { IconGroup } from './icon-group';
 import { cn } from './lib/utils';
 
 type Props = {
@@ -50,14 +51,13 @@ export function Detail(props: Props) {
                     {props.children}
                 </div>
                 {props.action && (
-                    <div
+                    <IconGroup
                         className={cn(
-                            'flex items-center gap-8px',
                             !props.side && 'col-start-2 row-span-2 row-start-1',
                         )}
                     >
                         {props.action}
-                    </div>
+                    </IconGroup>
                 )}
             </dd>
         </div>

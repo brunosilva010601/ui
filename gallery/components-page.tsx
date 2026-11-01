@@ -1073,6 +1073,21 @@ function DetailDemo() {
                         <span>ABC-123</span>
                     </Copyable>
                 </Detail>
+                <Detail
+                    label="With actions"
+                    action={
+                        <>
+                            <Button variant="ghost" square title="Favorite">
+                                <Star />
+                            </Button>
+                            <Button variant="ghost" square title="Notify">
+                                <Bell />
+                            </Button>
+                        </>
+                    }
+                >
+                    Value
+                </Detail>
             </dl>
             <dl className="grid grid-cols-[auto_1fr] gap-x-20px gap-y-8px">
                 <Detail label="Label" inline>
@@ -1373,8 +1388,14 @@ function SectionDemo() {
                 title="Action on hover"
                 collapsible
                 hover
+                menu={{
+                    label: 'Options',
+                    items: (
+                        <DropdownItem onSelect={() => {}}>Rename</DropdownItem>
+                    ),
+                }}
                 action={
-                    <Button variant="ghost" size="sm" square title="Add">
+                    <Button variant="ghost" square title="Add">
                         <Plus />
                     </Button>
                 }
