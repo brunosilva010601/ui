@@ -19,7 +19,7 @@ O repositório `brunosilva010601/ui` é público, e os apps instalam direto dele
 O pacote entra no `package.json` do app apontando para a tag:
 
 ```json
-"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.8.2"
+"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.9.0"
 ```
 
 A tag `v0.1.0` aponta para um commit de antes do nome atual e não serve para instalar.
@@ -34,6 +34,7 @@ Versões que quebram o app:
 
 - 0.8.0: saíram os nomes em pixels (`gap-8px`, `text-12px`, `size-icon-16px`), o multiplicador de espaçamento, os tamanhos de texto, as alturas de linha e as cores do Tailwind fora da escala do tema, como descreve `padroes.md`.
 - 0.8.1: o `Modal` passou a exigir `mobile`.
+- 0.9.0: o `className` do `PageBottom` passou a ir na barra, dentro da caixa fixa, e o botão flutuante entra pelo `floating`. O `UiLabels` ganhou sete textos, que um objeto completo do app precisa ter. O lint passou a acusar o tamanho de ícone pelo `className` do botão.
 
 Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no pacote aparecem na hora. Nesse modo o servidor do Vite serve os arquivos pelo caminho real da pasta, fora do projeto, e recusa tudo que está fora da raiz dele: sem liberar essa pasta em `server.fs.allow`, as fontes não carregam e o emoji sai em branco ou com o desenho do aparelho. Instalado pela tag, nada disso é preciso.
 

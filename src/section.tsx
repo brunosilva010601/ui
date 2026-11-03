@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { useId } from 'react';
 import type { ReactNode } from 'react';
 import { Cover } from './cover';
 import { Heading } from './heading';
@@ -44,6 +45,7 @@ type SectionProps = {
 };
 
 type SectionTextProps = {
+    id: string;
     title?: ReactNode;
     note?: ReactNode;
     description?: ReactNode;
@@ -53,7 +55,10 @@ type SectionTextProps = {
 
 function SectionText(props: SectionTextProps) {
     return (
-        <div className="flex min-w-0 flex-1 items-center gap-3 text-left">
+        <div
+            id={props.id}
+            className="flex min-w-0 flex-1 items-center gap-3 text-left"
+        >
             {props.icon && <IconBadge icon={props.icon} size="sm" />}
             <Heading
                 title={
@@ -82,6 +87,8 @@ const chevronClass =
     'pointer-events-none relative size-5 shrink-0 text-foreground-muted';
 
 export function Section(props: SectionProps) {
+    const textId = useId();
+    const contentId = useId();
     const collapsible = props.collapsible ?? false;
     const [open, setOpen] = useOpen(props);
     const variant = props.variant ?? 'flat';
@@ -110,6 +117,7 @@ export function Section(props: SectionProps) {
     );
     const text = (
         <SectionText
+            id={textId}
             title={props.title}
             note={props.note}
             description={props.description}
@@ -141,6 +149,7 @@ export function Section(props: SectionProps) {
             >
                 {headerLink && (
                     <Cover
+                        aria-labelledby={textId}
                         href={props.headerHref}
                         onClick={props.onHeaderClick}
                         className={headerLinkClass}
@@ -150,6 +159,7 @@ export function Section(props: SectionProps) {
                     <>
                         <Cover
                             aria-expanded={open}
+                            aria-labelledby={textId}
                             onClick={() => setOpen(!open)}
                             className="inset-0 rounded-t-[inherit]"
                         />
@@ -214,6 +224,7 @@ export function Section(props: SectionProps) {
 
             {showContent && (
                 <div
+                    id={contentId}
                     className={cn(
                         'flex flex-1 flex-col gap-3',
                         isOutlined &&
@@ -228,6 +239,7 @@ export function Section(props: SectionProps) {
 
             {isClickable && (
                 <Cover
+                    aria-labelledby={hasText ? textId : contentId}
                     onClick={props.onClick}
                     href={props.href}
                     className="inset-0 rounded-[inherit] focus-visible:outline-2"

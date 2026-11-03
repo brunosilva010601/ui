@@ -10,6 +10,13 @@ export type UiLabels = {
     system: string;
     decrease: string;
     increase: string;
+    close: string;
+    previous: string;
+    next: string;
+    today: string;
+    clear: string;
+    loading: string;
+    moreInfo: string;
 };
 
 export type UiLinkProps = {
@@ -19,6 +26,7 @@ export type UiLinkProps = {
     'data-test'?: string;
     'data-layer'?: boolean;
     'aria-current'?: 'page';
+    'aria-labelledby'?: string;
     title?: string;
     children?: ReactNode;
 };
@@ -42,6 +50,13 @@ const defaults: UiConfig = {
         system: 'Sistema',
         decrease: 'Diminuir',
         increase: 'Aumentar',
+        close: 'Fechar',
+        previous: 'Anterior',
+        next: 'Próximo',
+        today: 'Hoje',
+        clear: 'Limpar',
+        loading: 'Carregando',
+        moreInfo: 'Mais informações',
     },
     link: (props) => <a {...props} />,
     locale: 'pt-BR',

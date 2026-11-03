@@ -4,6 +4,7 @@ import type { ReactNode, RefObject } from 'react';
 import { Button } from './button';
 import { useEdgeFade } from './lib/edge-fade';
 import { cn } from './lib/utils';
+import { useUiLabels } from './provider';
 
 const SLIDE_MS = 320;
 
@@ -152,6 +153,7 @@ type CarouselFrameProps = {
 };
 
 export function CarouselFrame(props: CarouselFrameProps) {
+    const labels = useUiLabels();
     const go = (by: number) => props.control.page(by);
 
     return (
@@ -162,6 +164,7 @@ export function CarouselFrame(props: CarouselFrameProps) {
                     <Button
                         variant="outline"
                         square
+                        aria-label={labels.previous}
                         className={`${arrowClass} start-2`}
                         onClick={() => go(-1)}
                     >
@@ -170,6 +173,7 @@ export function CarouselFrame(props: CarouselFrameProps) {
                     <Button
                         variant="outline"
                         square
+                        aria-label={labels.next}
                         className={`${arrowClass} end-2`}
                         onClick={() => go(1)}
                     >

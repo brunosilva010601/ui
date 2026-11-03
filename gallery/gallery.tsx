@@ -191,6 +191,13 @@ const labels: UiLabels = {
     system: 'System',
     decrease: 'Decrease',
     increase: 'Increase',
+    close: 'Close',
+    previous: 'Previous',
+    next: 'Next',
+    today: 'Today',
+    clear: 'Clear',
+    loading: 'Loading',
+    moreInfo: 'More information',
 };
 
 const schemes: { value: Scheme; label: string }[] = [

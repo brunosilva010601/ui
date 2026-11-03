@@ -2,7 +2,7 @@ import { useId } from 'react';
 import type { ChangeEvent, FocusEvent, KeyboardEvent, Ref } from 'react';
 import { useTouch } from '../lib/device';
 import { cn } from '../lib/utils';
-import { bareFieldClass, Field, fieldClass } from './field';
+import { bareFieldClass, describedBy, Field, fieldClass } from './field';
 import type { FieldProps } from './field';
 
 type Props = FieldProps & {
@@ -77,6 +77,7 @@ export function Input(props: Props) {
             <input
                 id={inputId}
                 aria-invalid={error ? true : undefined}
+                aria-describedby={describedBy(inputId, { description, error })}
                 autoComplete="off"
                 {...(plain ? plainTextField : {})}
                 className={cn(bare ? bareFieldClass : fieldClass, className)}

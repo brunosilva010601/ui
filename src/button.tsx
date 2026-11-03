@@ -69,6 +69,9 @@ const sizes = {
     },
 };
 
+const stackedClass =
+    "flex-col gap-1 rounded px-2 py-2 text-center whitespace-normal [&_svg:not([class*='size-'])]:size-6";
+
 export type ButtonVariant = keyof typeof variants;
 
 export type ButtonSize = keyof typeof sizes;
@@ -77,6 +80,7 @@ type ButtonProps = Omit<ComponentProps<'button'>, 'type'> & {
     variant?: ButtonVariant;
     size?: ButtonSize;
     square?: boolean;
+    stacked?: boolean;
     bleed?: boolean;
     busy?: boolean;
     mark?: ButtonMark;
@@ -89,6 +93,7 @@ type ButtonClassOptions = {
     variant?: keyof typeof variants;
     size?: keyof typeof sizes;
     square?: boolean;
+    stacked?: boolean;
     bleed?: boolean;
     className?: string;
 };
@@ -97,6 +102,7 @@ export function buttonClass({
     variant = 'primary',
     size,
     square = false,
+    stacked = false,
     bleed = false,
     className,
 }: ButtonClassOptions = {}) {
@@ -109,7 +115,12 @@ export function buttonClass({
         variants[variant],
         box.icon,
         shape === 'link' && size && sizes[size].link,
-        isBox && (square ? box.square : box.text),
+        isBox &&
+            (stacked
+                ? [box.link, stackedClass]
+                : square
+                  ? box.square
+                  : box.text),
         bleed && isBox && bleedSides,
         bleed && isBox && bleedBackdrop,
         className,
@@ -121,6 +132,7 @@ export function Button(props: ButtonProps) {
         variant,
         size,
         square,
+        stacked,
         bleed,
         busy,
         mark,
@@ -145,6 +157,7 @@ export function Button(props: ButtonProps) {
                 variant,
                 size,
                 square,
+                stacked,
                 bleed,
                 className: cn(
                     working && '[&>svg]:hidden',

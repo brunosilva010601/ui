@@ -5,7 +5,9 @@ const palette =
 const colorUtility =
     'bg|text|border(?:-[xytrblse])?|outline|ring(?:-offset)?|inset-ring|shadow|inset-shadow|drop-shadow|divide|decoration|caret|accent|fill|stroke|from|via|to|placeholder';
 const spacingUtility =
-    'p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy]|size|w|h|min-w|min-h|max-w|max-h|inset(?:-[xy])?|top|right|bottom|left|start|end|translate-[xy]|scroll-[mp][xytrblse]?|indent|basis';
+    'p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy]|size|w|h|min-w|min-h|max-w|max-h|inset(?:-[xy])?|top|right|bottom|left|start|end|translate(?:-[xy])?|scroll-[mp][xytrblse]?|indent|basis|border-spacing(?:-[xy])?';
+const spacingOnlyUtility =
+    'p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy]|inset(?:-[xy])?|top|right|bottom|left|start|end|translate(?:-[xy])?|scroll-[mp][xytrblse]?|indent|border-spacing(?:-[xy])?';
 const spacingScale = [
     '0',
     'px',
@@ -32,9 +34,15 @@ const writtenColor = new RegExp(
 const spacingValue = new RegExp(
     `^-?(?:${spacingUtility})-(\\d+(?:\\.\\d+)?(?:px)?|px)$`,
 );
+const namedSpacing = new RegExp(
+    `^-?(?:${spacingOnlyUtility})-(?:\\d?xs|sm|md|lg|\\d?xl)$`,
+);
+const oldSize = /^size-(?:icon|circle)-/;
 const tailwindShadow =
-    /^(?:inset-)?shadow(?:-(?:2xs|xs|sm|md|lg|xl|2xl|inner))?$/;
+    /^(?:(?:inset-)?shadow(?:-(?:2xs|xs|sm|md|lg|xl|2xl|inner))?|drop-shadow(?:-(?:xs|sm|md|lg|xl|2xl))?)$/;
 const offScaleText = /^text-(?:xl|4xl|[7-9]xl|\d+px|\[\d)/;
+const textLineHeight = /^text-(?:xs|sm|base|lg|\d?xl)\/\S+$/;
+const svgSize = /svg/;
 const lineHeight = /^leading-/;
 const tailwindRadius =
     /^rounded(?:-(?:t|r|b|l|s|e|tl|tr|br|bl|ss|se|es|ee))?-(?:xs|sm|md|lg|xl|2xl|3xl|4xl)$/;
@@ -205,11 +213,14 @@ function strings(node) {
     }
 }
 
-function classes(node) {
+function rawClasses(node) {
     return strings(attribute(node, 'className')?.value)
         .flatMap((value) => value.split(/\s+/))
-        .filter(Boolean)
-        .map(utility);
+        .filter(Boolean);
+}
+
+function classes(node) {
+    return rawClasses(node).map(utility);
 }
 
 function childElements(nodes) {
@@ -321,7 +332,7 @@ const iconSize = {
                 'The button sizes its own icon; the app passes no icon size.',
         },
         messages: {
-            found: 'The button sizes its own icon; remove the size from the icon.',
+            found: 'The button sizes its own icon; remove the size from the icon or from the button className.',
         },
     },
     create(context) {
@@ -346,6 +357,19 @@ const iconSize = {
 
                 if (component !== 'Button' && component !== 'FloatingButton') {
                     return;
+                }
+
+                if (
+                    rawClasses(node).some(
+                        (each) =>
+                            svgSize.test(each) &&
+                            /^(?:size|w|h)-/.test(utility(each)),
+                    )
+                ) {
+                    context.report({
+                        node: node.openingElement,
+                        messageId: 'found',
+                    });
                 }
 
                 for (const child of childElements(node.children)) {
@@ -380,7 +404,8 @@ export default {
                 const match = spacingValue.exec(each);
 
                 return (
-                    each.startsWith('size-icon-') ||
+                    oldSize.test(each) ||
+                    namedSpacing.test(each) ||
                     (match !== null &&
                         !spacingScale.includes(match[1]) &&
                         each !== 'size-3.5')
@@ -401,7 +426,10 @@ export default {
         ),
         'text-scale': classRule(
             'use the text scale (xs, sm, base, lg, 2xl, 3xl, 5xl, 6xl) or a text role (ui-note, ui-label), with no line height of its own.',
-            (each) => offScaleText.test(each) || lineHeight.test(each),
+            (each) =>
+                offScaleText.test(each) ||
+                lineHeight.test(each) ||
+                textLineHeight.test(each),
         ),
         'icon-row': iconRow,
         'icon-size': iconSize,

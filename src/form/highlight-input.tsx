@@ -1,7 +1,7 @@
 import { useId, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { cn } from '../lib/utils';
-import { Field, fieldClass } from './field';
+import { describedBy, Field, fieldClass } from './field';
 import type { FieldProps } from './field';
 import { usePlainTextField } from './input';
 
@@ -84,6 +84,7 @@ export function HighlightInput(props: Props) {
                 <input
                     id={id}
                     aria-invalid={props.error ? true : undefined}
+                    aria-describedby={describedBy(id, props)}
                     autoComplete="off"
                     {...plainTextField}
                     autoFocus={props.autoFocus}

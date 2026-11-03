@@ -286,7 +286,7 @@ function ButtonDemo() {
             variant="outlined"
             title="Button"
             description="Every variant in both sizes, with text, icon and text, icon only, disabled and busy. Without size, a link takes the size of the text around it."
-            meta="variant · size · square · bleed · busy · disabled · asChild"
+            meta="variant · size · square · stacked · bleed · busy · disabled · asChild"
             collapsible
             collapsed
             remember="docs:button"
@@ -344,6 +344,36 @@ function ButtonDemo() {
                 </div>
             </div>
             <div className="flex flex-col gap-2">
+                <span className={caption}>
+                    stacked, icon over the label, in a grid of choices
+                </span>
+                <div className="grid grid-cols-3 gap-2 sm:max-w-[384px]">
+                    <Button variant="outline" stacked>
+                        <Star />
+                        Label
+                    </Button>
+                    <Button variant="outline" stacked mark="primary">
+                        <Heart />
+                        Marked
+                    </Button>
+                    <Button variant="outline" stacked>
+                        <Plus />A longer label that wraps
+                    </Button>
+                    <Button variant="ghost" stacked>
+                        <span className="text-base font-semibold">12</span>
+                        <span className="text-foreground-muted">Label</span>
+                    </Button>
+                    <Button variant="outline" size="sm" stacked>
+                        <Star />
+                        Small
+                    </Button>
+                    <Button variant="outline" stacked busy>
+                        <Star />
+                        Busy
+                    </Button>
+                </div>
+            </div>
+            <div className="flex flex-col gap-2">
                 <span className={caption}>busy</span>
                 <div className="flex flex-wrap items-center gap-2">
                     <Button busy>Sending</Button>
@@ -391,8 +421,8 @@ function BadgeDemo() {
         <Section
             variant="outlined"
             title="Badge"
-            description="Static label for a status or a count. Every tone in both sizes, with text, icon and text, and a count. Never clickable."
-            meta="tone · size · count"
+            description="Static label for a status or a count. Every tone in both sizes, with text, icon and text, a count and the solid fill. Never clickable."
+            meta="tone · size · solid · count"
             collapsible
             collapsed
             remember="docs:badge"
@@ -400,7 +430,7 @@ function BadgeDemo() {
             {sizes.map((size) => (
                 <div
                     key={size}
-                    className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:items-center sm:justify-items-start"
+                    className="flex flex-col gap-3 sm:grid sm:grid-cols-4 sm:items-center sm:justify-items-start"
                 >
                     <div className="sm:contents">
                         <span className={caption}>size="{size}"</span>
@@ -409,6 +439,9 @@ function BadgeDemo() {
                         </span>
                         <span className={cn(caption, 'max-sm:hidden')}>
                             count
+                        </span>
+                        <span className={cn(caption, 'max-sm:hidden')}>
+                            solid
                         </span>
                     </div>
                     {badgeTones.map((tone) => (
@@ -425,6 +458,9 @@ function BadgeDemo() {
                             </Badge>
                             <Badge tone={tone} size={size} count>
                                 12
+                            </Badge>
+                            <Badge tone={tone} size={size} solid count>
+                                3
                             </Badge>
                         </div>
                     ))}
@@ -447,7 +483,7 @@ function ButtonGroupDemo() {
             variant="outlined"
             title="ButtonGroup"
             description="Outline or ghost buttons where one is selected, switching on click, or several with multiple, each turning on and off. Text, icon and text, and icon only in both sizes, then ghost, the layouts and custom items."
-            meta="variant · size · iconOnly · layout · multiple · disabled · ButtonGroupItem"
+            meta="variant · size · iconOnly · label · layout · multiple · disabled · ButtonGroupItem"
             collapsible
             collapsed
             remember="docs:button-group"
@@ -477,10 +513,11 @@ function ButtonGroupDemo() {
                 </div>
             ))}
             <div className="flex flex-col gap-2">
-                <span className={caption}>variant="ghost"</span>
+                <span className={caption}>variant="ghost" · label</span>
                 <ButtonGroup
                     variant="ghost"
                     layout="fill"
+                    label="View"
                     iconOnly
                     options={iconOptions}
                     value={valueOf('ghost')}
@@ -1438,7 +1475,7 @@ function ListDemo() {
             variant="outlined"
             title="List"
             description="The list is only the frame: padding, dividers or cards, hover, the active and selected states, the click of the whole row and the row menu. What goes inside each item is free and belongs to the app. Divided, cards or bare; the menu opens by holding, right clicking or the ellipsis, which sits at the end of the row or floats over it on hover."
-            meta="List variant · bleed · columns · horizontal · onReorder · organizing · ListItem onClick · href · external · active · selected · menu · sortId"
+            meta="List variant · bleed · columns · horizontal · onReorder · organizing · ListItem onClick · href · external · active · selected · align · menu · sortId"
             collapsible
             collapsed
             remember="docs:list"
@@ -1490,6 +1527,17 @@ function ListDemo() {
                         onClick={() => notify({ title: 'Item clicked' })}
                     >
                         <span className="text-sm">Selected item</span>
+                    </ListItem>
+                    <ListItem
+                        align="start"
+                        onClick={() => notify({ title: 'Item clicked' })}
+                    >
+                        <Avatar name="Example" size="sm" />
+                        <span className="flex-1 text-sm">
+                            Aligned to the top: the avatar stays at the first
+                            line when the text runs over several lines, as in a
+                            long description that wraps.
+                        </span>
                     </ListItem>
                 </List>
             </div>
@@ -2141,7 +2189,7 @@ function FloatingButtonDemo() {
         <Section
             variant="outlined"
             title="FloatingButton"
-            description="The round action that floats over the page, with its shadow and bigger icon."
+            description="The round action that floats over the page, with its shadow and bigger icon. On a screen it goes in the floating slot of PageBottom, which places it above the bar."
             meta="same props as Button"
             collapsible
             collapsed
@@ -2340,8 +2388,8 @@ function PageDemo() {
         <Section
             variant="outlined"
             title="Page"
-            description="The frame of a screen: the shell with a side bar, the content, and a footer stuck to the bottom, which tells notify how much to clear. The header comes from the app."
-            meta="AppShell · Page · header · PageBottom · PageFooter"
+            description="The frame of a screen: the shell with a side bar, the content, and a footer stuck to the bottom, which tells notify how much to clear. A floating button above the bar keeps the end of the page clear and lifts notify over it too. The header comes from the app."
+            meta="AppShell · Page · header · PageBottom floating · PageFooter"
             collapsible
             collapsed
             remember="docs:page"
@@ -2378,10 +2426,17 @@ function PageDemo() {
                                 </PageFooter>
                             ) : (
                                 bottom && (
-                                    <PageBottom className="flex justify-end px-(--gutter) pb-3">
-                                        <FloatingButton>
-                                            <Plus />
-                                        </FloatingButton>
+                                    <PageBottom
+                                        floating={
+                                            <FloatingButton aria-label="Add">
+                                                <Plus />
+                                            </FloatingButton>
+                                        }
+                                        className="flex justify-center border-t border-border bg-background px-(--gutter) py-3"
+                                    >
+                                        <span className="ui-note">
+                                            Bottom bar
+                                        </span>
                                     </PageBottom>
                                 )
                             )

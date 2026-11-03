@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronRight, Ellipsis } from 'lucide-react';
+import { useId } from 'react';
 import type { ReactNode } from 'react';
 import { Button } from './button';
 import { Cover } from './cover';
@@ -29,18 +30,29 @@ type Props = {
 
 export function SectionBand(props: Props) {
     const Chevron = props.open ? ChevronDown : ChevronRight;
+    const textId = useId();
 
     return (
         <div className="group/header group/sort relative -mx-(--row-inset) flex items-center gap-2 px-3 py-2">
-            <Cover aria-expanded={props.open} onClick={props.onToggle} />
+            <Cover
+                aria-expanded={props.open}
+                aria-labelledby={textId}
+                onClick={props.onToggle}
+            />
             {props.sortable && <SortHandle />}
             <Chevron className="pointer-events-none relative size-4 shrink-0 text-foreground-muted" />
             {props.title ? (
-                <h2 className="pointer-events-none relative min-w-0 truncate font-semibold">
+                <h2
+                    id={textId}
+                    className="pointer-events-none relative min-w-0 truncate font-semibold"
+                >
                     {props.title}
                 </h2>
             ) : (
-                <p className="ui-note pointer-events-none relative min-w-0 truncate">
+                <p
+                    id={textId}
+                    className="ui-note pointer-events-none relative min-w-0 truncate"
+                >
                     {props.description}
                 </p>
             )}

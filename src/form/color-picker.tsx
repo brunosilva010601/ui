@@ -4,7 +4,7 @@ import { buttonClass } from '../button';
 import { cn } from '../lib/utils';
 import { paletteColors, paletteText } from '../palette';
 import type { PaletteColor } from '../palette';
-import { Field } from './field';
+import { describedBy, Field } from './field';
 import type { FieldProps } from './field';
 
 type Props = FieldProps & {
@@ -26,7 +26,12 @@ export function ColorPicker(props: Props) {
             optional={props.optional}
             error={props.error}
         >
-            <div id={id} role="radiogroup" className="flex flex-wrap gap-1">
+            <div
+                id={id}
+                role="radiogroup"
+                aria-describedby={describedBy(id, props)}
+                className="flex flex-wrap gap-1"
+            >
                 {colors.map((color) => {
                     const chosen = color === props.value;
 

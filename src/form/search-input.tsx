@@ -1,6 +1,7 @@
 import { Search, X } from 'lucide-react';
 import { Button } from '../button';
 import { cn } from '../lib/utils';
+import { useUiLabels } from '../provider';
 import { fieldClass } from './field';
 import { Input } from './input';
 
@@ -14,6 +15,8 @@ type Props = {
 };
 
 export function SearchInput(props: Props) {
+    const labels = useUiLabels();
+
     return (
         <div
             className={cn(
@@ -43,6 +46,7 @@ export function SearchInput(props: Props) {
                     size="sm"
                     square
                     bleed
+                    aria-label={labels.clear}
                     onClick={() => {
                         props.onChange('');
                         props.onClear?.();

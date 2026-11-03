@@ -4,7 +4,7 @@ import { buttonClass } from '../button';
 import { ControlStrut } from '../control-strut';
 import { monthYear, weekdayName } from '../lib/dates';
 import { cn } from '../lib/utils';
-import { useUi } from '../provider';
+import { useUi, useUiLabels } from '../provider';
 
 const DAY_MS = 86_400_000;
 
@@ -24,6 +24,7 @@ function iso(time: number): string {
 
 export function Calendar(props: Props) {
     const { locale, weekStart: offset } = useUi();
+    const labels = useUiLabels();
     const [shown, setShown] = useState(
         (props.value || props.today).slice(0, 7),
     );
@@ -53,6 +54,7 @@ export function Calendar(props: Props) {
                     </span>
                     <button
                         type="button"
+                        aria-label={labels.previous}
                         className={arrowClass}
                         onClick={() => move(-1)}
                     >
@@ -60,6 +62,7 @@ export function Calendar(props: Props) {
                     </button>
                     <button
                         type="button"
+                        aria-label={labels.today}
                         className={arrowClass}
                         onClick={() => setShown(props.today.slice(0, 7))}
                     >
@@ -67,6 +70,7 @@ export function Calendar(props: Props) {
                     </button>
                     <button
                         type="button"
+                        aria-label={labels.next}
                         className={arrowClass}
                         onClick={() => move(1)}
                     >

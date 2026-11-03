@@ -4,7 +4,7 @@ import type { KeyboardEvent, MouseEvent } from 'react';
 import { buttonClass } from '../button';
 import { cn } from '../lib/utils';
 import { useUiLabels } from '../provider';
-import { Field } from './field';
+import { describedBy, Field } from './field';
 import type { FieldProps } from './field';
 import { usePlainTextField } from './input';
 
@@ -230,6 +230,7 @@ export function NumberInput(props: Props) {
                     aria-valuemax={props.max}
                     aria-valuenow={props.value === '' ? undefined : props.value}
                     aria-invalid={props.error ? true : undefined}
+                    aria-describedby={describedBy(inputId, props)}
                     value={
                         props.value === ''
                             ? ''

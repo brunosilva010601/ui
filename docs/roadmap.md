@@ -2,7 +2,7 @@
 
 ## Pacote
 
-- Ligar as regras de `lint/` em cada app e instalar neles a versão com o tema limpo. Loremy e Salalas já usam os nomes novos de espaçamento, texto e ícone, que davam as mesmas medidas na versão anterior. O Mylo, na 0.7.1, ainda usa os nomes em pixels (`gap-8px`, `text-12px`, `size-icon-16px`) em cerca de 150 lugares, que somem sem aviso na 0.8.0, e tem 4 ícones com tamanho dentro do botão.
+- Ligar as regras de `lint/` no Mylo e instalar nele a versão com o tema limpo. Loremy e Salalas já estendem a configuração do pacote desde a 0.8.1. O Mylo, na 0.7.1, ainda usa os nomes em pixels (`gap-8px`, `text-12px`, `size-icon-16px`) em cerca de 150 lugares, que somem sem aviso na 0.8.0, e tem 4 ícones com tamanho dentro do botão.
 - Escolher o nome definitivo do pacote, hoje `ui`.
 - Renomear a pasta `gallery`, provavelmente para `docs`.
 - Ideia: configurar o tema do app num bloco no CSS (`@plugin`), com só as chaves que o projeto pode mudar, como a cor principal.
@@ -12,7 +12,9 @@
 - O mínimo de `lucide-react` aceito pelo pacote está abaixo do que ele usa.
 - Ainda fora de `css/tokens.css` ou da escala: larguras `max-w-*` do Tailwind em `rem`, `--radius` em `rem`, a altura de linha escrita à mão no bloco de código, as medidas de `lib/edge-fade.ts` e o ícone de 12 px da `Badge`, que fica fora dos tamanhos de ícone.
 - A decidir: item de lista `disabled` ou `busy` continua arrastável pela alça.
-- Nome acessível: os `aria-label` foram removidos de quase todo o pacote (sobraram os das setas do `NumberInput`, e o `ButtonGroupItem` aceita um), então botões só de ícone, setas, fechar e carregando não têm nome para leitor de tela. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
+- Nome acessível: as peças só de ícone do próprio pacote já têm nome pelos textos do `UiLabels`, mas o `Button` só de ícone de um app continua dependendo de o app lembrar do `aria-label`. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
+- A confirmar: no Explorar do Loremy (430 × 932, escuro), a gaveta de Filtros fechou uma vez junto com o seletor de Serviços, aberto logo depois de fechar o de Gêneros pelo voltar. Não se repetiu em três tentativas. Os suspeitos são o histórico das modais (`src/modal-history.ts`) e o arrastar da gaveta (`src/modal.tsx`).
+- O Loremy, ao instalar a versão seguinte, troca o botão de marcar pelo `stacked` (o lint já acusa o ícone dimensionado pelo `className` em `item/mark-toggle.tsx`), o contador de filtros pela `Badge` com `solid` e o botão flutuante pelo `floating` do `PageBottom`. Ainda sem peça no pacote: o `p-1` no avatar do menu e o `Surface` com `p-2 text-xs` no seletor de serviços.
 
 ## Adoção pelo Salalas
 

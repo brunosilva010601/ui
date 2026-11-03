@@ -1,7 +1,7 @@
 import { OTPInput, REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useId, useRef } from 'react';
 import { cn } from '../lib/utils';
-import { Field } from './field';
+import { describedBy, Field } from './field';
 import type { FieldProps } from './field';
 
 const CODE_LENGTH = 6;
@@ -48,6 +48,7 @@ export function CodeInput(props: Props) {
                     input.current?.form?.requestSubmit()
                 }
                 aria-invalid={props.error ? true : undefined}
+                aria-describedby={describedBy(inputId, props)}
                 containerClassName="flex items-center justify-center gap-2 has-[:disabled]:opacity-50"
                 render={({ slots }) => (
                     <>

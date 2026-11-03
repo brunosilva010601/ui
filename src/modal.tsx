@@ -22,6 +22,7 @@ import {
     mobileLayouts,
 } from './modal-layouts';
 import type { ModalDesktop, ModalMobile } from './modal-layouts';
+import { useUiLabels } from './provider';
 
 export type { ModalDesktop, ModalMobile };
 
@@ -71,7 +72,7 @@ export function Modal(props: ModalProps) {
 }
 
 function ModalPanel(props: ModalProps) {
-    const mobile = props.mobile;
+    const mobile = props.mobile in mobileLayouts ? props.mobile : 'dialog';
     const desktop = props.desktop ?? desktopFor[mobile];
     const small = mobileLayouts[mobile];
     const wide = desktopLayouts[desktop];
@@ -163,6 +164,8 @@ function ModalPanel(props: ModalProps) {
 }
 
 function BareBody(props: ModalProps) {
+    const labels = useUiLabels();
+
     return (
         <>
             <DialogPrimitive.Title className="sr-only">
@@ -173,6 +176,7 @@ function BareBody(props: ModalProps) {
             </div>
             {props.dismissible !== false && (
                 <DialogPrimitive.Close
+                    aria-label={labels.close}
                     className={cn(
                         buttonClass({ variant: 'outline', square: true }),
                         'pointer-events-auto absolute top-0 right-0',
@@ -190,8 +194,11 @@ type ModalCloseButtonProps = {
 };
 
 export function ModalCloseButton(props: ModalCloseButtonProps) {
+    const labels = useUiLabels();
+
     return (
         <DialogPrimitive.Close
+            aria-label={labels.close}
             className={cn(
                 buttonClass({ variant: 'ghost', square: true, bleed: true }),
                 props.className,

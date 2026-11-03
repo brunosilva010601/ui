@@ -3,7 +3,7 @@ import { useId } from 'react';
 import { tintClass } from '../icon-badge';
 import { cn } from '../lib/utils';
 import { useUiLabels } from '../provider';
-import { Field } from './field';
+import { describedBy, Field } from './field';
 import type { FieldProps } from './field';
 
 type Props = FieldProps & {
@@ -52,6 +52,7 @@ export function FileInput(props: Props) {
                     accept={props.accept}
                     disabled={props.disabled}
                     aria-invalid={props.error ? true : undefined}
+                    aria-describedby={describedBy(inputId, props)}
                     className="sr-only"
                     onChange={(event) =>
                         props.onChange(event.target.files?.[0] ?? null)

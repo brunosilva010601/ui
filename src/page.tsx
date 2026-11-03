@@ -26,8 +26,9 @@ export function AppShell(props: AppShellProps) {
 }
 
 type PageBottomProps = {
+    floating?: ReactNode;
     className?: string;
-    children: ReactNode;
+    children?: ReactNode;
 };
 
 export function PageBottom(props: PageBottomProps) {
@@ -55,12 +56,21 @@ export function PageBottom(props: PageBottomProps) {
     return (
         <div
             ref={root}
-            className={cn(
-                'sticky bottom-0 z-20 w-full pb-safe-bottom',
-                props.className,
-            )}
+            className="pointer-events-none sticky bottom-0 z-20 w-full"
         >
-            {props.children}
+            {props.floating && (
+                <div className="flex justify-end gap-2 px-(--gutter) pb-3 *:pointer-events-auto">
+                    {props.floating}
+                </div>
+            )}
+            <div
+                className={cn(
+                    'pointer-events-auto w-full pb-safe-bottom',
+                    props.className,
+                )}
+            >
+                {props.children}
+            </div>
         </div>
     );
 }

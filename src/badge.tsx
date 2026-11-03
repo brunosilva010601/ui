@@ -11,6 +11,7 @@ const sizes = {
 type Props = {
     tone?: Tone;
     size?: keyof typeof sizes;
+    solid?: boolean;
     count?: boolean;
     title?: string;
     className?: string;
@@ -23,7 +24,7 @@ export function Badge(props: Props) {
             title={props.title}
             className={cn(
                 'inline-flex w-fit shrink-0 items-center rounded-full border border-transparent font-semibold whitespace-nowrap [&_svg]:shrink-0',
-                tones[props.tone ?? 'neutral'].soft,
+                tones[props.tone ?? 'neutral'][props.solid ? 'solid' : 'soft'],
                 sizes[props.size ?? 'sm'],
                 props.count && 'tabular-nums',
                 props.className,

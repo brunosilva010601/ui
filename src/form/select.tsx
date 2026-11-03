@@ -2,7 +2,7 @@ import { Check, ChevronDown } from 'lucide-react';
 import { useId } from 'react';
 import type { ReactNode } from 'react';
 import { DropdownItem, DropdownMenu } from '../dropdown-menu';
-import { Field, fieldClass } from './field';
+import { describedBy, Field, fieldClass } from './field';
 import type { FieldProps } from './field';
 
 type Option<T extends string> = {
@@ -65,6 +65,7 @@ export function Select<T extends string>(props: Props<T>) {
                         type="button"
                         disabled={props.disabled}
                         aria-invalid={props.error ? true : undefined}
+                        aria-describedby={describedBy(id, props)}
                         className={`${fieldClass} flex cursor-pointer items-center gap-2 text-left`}
                     >
                         {current && <OptionText option={current} />}

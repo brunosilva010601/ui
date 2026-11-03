@@ -60,6 +60,7 @@ export type ButtonGroupOption<T extends string> = {
 
 type ButtonGroupProps<T extends string> = {
     options?: ButtonGroupOption<T>[];
+    label?: string;
     layout?: keyof typeof layouts;
     variant?: GroupVariant;
     size?: ButtonSize;
@@ -111,6 +112,7 @@ export function ButtonGroup<T extends string>(props: ButtonGroupProps<T>) {
             <GroupContext value={group}>
                 <ToggleGroupPrimitive.Root
                     type="multiple"
+                    aria-label={props.label}
                     className={layout}
                     disabled={props.disabled}
                     value={props.value}
@@ -128,6 +130,7 @@ export function ButtonGroup<T extends string>(props: ButtonGroupProps<T>) {
         <GroupContext value={group}>
             <ToggleGroupPrimitive.Root
                 type="single"
+                aria-label={props.label}
                 className={layout}
                 disabled={props.disabled}
                 value={props.value}

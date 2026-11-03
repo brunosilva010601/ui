@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useId } from 'react';
 import type { ReactNode } from 'react';
 import { Cover } from './cover';
 import { DropdownMenu } from './dropdown-menu';
@@ -41,11 +41,12 @@ type ItemLayerProps = {
     external?: boolean;
 };
 
-function ItemLayer(props: ItemLayerProps) {
+function ItemLayer(props: ItemLayerProps & { labelledBy: string }) {
     return (
         (props.href || props.onClick) && (
             <Cover
                 data-layer
+                aria-labelledby={props.labelledBy}
                 href={props.href}
                 external={props.external}
                 onClick={props.onClick}
@@ -62,11 +63,13 @@ type ListItemProps = ItemLayerProps & {
     disabled?: boolean;
     busy?: boolean;
     menu?: ListItemMenu;
+    align?: 'center' | 'start';
     className?: string;
     children: ReactNode;
 };
 
 export function ListItem(props: ListItemProps) {
+    const contentId = useId();
     const variant = useContext(VariantContext);
     const blocked = props.disabled || props.busy;
     const menu = blocked ? undefined : props.menu;
@@ -99,6 +102,7 @@ export function ListItem(props: ListItemProps) {
         >
             {layered && (
                 <ItemLayer
+                    labelledBy={contentId}
                     onClick={props.onClick}
                     href={props.href}
                     external={props.external}
@@ -106,8 +110,10 @@ export function ListItem(props: ListItemProps) {
             )}
             {props.sortId !== undefined && <SortHandle />}
             <div
+                id={contentId}
                 className={cn(
-                    'relative flex min-w-0 flex-1 items-center gap-3',
+                    'relative flex min-w-0 flex-1 gap-3',
+                    props.align === 'start' ? 'items-start' : 'items-center',
                     variant !== 'bare' && 'px-(--row-inset) py-3 lg:py-2',
                     layered &&
                         'pointer-events-none [&_a,&_button,&_input,&_label,&_select,&_textarea]:pointer-events-auto',

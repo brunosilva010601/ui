@@ -1,7 +1,7 @@
 import { useId, useState } from 'react';
 import type { ChangeEvent, FocusEvent, KeyboardEvent, Ref } from 'react';
 import { cn } from '../lib/utils';
-import { bareFieldClass, Field, fieldClass } from './field';
+import { bareFieldClass, describedBy, Field, fieldClass } from './field';
 import type { FieldProps } from './field';
 
 const sizes = {
@@ -68,6 +68,10 @@ export function Textarea(props: Props) {
             <textarea
                 id={textareaId}
                 aria-invalid={error ? true : undefined}
+                aria-describedby={describedBy(textareaId, {
+                    description: counted || description,
+                    error,
+                })}
                 autoComplete="off"
                 className={cn(
                     'field-sizing-content resize-none',

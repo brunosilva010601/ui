@@ -1,4 +1,5 @@
 import { Slot } from '@radix-ui/react-slot';
+import { useId } from 'react';
 import type { ReactNode } from 'react';
 import { Cover } from './cover';
 import { cn } from './lib/utils';
@@ -27,6 +28,7 @@ type Props = {
 );
 
 export function Surface(props: Props) {
+    const contentId = useId();
     const clickable = !props.disabled && Boolean(props.onClick || props.href);
     const shared = cn(
         surfaceClass,
@@ -67,6 +69,7 @@ export function Surface(props: Props) {
             {clickable && (
                 <Cover
                     data-layer
+                    aria-labelledby={contentId}
                     onClick={props.onClick}
                     href={props.href}
                     external={props.external}
@@ -74,6 +77,7 @@ export function Surface(props: Props) {
                 />
             )}
             <div
+                id={contentId}
                 className={cn(
                     'contents',
                     clickable &&

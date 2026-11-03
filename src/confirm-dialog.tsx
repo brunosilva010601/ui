@@ -65,7 +65,8 @@ export function ConfirmDialog(props: Props) {
                     <Button
                         type="submit"
                         variant={props.tone ?? 'danger'}
-                        disabled={sending || props.blocked}
+                        busy={sending}
+                        disabled={props.blocked}
                     >
                         {props.confirmLabel}
                     </Button>

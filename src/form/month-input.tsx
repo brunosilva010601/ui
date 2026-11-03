@@ -4,8 +4,8 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 import { monthYear } from '../lib/dates';
 import { cn } from '../lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
-import { useUi } from '../provider';
-import { Field } from './field';
+import { useUi, useUiLabels } from '../provider';
+import { describedBy, Field } from './field';
 import type { FieldProps } from './field';
 import { stepButtonClass, stepperClass } from './number-input';
 
@@ -126,6 +126,7 @@ function YearPicker(props: YearPickerProps) {
 export function MonthInput(props: Props) {
     const inputId = useId();
     const { locale } = useUi();
+    const labels = useUiLabels();
     const [picking, setPicking] = useState(false);
     const unit = props.yearOnly ? MONTHS_IN_YEAR : 1;
     const current = useRef(index(props.value));
@@ -190,6 +191,7 @@ export function MonthInput(props: Props) {
                 <button
                     type="button"
                     tabIndex={-1}
+                    aria-label={labels.previous}
                     disabled={props.disabled || atMin}
                     className={stepButtonClass}
                     {...previous}
@@ -205,6 +207,7 @@ export function MonthInput(props: Props) {
                             aria-valuenow={current.current}
                             aria-valuetext={text}
                             aria-invalid={props.error ? true : undefined}
+                            aria-describedby={describedBy(inputId, props)}
                             disabled={props.disabled}
                             onKeyDown={arrowKeys}
                             className="cursor-pointer py-2 text-center font-semibold text-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50"
@@ -227,6 +230,7 @@ export function MonthInput(props: Props) {
                 <button
                     type="button"
                     tabIndex={-1}
+                    aria-label={labels.next}
                     disabled={props.disabled || atMax}
                     className={stepButtonClass}
                     {...next}

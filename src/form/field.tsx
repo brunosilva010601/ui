@@ -36,7 +36,22 @@ function Label(props: LabelProps) {
     );
 }
 
+type Described = {
+    description?: ReactNode;
+    error?: string;
+};
+
+export function describedBy(id: string, props: Described) {
+    const ids = [
+        props.description && `${id}-description`,
+        props.error && `${id}-error`,
+    ].filter(Boolean);
+
+    return ids.length > 0 ? ids.join(' ') : undefined;
+}
+
 type FieldErrorProps = {
+    id?: string;
     message?: string;
 };
 
@@ -45,7 +60,11 @@ export function FieldError(props: FieldErrorProps) {
         return null;
     }
 
-    return <p className="text-sm text-danger">{props.message}</p>;
+    return (
+        <p id={props.id} className="text-sm text-danger">
+            {props.message}
+        </p>
+    );
 }
 
 type Props = Omit<FieldProps, 'disabled'> & {
@@ -63,7 +82,10 @@ export function Field(props: Props) {
     }
 
     const description = props.description && (
-        <p className={cn('ui-note', props.descriptionAside && 'text-right')}>
+        <p
+            id={props.id && `${props.id}-description`}
+            className={cn('ui-note', props.descriptionAside && 'text-right')}
+        >
             {props.description}
         </p>
     );
@@ -100,7 +122,10 @@ export function Field(props: Props) {
             )}
             {props.children}
             {!(props.descriptionAside && props.label) && description}
-            <FieldError message={props.error} />
+            <FieldError
+                id={props.id && `${props.id}-error`}
+                message={props.error}
+            />
         </div>
     );
 }

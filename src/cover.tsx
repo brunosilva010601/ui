@@ -7,6 +7,8 @@ type Props = {
     onClick?: () => void;
     className?: string;
     'aria-expanded'?: boolean;
+    'aria-label'?: string;
+    'aria-labelledby'?: string;
     'data-layer'?: boolean;
 };
 
