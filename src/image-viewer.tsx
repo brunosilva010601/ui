@@ -9,7 +9,13 @@ type Props = {
 
 export function ImageViewer(props: Props) {
     return (
-        <Modal open={props.open} onClose={props.onClose} title={props.alt} bare>
+        <Modal
+            open={props.open}
+            onClose={props.onClose}
+            mobile="dialog"
+            title={props.alt}
+            bare
+        >
             <img
                 src={props.src}
                 alt={props.alt}

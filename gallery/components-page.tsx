@@ -1661,10 +1661,10 @@ function CarouselDemo() {
 
 const modalCases: {
     label: string;
-    mobile?: ModalMobile;
+    mobile: ModalMobile;
     desktop?: ModalDesktop;
 }[] = [
-    { label: 'dialog' },
+    { label: 'dialog', mobile: 'dialog' },
     { label: 'top', mobile: 'top' },
     { label: 'left', mobile: 'left' },
     { label: 'right', mobile: 'right' },
@@ -1723,6 +1723,7 @@ function ModalDemo() {
             <Modal
                 open={open === 'wide'}
                 onClose={close}
+                mobile="dialog"
                 className="max-w-4xl"
                 title="Title"
             >
@@ -2657,6 +2658,7 @@ function LockedModalDemo() {
                     trigger={
                         <Button variant="outline">With ModalCloseButton</Button>
                     }
+                    mobile="dialog"
                     hideClose
                 >
                     <div className="flex items-center justify-between gap-3">
@@ -2668,7 +2670,7 @@ function LockedModalDemo() {
                     </div>
                 </Modal>
             </div>
-            <Modal open={open} dismissible={false} title="Title">
+            <Modal open={open} mobile="sheet" dismissible={false} title="Title">
                 <p className="text-sm">Content.</p>
                 <ModalFooter>
                     <Button onClick={() => setOpen(false)}>Answer</Button>
@@ -2701,6 +2703,7 @@ function UseModalValueDemo() {
                 key={modal.key}
                 open={modal.open}
                 onClose={() => setValue(null)}
+                mobile="dialog"
                 title={modal.value}
             >
                 <ModalClose asChild>

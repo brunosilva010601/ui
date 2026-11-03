@@ -59,6 +59,7 @@ function ChoiceModal(props: DropdownMenuProps) {
             <Modal
                 open={open}
                 onClose={() => setOpen(false)}
+                mobile="dialog"
                 title={props.label}
             >
                 <MenuClose value={ModalClose}>

@@ -50,6 +50,7 @@ export function ConfirmDialog(props: Props) {
             open={props.open}
             onClose={props.onClose}
             onClosed={props.onClosed}
+            mobile="dialog"
             title={props.title}
             description={props.description}
         >

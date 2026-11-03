@@ -35,7 +35,7 @@ type ModalProps = {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     trigger?: ReactNode;
-    mobile?: ModalMobile;
+    mobile: ModalMobile;
     desktop?: ModalDesktop;
     className?: string;
     bare?: boolean;
@@ -71,12 +71,12 @@ export function Modal(props: ModalProps) {
 }
 
 function ModalPanel(props: ModalProps) {
-    const mobile = props.mobile ?? 'dialog';
+    const mobile = props.mobile;
     const desktop = props.desktop ?? desktopFor[mobile];
     const small = mobileLayouts[mobile];
     const wide = desktopLayouts[desktop];
-    const sheet = isSheet(props);
     const locked = props.dismissible === false;
+    const sheet = isSheet(props) && !locked;
     const closeButton = useRef<HTMLButtonElement>(null);
     const content = useRef<HTMLDivElement>(null);
     const [panel, setPanel] = useState<HTMLDivElement | null>(null);
@@ -84,7 +84,11 @@ function ModalPanel(props: ModalProps) {
         content.current = node;
         setPanel(node);
     }, []);
-    const close = () => closeButton.current?.click();
+    const close = () => {
+        if (!locked) {
+            closeButton.current?.click();
+        }
+    };
     const drag = useDrawerDrag(close);
     const onTop = useCloseOnBack(close, panel !== null && props.open !== false);
     usePullToClose(panel, sheet && props.open !== false, close);
@@ -167,14 +171,16 @@ function BareBody(props: ModalProps) {
             <div className="flex size-full items-center justify-center *:pointer-events-auto">
                 {props.children}
             </div>
-            <DialogPrimitive.Close
-                className={cn(
-                    buttonClass({ variant: 'outline', square: true }),
-                    'pointer-events-auto absolute top-0 right-0',
-                )}
-            >
-                <X />
-            </DialogPrimitive.Close>
+            {props.dismissible !== false && (
+                <DialogPrimitive.Close
+                    className={cn(
+                        buttonClass({ variant: 'outline', square: true }),
+                        'pointer-events-auto absolute top-0 right-0',
+                    )}
+                >
+                    <X />
+                </DialogPrimitive.Close>
+            )}
         </>
     );
 }
@@ -205,7 +211,7 @@ function FramedBody(props: ModalProps) {
 
     return (
         <>
-            {isDrawer && (
+            {isDrawer && props.dismissible !== false && (
                 <div
                     data-drawer-drag
                     data-drawer-handle

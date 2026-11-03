@@ -8,7 +8,7 @@
 - `lint/`: regras de lint que conferem nos apps o uso do tema e dos componentes (`index.js`) e a configuração que liga todas elas (`oxlintrc.json`). É JavaScript, e não TypeScript, porque o Node não tira os tipos de arquivos dentro de `node_modules`.
 - `gallery/`: página de consulta do tema e dos componentes. Não vai para os apps.
 
-O pacote se chama `@brunosilva010601/ui` e vai como código TypeScript, sem etapa de build, com três entradas: `@brunosilva010601/ui` (componentes), `@brunosilva010601/ui/theme.css` (tema) e `@brunosilva010601/ui/lint` (regras de lint).
+O pacote se chama `@brunosilva010601/ui` e vai como código TypeScript, sem etapa de build, com quatro entradas: `@brunosilva010601/ui` (componentes), `@brunosilva010601/ui/theme.css` (tema), `@brunosilva010601/ui/lint` (regras de lint) e `@brunosilva010601/ui/lint/oxlintrc.json` (a configuração que liga todas as regras).
 
 ## Publicar
 
@@ -19,10 +19,21 @@ O repositório `brunosilva010601/ui` é público, e os apps instalam direto dele
 O pacote entra no `package.json` do app apontando para a tag:
 
 ```json
-"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.8.0"
+"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.8.1"
 ```
 
 A tag `v0.1.0` aponta para um commit de antes do nome atual e não serve para instalar.
+
+## Atualizar
+
+1. Ler o que mudou entre a tag atual do app e a nova (`git log` e `git diff` entre as duas tags neste repositório) e as docs na tag nova.
+2. Trocar a tag no `package.json` do app e instalar.
+3. Rodar o lint, com as regras do pacote ligadas como em "Ligar num app", e os tipos, e corrigir tudo antes de publicar o app. Classe que o tema deixou de gerar não dá erro no build, o elemento só perde o estilo, então o lint é o único aviso.
+
+Versões que quebram o app:
+
+- 0.8.0: saíram os nomes em pixels (`gap-8px`, `text-12px`, `size-icon-16px`), o multiplicador de espaçamento, os tamanhos de texto, as alturas de linha e as cores do Tailwind fora da escala do tema, como descreve `padroes.md`.
+- 0.8.1: o `Modal` passou a exigir `mobile`.
 
 Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no pacote aparecem na hora. Nesse modo o servidor do Vite serve os arquivos pelo caminho real da pasta, fora do projeto, e recusa tudo que está fora da raiz dele: sem liberar essa pasta em `server.fs.allow`, as fontes não carregam e o emoji sai em branco ou com o desenho do aparelho. Instalado pela tag, nada disso é preciso.
 
@@ -30,7 +41,7 @@ Durante ajustes, o app pode usar a pasta local com `bun link`, e as mudanças no
 
 1. Instalar o pacote como descrito em "Instalar".
 2. Ligar o pacote no código, como descrito abaixo, mantendo a cor principal atual do app.
-3. Trocar os componentes de interface do app pelos do pacote, um por um, apagando a cópia local de cada um. O TypeScript aponta o que mudou, e `roadmap.md` lista as diferenças em relação ao Mylo e ao Loremy.
+3. Trocar os componentes de interface do app pelos do pacote, um por um, apagando a cópia local de cada um. O TypeScript e o lint apontam o que mudou, e `roadmap.md` registra o que cada adoção decidiu e o que ficou pendente.
 4. Componentes do produto, que não são interface genérica, continuam no app, montados em cima dos do pacote.
 5. Registrar nas docs do app o que foi trocado e o que ficou pendente.
 
@@ -41,13 +52,27 @@ Regras da adoção:
 
 ## Ligar num app
 
-1. No CSS do app, importar o Tailwind e depois `@brunosilva010601/ui/theme.css`, e remover os arquivos de tema próprios que ele substitui (tokens, paletas, animações, fonte) e a fonte de emoji carregada pelo app, porque o pacote já traz a Noto Color Emoji. Em seguida, sobrescrever as variáveis da cor principal no claro (`:root, .light`) e no escuro (`.dark`).
+1. No CSS do app, importar o Tailwind e depois `@brunosilva010601/ui/theme.css`, e remover os arquivos de tema próprios que ele substitui (tokens, paletas, animações, fonte) e a fonte de emoji carregada pelo app, porque o pacote já traz a Noto Color Emoji. Em seguida, sobrescrever as variáveis da cor principal no claro (`:root, .light`) e no escuro (`.dark`): `--color-primary`, `--color-primary-text` e `--color-primary-foreground`. O `--color-primary-hover` e o `--color-focus` saem delas sozinhos. As cores do Tailwind continuam disponíveis como variáveis para isso (`var(--color-blue-600)`), sem virar classe.
 2. O modo escuro é a classe `dark` no `html`.
 3. A margem lateral é `--gutter`, de 16 px, igual em todos os apps, e o app não a muda. É o que o `Container` com `padded` aplica, o que a modal usa de recuo, o que a seção usa para sangrar o cabeçalho clicável e o recuo que uma faixa ou lista com `bleed` devolve.
 4. Envolver o app com `UiProvider`, que recebe o componente de link do roteador, os textos internos, o idioma, o início da semana, o aviso de saída de página (`onLeave`) e o aviso de fim de navegação (`onSettle`). Sem ele, tudo funciona com textos em português e links comuns.
 5. Montar o `Toaster` uma vez na raiz, passando claro ou escuro. Mensagens vindas do servidor ficam no app, chamando `notify`. O aviso sobe sozinho acima de um `PageBottom` ou `PageFooter` montado, que declaram a altura em `--page-bottom`.
 6. A escolha entre claro, escuro e sistema usa o `AppearancePicker`, mas guardar a escolha e aplicar a classe `dark` ficam no app.
-7. Na configuração do oxlint, estender a do pacote, para cada versão nova trazer as regras atualizadas sem mexer no app: `"extends": ["./node_modules/@brunosilva010601/ui/lint/oxlintrc.json"]` no `.oxlintrc.json`, ou o mesmo arquivo importado e passado em `extends` no bloco `lint` do `vite.config.ts`. As regras de fora no oxlint ainda estão em alfa, então uma versão nova dele pode pedir ajuste nelas.
+7. Na configuração do oxlint, estender a do pacote, para cada versão nova trazer as regras atualizadas sem mexer no app. As regras de fora no oxlint ainda estão em alfa, então uma versão nova dele pode pedir ajuste nelas.
+
+No `.oxlintrc.json`:
+
+```json
+"extends": ["./node_modules/@brunosilva010601/ui/lint/oxlintrc.json"]
+```
+
+No bloco `lint` do `vite.config.ts` (Vite+):
+
+```ts
+import ui from '@brunosilva010601/ui/lint/oxlintrc.json' with { type: 'json' };
+
+lint: { extends: [ui], ... }
+```
 
 No Inertia, duas ligações ficam no app:
 

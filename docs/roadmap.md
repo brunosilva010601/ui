@@ -2,7 +2,7 @@
 
 ## Pacote
 
-- Ligar as regras de `lint/` em cada app e instalar neles a versão com o tema limpo. Os três apps já usam os nomes novos de espaçamento e texto, que davam as mesmas medidas na versão anterior. Hoje as regras só pegam 4 ícones com tamanho dentro do botão no Mylo.
+- Ligar as regras de `lint/` em cada app e instalar neles a versão com o tema limpo. Loremy e Salalas já usam os nomes novos de espaçamento, texto e ícone, que davam as mesmas medidas na versão anterior. O Mylo, na 0.7.1, ainda usa os nomes em pixels (`gap-8px`, `text-12px`, `size-icon-16px`) em cerca de 150 lugares, que somem sem aviso na 0.8.0, e tem 4 ícones com tamanho dentro do botão.
 - Escolher o nome definitivo do pacote, hoje `ui`.
 - Renomear a pasta `gallery`, provavelmente para `docs`.
 - Ideia: configurar o tema do app num bloco no CSS (`@plugin`), com só as chaves que o projeto pode mudar, como a cor principal.
@@ -10,10 +10,9 @@
 - `Section` ainda tem quatro formas de clique (`onClick`, `href`, `headerHref`, `onHeaderClick`), e `Banner`, `EmptyState` e `notify` recebem a ação em três formatos.
 - `Brand` no tamanho `md` traz recuo de posição junto do tamanho, e o girador aparece repetido no botão, no `Banner` e no `Spinner`.
 - O mínimo de `lucide-react` aceito pelo pacote está abaixo do que ele usa.
-- Ainda fora de `css/tokens.css` ou da escala: larguras `max-w-*` do Tailwind em `rem`, `--radius` em `rem`, a altura de linha escrita à mão no bloco de código, as medidas de `lib/edge-fade.ts` e o ícone de 12 px da `Badge`.
+- Ainda fora de `css/tokens.css` ou da escala: larguras `max-w-*` do Tailwind em `rem`, `--radius` em `rem`, a altura de linha escrita à mão no bloco de código, as medidas de `lib/edge-fade.ts` e o ícone de 12 px da `Badge`, que fica fora dos tamanhos de ícone.
 - A decidir: item de lista `disabled` ou `busy` continua arrastável pela alça.
-- A modal não dismissível (`dismissible={false}`) prende Escape e clique fora e esconde o X, mas o gesto de arrastar a gaveta para baixo ainda fecha.
-- Nome acessível: os `aria-label` foram removidos de todo o pacote, então botões só de ícone, setas, fechar e carregando não têm nome para leitor de tela. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
+- Nome acessível: os `aria-label` foram removidos de quase todo o pacote (sobraram os das setas do `NumberInput`, e o `ButtonGroupItem` aceita um), então botões só de ícone, setas, fechar e carregando não têm nome para leitor de tela. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
 
 ## Adoção pelo Salalas
 
@@ -35,18 +34,3 @@ O que falta: o voltar do navegador com modal aberta não foi testado contra o ro
 O Mylo já usa o pacote. O que ele tinha e o pacote ainda não tem:
 
 - O `Markdown` traz o realce de código para todo app que o usa. Na troca, o JavaScript do Mylo cresceu cerca de 57 kB.
-
-## Adoção pelo Loremy
-
-- A escolha de tema nas preferências passa a ser o `AppearancePicker`.
-- Linhas de lista montadas com `staticRowClass`, `coverRowClass` e `layerRowClass` passam a ser `ListItem`, com o conteúdo de cada linha montado no próprio Loremy.
-- `Chip` sai. Etiqueta estática vira `Badge` (tons `neutral`, `primary`, `success`, `warning`, `danger`), e chip clicável vira `Button`.
-- `ChipGroup` e `ChipOption` viram `ButtonGroup` e `ButtonGroupItem`.
-- `IconToggle` vira `Button` outline com `mark` e `aria-pressed`, e as cores de avaliação entram como `className`, porque o tom do `mark` só cobre os tons e a paleta do pacote.
-- As classes internas não são reexportadas: `menuRowClass` e `tintClass` da navegação viram `NavItem`, `ghostHoverClass` vira `Button` ghost, `sectionPadding` vira `p-3` ou `Surface`, e `headingClass`, `HeadingTitle` e `HeadingDescription` viram `Heading` ou `ItemText`.
-- Os links de crédito com `variant="inline"` passam a usar `variant="link"`.
-- O `RemoveButton` saiu do pacote. Cada uso vira um `Button` ghost, quadrado, com `bleed` e o ícone de lixeira.
-- As cores de avaliação continuam no CSS do próprio Loremy.
-- A modal do trailer troca `width="lg"` por `className="max-w-4xl"`.
-- As gavetas (`format="drawer"`) passam a ser `mobile="full"`: sobem de baixo no celular e viram painel à direita no computador.
-- As faixas dos carrosséis (prateleira de itens e colaboradores) passam a ser `CarouselTrack`, que já esmaece as bordas. Hoje só a prateleira esmaece, por conta própria.

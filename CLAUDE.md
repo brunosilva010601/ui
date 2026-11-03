@@ -17,4 +17,5 @@ Stack: React 19, Tailwind CSS 4, TypeScript, Radix e bun; a galeria de consulta 
 - Consultar `docs/` antes de decidir ou criar componente.
 - Atualizar o arquivo afetado na mesma mudança: ligação com os apps em `estrutura.md`, regra de tema ou componente em `padroes.md`.
 - Componente novo ou variação nova entra também na galeria.
+- Regra que dá para conferir no código entra também em `lint/index.js` e em `lint/oxlintrc.json`.
 - Item concluído sai do `roadmap.md`. Ideia nova entra nele.

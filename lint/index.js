@@ -36,6 +36,8 @@ const tailwindShadow =
     /^(?:inset-)?shadow(?:-(?:2xs|xs|sm|md|lg|xl|2xl|inner))?$/;
 const offScaleText = /^text-(?:xl|4xl|[7-9]xl|\d+px|\[\d)/;
 const lineHeight = /^leading-/;
+const tailwindRadius =
+    /^rounded(?:-(?:t|r|b|l|s|e|tl|tr|br|bl|ss|se|es|ee))?-(?:xs|sm|md|lg|xl|2xl|3xl|4xl)$/;
 
 function utility(token) {
     let depth = 0;
@@ -384,6 +386,10 @@ export default {
                         each !== 'size-3.5')
                 );
             },
+        ),
+        'tailwind-radius': classRule(
+            'use rounded, rounded-full or rounded-none, on all sides or on one.',
+            (each) => tailwindRadius.test(each),
         ),
         'tailwind-shadow': classRule(
             'use shadow-control, shadow-floating or shadow-overlay.',
