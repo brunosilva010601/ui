@@ -49,7 +49,7 @@ export function AppearancePicker(props: Props) {
                     key={appearance}
                     value={appearance}
                     className={cn(
-                        'flex cursor-pointer flex-col gap-2 rounded border border-border bg-control p-2 text-left text-sm text-foreground transition hover:bg-control-hover active:bg-control-hover data-[state=on]:border-foreground data-[state=on]:bg-foreground data-[state=on]:text-background',
+                        'flex cursor-pointer flex-col gap-2 rounded border border-border bg-control p-2 text-left text-sm text-foreground transition hover:bg-control-hover active:bg-control-hover data-[state=on]:border-primary data-[state=on]:ring-1 data-[state=on]:ring-primary',
                         appearance === 'system' && 'col-span-full',
                     )}
                 >
