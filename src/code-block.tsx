@@ -51,7 +51,7 @@ export function CodeBlock(props: Props) {
             {(highlight) => (
                 <pre
                     className={cn(
-                        'overflow-x-auto rounded border border-border p-12px font-mono text-12px leading-relaxed [overflow-wrap:normal] select-text',
+                        'overflow-x-auto rounded border border-border p-3 font-mono text-xs leading-[1.625] [overflow-wrap:normal] select-text',
                         props.className,
                     )}
                     style={highlight.style}

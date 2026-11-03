@@ -86,9 +86,7 @@ export function PageFooter(props: PageFooterProps) {
         >
             <Container
                 width={width}
-                className={cn(
-                    !props.flush && 'grid gap-8px px-(--gutter) pt-12px',
-                )}
+                className={cn(!props.flush && 'grid gap-2 px-(--gutter) pt-3')}
             >
                 {props.children}
             </Container>

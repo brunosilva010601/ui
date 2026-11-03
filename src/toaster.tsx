@@ -10,7 +10,7 @@ import type { Tone } from './tones';
 const DURATION_MS = 5000;
 
 const abovePageBottom = {
-    bottom: 'calc(var(--page-bottom, var(--spacing-safe-bottom)) + var(--spacing-8px))',
+    bottom: 'calc(var(--page-bottom, var(--spacing-safe-bottom)) + var(--spacing-2))',
 };
 
 type Notice = {
@@ -29,21 +29,21 @@ function ToastCard(props: ToastCardProps) {
     const tone = tones[props.tone ?? 'success'];
     const content = (
         <>
-            <tone.icon className={cn('size-icon-20px shrink-0', tone.text)} />
+            <tone.icon className={cn('size-5 shrink-0', tone.text)} />
             <span className="flex min-w-0 flex-1 flex-col text-left">
-                <span className="text-14px font-semibold">{props.title}</span>
+                <span className="text-sm font-semibold">{props.title}</span>
                 {props.description && (
-                    <span className="text-12px text-foreground-muted">
+                    <span className="text-xs text-foreground-muted">
                         {props.description}
                     </span>
                 )}
             </span>
             {props.onOpen && (
-                <ChevronRight className="size-icon-16px shrink-0 text-foreground-muted" />
+                <ChevronRight className="size-4 shrink-0 text-foreground-muted" />
             )}
         </>
     );
-    const contentClass = 'flex min-w-0 flex-1 items-center gap-12px p-12px';
+    const contentClass = 'flex min-w-0 flex-1 items-center gap-3 p-3';
 
     return (
         <div className="relative flex w-full items-center transition-colors has-[>[data-layer]:active]:bg-surface-hover [@media(hover:hover)]:has-[>[data-layer]:hover]:bg-surface-hover">
@@ -66,7 +66,7 @@ function ToastCard(props: ToastCardProps) {
                 <div className={contentClass}>{content}</div>
             )}
             {props.action && (
-                <div className="pointer-events-none relative shrink-0 pe-12px *:pointer-events-auto">
+                <div className="pointer-events-none relative shrink-0 pe-3 *:pointer-events-auto">
                     <Button
                         variant="outline"
                         size="sm"

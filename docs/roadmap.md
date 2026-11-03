@@ -2,7 +2,7 @@
 
 ## Pacote
 
-- Quando o Loremy adotar: remover os nomes antigos (`gap-md`, `text-sm`, `size-icon-sm`, `--gap-*`, `--padding-*`, `--margin-*`) e o multiplicador `--spacing`, fechar `--text-*` e acrescentar um lint contra número puro. Mylo e Salalas já estão sem eles.
+- Ligar as regras de `lint/` em cada app e instalar neles a versão com o tema limpo. Os três apps já usam os nomes novos de espaçamento e texto, que davam as mesmas medidas na versão anterior. Hoje as regras só pegam 4 ícones com tamanho dentro do botão no Mylo.
 - Escolher o nome definitivo do pacote, hoje `ui`.
 - Renomear a pasta `gallery`, provavelmente para `docs`.
 - Ideia: configurar o tema do app num bloco no CSS (`@plugin`), com só as chaves que o projeto pode mudar, como a cor principal.
@@ -10,7 +10,7 @@
 - `Section` ainda tem quatro formas de clique (`onClick`, `href`, `headerHref`, `onHeaderClick`), e `Banner`, `EmptyState` e `notify` recebem a ação em três formatos.
 - `Brand` no tamanho `md` traz recuo de posição junto do tamanho, e o girador aparece repetido no botão, no `Banner` e no `Spinner`.
 - O mínimo de `lucide-react` aceito pelo pacote está abaixo do que ele usa.
-- Ainda fora de `css/tokens.css` ou da escala: larguras `max-w-*` do Tailwind em `rem`, `--radius` em `rem`, `leading-relaxed` no bloco de código, as medidas de `lib/edge-fade.ts` e o ícone de 12 px da `Badge`.
+- Ainda fora de `css/tokens.css` ou da escala: larguras `max-w-*` do Tailwind em `rem`, `--radius` em `rem`, a altura de linha escrita à mão no bloco de código, as medidas de `lib/edge-fade.ts` e o ícone de 12 px da `Badge`.
 - A decidir: item de lista `disabled` ou `busy` continua arrastável pela alça.
 - A modal não dismissível (`dismissible={false}`) prende Escape e clique fora e esconde o X, mas o gesto de arrastar a gaveta para baixo ainda fecha.
 - Nome acessível: os `aria-label` foram removidos de todo o pacote, então botões só de ícone, setas, fechar e carregando não têm nome para leitor de tela. A proposta em discussão é o `Button` ter `label` obrigatório (lido pelo leitor de tela, mostrado como texto quando não há filho), `icon` para ícone com texto e `square` para só ícone, e os demais componentes seguirem a mesma ideia.
@@ -43,7 +43,7 @@ O Mylo já usa o pacote. O que ele tinha e o pacote ainda não tem:
 - `Chip` sai. Etiqueta estática vira `Badge` (tons `neutral`, `primary`, `success`, `warning`, `danger`), e chip clicável vira `Button`.
 - `ChipGroup` e `ChipOption` viram `ButtonGroup` e `ButtonGroupItem`.
 - `IconToggle` vira `Button` outline com `mark` e `aria-pressed`, e as cores de avaliação entram como `className`, porque o tom do `mark` só cobre os tons e a paleta do pacote.
-- As classes internas não são reexportadas: `menuRowClass` e `tintClass` da navegação viram `NavItem`, `ghostHoverClass` vira `Button` ghost, `sectionPadding` vira `p-12px` ou `Surface`, e `headingClass`, `HeadingTitle` e `HeadingDescription` viram `Heading` ou `ItemText`.
+- As classes internas não são reexportadas: `menuRowClass` e `tintClass` da navegação viram `NavItem`, `ghostHoverClass` vira `Button` ghost, `sectionPadding` vira `p-3` ou `Surface`, e `headingClass`, `HeadingTitle` e `HeadingDescription` viram `Heading` ou `ItemText`.
 - Os links de crédito com `variant="inline"` passam a usar `variant="link"`.
 - O `RemoveButton` saiu do pacote. Cada uso vira um `Button` ghost, quadrado, com `bleed` e o ícone de lixeira.
 - As cores de avaliação continuam no CSS do próprio Loremy.

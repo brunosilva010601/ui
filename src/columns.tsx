@@ -14,8 +14,8 @@ export function Columns(props: ColumnsProps) {
     return (
         <div
             className={cn(
-                'flex flex-col gap-20px',
-                !props.empty && 'xl:flex-row xl:items-start xl:gap-32px',
+                'flex flex-col gap-5',
+                !props.empty && 'xl:flex-row xl:items-start xl:gap-8',
             )}
         >
             {props.children}
@@ -25,7 +25,7 @@ export function Columns(props: ColumnsProps) {
 
 export function MainColumn(props: Props) {
     return (
-        <div className="contents xl:flex xl:min-w-0 xl:flex-1 xl:flex-col xl:gap-20px">
+        <div className="contents xl:flex xl:min-w-0 xl:flex-1 xl:flex-col xl:gap-5">
             {props.children}
         </div>
     );
@@ -73,7 +73,7 @@ export function SideColumn(props: SideColumnProps) {
         <div
             ref={ref}
             className={cn(
-                'contents xl:top-(--page-top) xl:flex xl:w-full xl:max-w-sm xl:shrink-0 xl:flex-col xl:gap-20px',
+                'contents xl:top-(--page-top) xl:flex xl:w-full xl:max-w-sm xl:shrink-0 xl:flex-col xl:gap-5',
                 fits && 'xl:sticky',
             )}
         >

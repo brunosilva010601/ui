@@ -1,0 +1,12 @@
+{
+    "jsPlugins": ["@brunosilva010601/ui/lint"],
+    "rules": {
+        "ui/fixed-color": "error",
+        "ui/spacing-scale": "error",
+        "ui/tailwind-shadow": "error",
+        "ui/safe-area": "error",
+        "ui/text-scale": "error",
+        "ui/icon-row": "error",
+        "ui/icon-size": "error"
+    }
+}

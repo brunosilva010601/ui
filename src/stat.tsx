@@ -2,8 +2,8 @@ import { cn } from './lib/utils';
 import { useUi } from './provider';
 
 const sizes = {
-    md: { value: 'text-18px', label: 'text-12px' },
-    lg: { value: 'text-24px', label: 'text-14px' },
+    md: { value: 'text-lg', label: 'text-xs' },
+    lg: { value: 'text-2xl', label: 'text-sm' },
 };
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
 export function Stat(props: Props) {
     const { link: Link } = useUi();
     const size = sizes[props.size ?? 'md'];
-    const className = 'flex flex-col items-center p-12px text-center';
+    const className = 'flex flex-col items-center p-3 text-center';
     const content = (
         <>
             <span className={cn('font-bold tabular-nums', size.value)}>

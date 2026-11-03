@@ -6,7 +6,7 @@ import type { FieldProps } from './field';
 import { usePlainTextField } from './input';
 
 const bareClass =
-    'w-full min-w-0 border border-transparent bg-transparent py-4px text-foreground outline-none placeholder:text-foreground-muted';
+    'w-full min-w-0 border border-transparent bg-transparent py-1 text-foreground outline-none placeholder:text-foreground-muted';
 
 type Props = FieldProps & {
     bare?: boolean;

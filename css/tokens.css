@@ -5,74 +5,68 @@
     --font-sans:
         'Outfit', 'Noto Color Emoji', ui-sans-serif, system-ui, sans-serif;
 
+    --spacing-*: initial;
     --spacing-0: 0px;
-    --spacing-2px: 2px;
-    --spacing-4px: 4px;
-    --spacing-6px: 6px;
-    --spacing-8px: 8px;
-    --spacing-10px: 10px;
-    --spacing-12px: 12px;
-    --spacing-16px: 16px;
-    --spacing-20px: 20px;
-    --spacing-24px: 24px;
-    --spacing-32px: 32px;
-    --spacing-40px: 40px;
-    --spacing-48px: 48px;
+    --spacing-px: 1px;
+    --spacing-0_5: 2px;
+    --spacing-1: 4px;
+    --spacing-1_5: 6px;
+    --spacing-2: 8px;
+    --spacing-2_5: 10px;
+    --spacing-3: 12px;
+    --spacing-4: 16px;
+    --spacing-5: 20px;
+    --spacing-6: 24px;
+    --spacing-8: 32px;
+    --spacing-10: 40px;
+    --spacing-12: 48px;
     --spacing-safe-top: env(safe-area-inset-top);
     --spacing-safe-bottom: env(
         safe-area-max-inset-bottom,
         env(safe-area-inset-bottom)
     );
 
-    --text-12px: 0.75rem;
-    --text-12px--line-height: 1rem;
-    --text-14px: 0.875rem;
-    --text-14px--line-height: 1.25rem;
-    --text-16px: 1rem;
-    --text-16px--line-height: 1.5rem;
-    --text-18px: 1.125rem;
-    --text-18px--line-height: 1.75rem;
-    --text-24px: 1.5rem;
-    --text-24px--line-height: 2rem;
-    --text-30px: 1.875rem;
-    --text-30px--line-height: 2.25rem;
-    --text-48px: 3rem;
-    --text-48px--line-height: 1;
-    --text-60px: 3.75rem;
-    --text-60px--line-height: 1;
+    --text-*: initial;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: 1rem;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: 1.25rem;
+    --text-base: 1rem;
+    --text-base--line-height: 1.5rem;
+    --text-lg: 1.125rem;
+    --text-lg--line-height: 1.75rem;
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: 2rem;
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: 2.25rem;
+    --text-5xl: 3rem;
+    --text-5xl--line-height: 1;
+    --text-6xl: 3.75rem;
+    --text-6xl--line-height: 1;
 
-    --gap-2xs: 2px;
-    --gap-xs: 4px;
-    --gap-sm: 8px;
-    --gap-md: 12px;
-    --gap-lg: 20px;
-    --gap-xl: 32px;
+    --leading-*: initial;
 
-    --padding-2xs: var(--gap-2xs);
-    --padding-xs: var(--gap-xs);
-    --padding-sm: var(--gap-sm);
-    --padding-md: var(--gap-md);
-    --padding-lg: var(--gap-lg);
-    --padding-xl: var(--gap-xl);
+    --color-*: initial;
+    --color-red-500: oklch(63.7% 0.237 25.331);
+    --color-orange-500: oklch(70.5% 0.213 47.604);
+    --color-amber-500: oklch(76.9% 0.188 70.08);
+    --color-yellow-500: oklch(79.5% 0.184 86.047);
+    --color-lime-500: oklch(76.8% 0.233 130.85);
+    --color-green-500: oklch(72.3% 0.219 149.579);
+    --color-emerald-500: oklch(69.6% 0.17 162.48);
+    --color-teal-500: oklch(70.4% 0.14 182.503);
+    --color-cyan-500: oklch(71.5% 0.143 215.221);
+    --color-sky-500: oklch(68.5% 0.169 237.323);
+    --color-blue-500: oklch(62.3% 0.214 259.815);
+    --color-indigo-500: oklch(58.5% 0.233 277.117);
+    --color-violet-500: oklch(60.6% 0.25 292.717);
+    --color-purple-500: oklch(62.7% 0.265 303.9);
+    --color-fuchsia-500: oklch(66.7% 0.295 322.15);
+    --color-pink-500: oklch(65.6% 0.241 354.308);
+    --color-rose-500: oklch(64.5% 0.246 16.439);
+    --color-white: #fff;
 
-    --margin-2xs: var(--gap-2xs);
-    --margin-xs: var(--gap-xs);
-    --margin-sm: var(--gap-sm);
-    --margin-md: var(--gap-md);
-    --margin-lg: var(--gap-lg);
-    --margin-xl: var(--gap-xl);
-
-    --size-icon-14px: 14px;
-    --size-icon-16px: 16px;
-    --size-icon-20px: 20px;
-    --size-icon-24px: 24px;
-    --size-icon-32px: 32px;
-
-    --size-icon-xs: 14px;
-    --size-icon-sm: 16px;
-    --size-icon-md: 20px;
-    --size-icon-lg: 24px;
-    --size-icon-xl: 32px;
+    --size-3_5: 14px;
 
     --size-dot: 10px;
 
@@ -106,40 +100,40 @@
 
 @layer base {
     :root {
-        --gutter: var(--spacing-16px);
-        --row-inset: var(--spacing-12px);
-        --drawer-gap: var(--spacing-12px);
+        --gutter: var(--spacing-4);
+        --row-inset: var(--spacing-3);
+        --drawer-gap: var(--spacing-3);
         --sheet-top: 56px;
-        --page-top: var(--spacing-24px);
+        --page-top: var(--spacing-6);
     }
 }
 
 @utility ui-page-title {
-    @apply text-18px font-bold lg:text-24px;
+    @apply text-lg font-bold lg:text-2xl;
 }
 
 @utility ui-item-title {
-    @apply text-16px font-semibold;
+    @apply text-base font-semibold;
 }
 
 @utility ui-note {
-    @apply text-14px text-foreground-muted;
+    @apply text-sm text-foreground-muted;
 }
 
 @utility ui-label {
-    @apply text-14px tracking-wider text-foreground-soft uppercase;
+    @apply text-sm tracking-wider text-foreground-soft uppercase;
 }
 
 @utility ui-prompt {
-    @apply text-30px font-semibold text-balance;
+    @apply text-3xl font-semibold text-balance;
 }
 
 @utility ui-display {
-    @apply text-48px font-bold;
+    @apply text-5xl font-bold;
 }
 
 @utility ui-hero {
-    @apply text-60px font-bold;
+    @apply text-6xl font-bold;
 }
 
 @theme inline reference {

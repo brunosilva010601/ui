@@ -14,7 +14,7 @@ import { sortItemClass } from './sortable';
 import { surfaceClass } from './surface';
 
 const variants = {
-    flat: 'flex flex-col gap-12px [--row-surface:var(--color-background)]',
+    flat: 'flex flex-col gap-3 [--row-surface:var(--color-background)]',
     outlined: surfaceClass,
 };
 
@@ -53,7 +53,7 @@ type SectionTextProps = {
 
 function SectionText(props: SectionTextProps) {
     return (
-        <div className="flex min-w-0 flex-1 items-center gap-12px text-left">
+        <div className="flex min-w-0 flex-1 items-center gap-3 text-left">
             {props.icon && <IconBadge icon={props.icon} size="sm" />}
             <Heading
                 title={
@@ -79,7 +79,7 @@ function SectionText(props: SectionTextProps) {
 }
 
 const chevronClass =
-    'pointer-events-none relative size-icon-20px shrink-0 text-foreground-muted';
+    'pointer-events-none relative size-5 shrink-0 text-foreground-muted';
 
 export function Section(props: SectionProps) {
     const collapsible = props.collapsible ?? false;
@@ -96,7 +96,7 @@ export function Section(props: SectionProps) {
         props.action ??
         (props.hint && <Hint>{props.hint}</Hint>) ??
         (isClickable && hasText && (
-            <ChevronRight className="size-icon-20px text-foreground-muted" />
+            <ChevronRight className="size-5 text-foreground-muted" />
         ));
     const hasHeader = hasText || Boolean(action);
     const showContent = Boolean(props.children) && (!collapsible || open);
@@ -106,7 +106,7 @@ export function Section(props: SectionProps) {
         'transition-colors hover:bg-surface-hover focus-visible:outline-2 active:bg-surface-hover',
         isOutlined
             ? 'inset-0 rounded-t-[inherit]'
-            : '-inset-y-8px max-xl:-inset-x-(--gutter) xl:-inset-x-8px',
+            : '-inset-y-2 max-xl:-inset-x-(--gutter) xl:-inset-x-2',
     );
     const text = (
         <SectionText
@@ -134,8 +134,8 @@ export function Section(props: SectionProps) {
         hasHeader && (
             <div
                 className={cn(
-                    'group/header flex items-center gap-12px',
-                    isOutlined && 'p-12px',
+                    'group/header flex items-center gap-3',
+                    isOutlined && 'p-3',
                     (headerLink || collapsible) && 'relative',
                 )}
             >
@@ -153,7 +153,7 @@ export function Section(props: SectionProps) {
                             onClick={() => setOpen(!open)}
                             className="inset-0 rounded-t-[inherit]"
                         />
-                        <div className="pointer-events-none relative flex min-w-0 flex-1 items-center gap-12px [&_a]:pointer-events-auto">
+                        <div className="pointer-events-none relative flex min-w-0 flex-1 items-center gap-3 [&_a]:pointer-events-auto">
                             {text}
                         </div>
                     </>
@@ -197,7 +197,7 @@ export function Section(props: SectionProps) {
                 band ? bandClass : variants[variant],
                 props.sortId !== undefined && [
                     sortItemClass,
-                    'data-[dragging]:-mx-[var(--bleed,var(--spacing-12px))] data-[dragging]:bg-background data-[dragging]:px-[var(--bleed,var(--spacing-12px))]',
+                    'data-[dragging]:-mx-[var(--bleed,var(--spacing-3))] data-[dragging]:bg-background data-[dragging]:px-[var(--bleed,var(--spacing-3))]',
                 ],
                 isOutlined && props.flush && 'overflow-clip',
                 isClickable &&
@@ -215,10 +215,10 @@ export function Section(props: SectionProps) {
             {showContent && (
                 <div
                     className={cn(
-                        'flex flex-1 flex-col gap-12px',
+                        'flex flex-1 flex-col gap-3',
                         isOutlined &&
                             !props.flush &&
-                            'p-12px [--bleed:var(--spacing-12px)]',
+                            'p-3 [--bleed:var(--spacing-3)]',
                         isOutlined && hasHeader && 'border-t border-border',
                     )}
                 >

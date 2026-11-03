@@ -26,7 +26,7 @@ export function ColorPicker(props: Props) {
             optional={props.optional}
             error={props.error}
         >
-            <div id={id} role="radiogroup" className="flex flex-wrap gap-4px">
+            <div id={id} role="radiogroup" className="flex flex-wrap gap-1">
                 {colors.map((color) => {
                     const chosen = color === props.value;
 
@@ -49,9 +49,9 @@ export function ColorPicker(props: Props) {
                                 chosen && 'border-current',
                             )}
                         >
-                            <span className="flex size-icon-20px items-center justify-center rounded-full bg-current">
+                            <span className="flex size-5 items-center justify-center rounded-full bg-current">
                                 {chosen && (
-                                    <Check className="size-icon-14px text-background" />
+                                    <Check className="size-3.5 text-background" />
                                 )}
                             </span>
                         </button>

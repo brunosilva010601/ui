@@ -4,8 +4,8 @@ import { tones } from './tones';
 import type { Tone } from './tones';
 
 const sizes = {
-    sm: 'gap-2px px-8px py-2px text-12px [&_svg]:size-12px',
-    md: 'gap-4px px-8px py-4px text-14px [&_svg]:size-icon-14px',
+    sm: 'gap-0.5 px-2 py-0.5 text-xs [&_svg]:size-3',
+    md: 'gap-1 px-2 py-1 text-sm [&_svg]:size-3.5',
 };
 
 type Props = {

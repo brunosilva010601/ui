@@ -20,12 +20,12 @@ export const desktopFor: Record<ModalMobile, ModalDesktop> = {
 export const mobileLayouts: Record<ModalMobile, Layout> = {
     dialog: {
         overlay:
-            'max-sm:items-center max-sm:justify-center max-sm:p-12px max-sm:pt-[max(var(--spacing-12px),var(--spacing-safe-top))] max-sm:pb-[max(var(--spacing-12px),var(--spacing-safe-bottom))] max-sm:data-[state=closed]:animate-fade-out max-sm:data-[state=open]:animate-fade-in',
+            'max-sm:items-center max-sm:justify-center max-sm:p-3 max-sm:pt-[max(var(--spacing-3),var(--spacing-safe-top))] max-sm:pb-[max(var(--spacing-3),var(--spacing-safe-bottom))] max-sm:data-[state=closed]:animate-fade-out max-sm:data-[state=open]:animate-fade-in',
         panel: 'max-sm:max-h-full max-sm:w-full max-sm:data-[state=closed]:animate-pop-out max-sm:data-[state=open]:animate-pop-in',
     },
     top: {
         overlay:
-            'max-sm:items-start max-sm:justify-center max-sm:p-12px max-sm:pt-[max(var(--spacing-12px),var(--spacing-safe-top))] max-sm:pb-[max(var(--spacing-12px),var(--spacing-safe-bottom))] max-sm:data-[state=closed]:animate-fade-out max-sm:data-[state=open]:animate-fade-in',
+            'max-sm:items-start max-sm:justify-center max-sm:p-3 max-sm:pt-[max(var(--spacing-3),var(--spacing-safe-top))] max-sm:pb-[max(var(--spacing-3),var(--spacing-safe-bottom))] max-sm:data-[state=closed]:animate-fade-out max-sm:data-[state=open]:animate-fade-in',
         panel: 'max-sm:max-h-full max-sm:w-full max-sm:data-[state=closed]:animate-pop-out max-sm:data-[state=open]:animate-pop-in',
     },
     left: {
@@ -53,12 +53,12 @@ export const mobileLayouts: Record<ModalMobile, Layout> = {
 export const desktopLayouts: Record<ModalDesktop, Layout> = {
     dialog: {
         overlay:
-            'sm:items-center sm:justify-center sm:p-12px sm:pt-[max(var(--spacing-12px),var(--spacing-safe-top))] sm:pb-[max(var(--spacing-12px),var(--spacing-safe-bottom))] sm:data-[state=closed]:animate-fade-out sm:data-[state=open]:animate-fade-in',
+            'sm:items-center sm:justify-center sm:p-3 sm:pt-[max(var(--spacing-3),var(--spacing-safe-top))] sm:pb-[max(var(--spacing-3),var(--spacing-safe-bottom))] sm:data-[state=closed]:animate-fade-out sm:data-[state=open]:animate-fade-in',
         panel: 'sm:max-h-full sm:w-full sm:data-[state=closed]:animate-pop-out sm:data-[state=open]:animate-pop-in',
     },
     top: {
         overlay:
-            'sm:items-start sm:justify-center sm:p-12px sm:pt-[12vh] sm:data-[state=closed]:animate-fade-out sm:data-[state=open]:animate-fade-in',
+            'sm:items-start sm:justify-center sm:p-3 sm:pt-[12vh] sm:data-[state=closed]:animate-fade-out sm:data-[state=open]:animate-fade-in',
         panel: 'sm:max-h-full sm:w-full sm:data-[state=closed]:animate-pop-out sm:data-[state=open]:animate-pop-in',
     },
     left: {

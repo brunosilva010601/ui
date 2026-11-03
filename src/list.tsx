@@ -14,7 +14,7 @@ import { Spinner } from './spinner';
 
 const variants = {
     divided: 'divide-y divide-border',
-    cards: 'flex flex-col gap-8px',
+    cards: 'flex flex-col gap-2',
     bare: 'flex flex-col',
 };
 
@@ -107,8 +107,8 @@ export function ListItem(props: ListItemProps) {
             {props.sortId !== undefined && <SortHandle />}
             <div
                 className={cn(
-                    'relative flex min-w-0 flex-1 items-center gap-12px',
-                    variant !== 'bare' && 'px-(--row-inset) py-12px lg:py-8px',
+                    'relative flex min-w-0 flex-1 items-center gap-3',
+                    variant !== 'bare' && 'px-(--row-inset) py-3 lg:py-2',
                     layered &&
                         'pointer-events-none [&_a,&_button,&_input,&_label,&_select,&_textarea]:pointer-events-auto',
                 )}
@@ -164,7 +164,7 @@ export function List(props: ListProps) {
                     ref={props.onReorder ? sortable : undefined}
                     className={cn(
                         props.bleed &&
-                            '-mx-(--row-inset) [--row-inset:var(--bleed,var(--spacing-12px))]',
+                            '-mx-(--row-inset) [--row-inset:var(--bleed,var(--spacing-3))]',
                         props.columns
                             ? 'grid grid-cols-1 gap-px bg-border lg:grid-cols-2 lg:[&>li:last-child:nth-child(odd)]:col-span-2'
                             : props.horizontal

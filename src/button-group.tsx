@@ -8,10 +8,10 @@ import { cn } from './lib/utils';
 import { trackClass, trackItemClass } from './track';
 
 const layouts = {
-    wrap: 'flex flex-wrap gap-8px',
-    row: 'flex gap-4px',
-    fill: 'flex gap-4px *:min-w-0 *:flex-1',
-    segmented: cn(trackClass, 'items-stretch gap-4px'),
+    wrap: 'flex flex-wrap gap-2',
+    row: 'flex gap-1',
+    fill: 'flex gap-1 *:min-w-0 *:flex-1',
+    segmented: cn(trackClass, 'items-stretch gap-1'),
 };
 
 const segmentedItem = cn(trackItemClass, 'min-w-0');

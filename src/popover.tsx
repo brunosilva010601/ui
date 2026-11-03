@@ -69,7 +69,7 @@ export function PopoverContent(props: Props) {
                 align={align}
                 className={cn(
                     floatingClass,
-                    'origin-(--radix-popover-content-transform-origin) data-[side=bottom]:mt-8px data-[side=left]:me-8px data-[side=right]:ms-8px data-[side=top]:mb-8px',
+                    'origin-(--radix-popover-content-transform-origin) data-[side=bottom]:mt-2 data-[side=left]:me-2 data-[side=right]:ms-2 data-[side=top]:mb-2',
                     className,
                 )}
                 {...rest}

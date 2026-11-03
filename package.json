@@ -1,6 +1,6 @@
 {
     "name": "@brunosilva010601/ui",
-    "version": "0.7.3",
+    "version": "0.8.0",
     "type": "module",
     "sideEffects": [
         "*.css"
@@ -12,16 +12,19 @@
     "files": [
         "src",
         "css",
+        "lint",
         "theme.css"
     ],
     "scripts": {
         "dev": "vite",
-        "format": "prettier --write src gallery/*.tsx css/tokens.css css/base.css",
+        "format": "prettier --write src lint gallery/*.tsx css/tokens.css css/base.css",
         "types:check": "tsc --noEmit"
     },
     "exports": {
         ".": "./src/index.ts",
-        "./theme.css": "./theme.css"
+        "./theme.css": "./theme.css",
+        "./lint": "./lint/index.js",
+        "./lint/oxlintrc.json": "./lint/oxlintrc.json"
     },
     "dependencies": {
         "@fontsource-variable/outfit": "^5.3.0",

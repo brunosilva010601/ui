@@ -25,7 +25,7 @@ export function Detail(props: Props) {
         return (
             <div className="contents">
                 <dt className="ui-note">{props.label}</dt>
-                <dd className="text-14px">{props.children}</dd>
+                <dd className="text-sm">{props.children}</dd>
             </div>
         );
     }
@@ -33,10 +33,10 @@ export function Detail(props: Props) {
     return (
         <div
             className={cn(
-                'grid min-w-0 items-center gap-x-8px',
+                'grid min-w-0 items-center gap-x-2',
                 props.side
                     ? 'grid-cols-[auto_minmax(0,1fr)_auto]'
-                    : 'grid-cols-[minmax(0,1fr)_auto] gap-y-4px',
+                    : 'grid-cols-[minmax(0,1fr)_auto] gap-y-1',
                 props.className,
             )}
         >
@@ -44,7 +44,7 @@ export function Detail(props: Props) {
             <dd className="contents">
                 <div
                     className={cn(
-                        'min-w-0 text-14px break-words',
+                        'min-w-0 text-sm break-words',
                         props.side ? 'text-right' : 'col-start-1',
                     )}
                 >

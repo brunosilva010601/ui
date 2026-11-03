@@ -206,7 +206,7 @@ export function NumberInput(props: Props) {
             <div
                 className={cn(
                     props.bare
-                        ? 'grid w-fit grid-cols-[auto_auto_auto] items-center gap-8px'
+                        ? 'grid w-fit grid-cols-[auto_auto_auto] items-center gap-2'
                         : stepperClass,
                     props.className,
                 )}
@@ -248,8 +248,8 @@ export function NumberInput(props: Props) {
                     }}
                     onKeyDown={keys}
                     className={cn(
-                        'min-w-0 bg-transparent py-8px text-center text-foreground tabular-nums outline-none disabled:cursor-not-allowed disabled:opacity-50',
-                        props.bare ? 'text-30px font-bold' : 'font-semibold',
+                        'min-w-0 bg-transparent py-2 text-center text-foreground tabular-nums outline-none disabled:cursor-not-allowed disabled:opacity-50',
+                        props.bare ? 'text-3xl font-bold' : 'font-semibold',
                         props.bare && props.error && 'text-danger',
                     )}
                 />

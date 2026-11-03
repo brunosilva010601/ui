@@ -71,14 +71,14 @@ const colorGroups = [
 ];
 
 const textSizes = [
-    'text-12px',
-    'text-14px',
-    'text-16px',
-    'text-18px',
-    'text-24px',
-    'text-30px',
-    'text-48px',
-    'text-60px',
+    'text-xs',
+    'text-sm',
+    'text-base',
+    'text-lg',
+    'text-2xl',
+    'text-3xl',
+    'text-5xl',
+    'text-6xl',
 ];
 
 const textRoles = [
@@ -95,59 +95,59 @@ const weights = ['font-normal', 'font-medium', 'font-semibold', 'font-bold'];
 
 const gaps = [
     'gap-px',
-    'gap-2px',
-    'gap-4px',
-    'gap-6px',
-    'gap-8px',
-    'gap-10px',
-    'gap-12px',
-    'gap-16px',
-    'gap-20px',
-    'gap-24px',
-    'gap-32px',
-    'gap-40px',
-    'gap-48px',
+    'gap-0.5',
+    'gap-1',
+    'gap-1.5',
+    'gap-2',
+    'gap-2.5',
+    'gap-3',
+    'gap-4',
+    'gap-5',
+    'gap-6',
+    'gap-8',
+    'gap-10',
+    'gap-12',
 ];
 
 const paddings = [
     'p-px',
-    'p-2px',
-    'p-4px',
-    'p-6px',
-    'p-8px',
-    'p-10px',
-    'p-12px',
-    'p-16px',
-    'p-20px',
-    'p-24px',
-    'p-32px',
-    'p-40px',
-    'p-48px',
+    'p-0.5',
+    'p-1',
+    'p-1.5',
+    'p-2',
+    'p-2.5',
+    'p-3',
+    'p-4',
+    'p-5',
+    'p-6',
+    'p-8',
+    'p-10',
+    'p-12',
 ];
 
 const sizes = [
     {
-        className: 'size-icon-14px',
+        className: 'size-3.5',
         px: 14,
         shape: 'rounded bg-foreground-muted',
     },
     {
-        className: 'size-icon-16px',
+        className: 'size-4',
         px: 16,
         shape: 'rounded bg-foreground-muted',
     },
     {
-        className: 'size-icon-20px',
+        className: 'size-5',
         px: 20,
         shape: 'rounded bg-foreground-muted',
     },
     {
-        className: 'size-icon-24px',
+        className: 'size-6',
         px: 24,
         shape: 'rounded bg-foreground-muted',
     },
     {
-        className: 'size-icon-32px',
+        className: 'size-8',
         px: 32,
         shape: 'rounded bg-foreground-muted',
     },
@@ -175,7 +175,7 @@ const animations = [
     'animate-slide-in-left',
 ];
 
-const heightRowClass = 'flex flex-wrap items-start gap-8px *:shrink-0';
+const heightRowClass = 'flex flex-wrap items-start gap-2 *:shrink-0';
 
 const choices = [
     { value: 'a', label: 'Option A' },
@@ -230,10 +230,10 @@ export function Gallery() {
 
     return (
         <UiProvider labels={labels} locale="en-US">
-            <div className="mx-auto flex min-h-screen max-w-3xl flex-col gap-32px px-12px pb-32px sm:px-20px">
-                <header className="sticky top-0 z-40 -mx-12px flex flex-col gap-8px border-b border-border bg-background/90 px-12px py-8px backdrop-blur-md sm:-mx-20px sm:flex-row sm:items-center sm:gap-12px sm:px-20px">
-                    <h1 className="text-18px font-semibold">ui</h1>
-                    <div className="flex flex-1 items-center gap-8px sm:justify-between">
+            <div className="mx-auto flex min-h-screen max-w-3xl flex-col gap-8 px-3 pb-8 sm:px-5">
+                <header className="sticky top-0 z-40 -mx-3 flex flex-col gap-2 border-b border-border bg-background/90 px-3 py-2 backdrop-blur-md sm:-mx-5 sm:flex-row sm:items-center sm:gap-3 sm:px-5">
+                    <h1 className="text-lg font-semibold">ui</h1>
+                    <div className="flex flex-1 items-center gap-2 sm:justify-between">
                         <Tabs value={page} onValueChange={changePage}>
                             <TabsList fit>
                                 {pages.map((option) => (
@@ -272,7 +272,7 @@ function ThemePage() {
     const [choice, setChoice] = useState('a');
 
     return (
-        <div className="flex flex-col gap-20px">
+        <div className="flex flex-col gap-5">
             <Section title="Colors" collapsible remember="docs:colors">
                 {colorGroups.map((group) => (
                     <Section
@@ -284,19 +284,19 @@ function ThemePage() {
                         collapsible
                         remember={`docs:colors-${group.title}`}
                     >
-                        <div className="grid grid-cols-2 gap-8px sm:grid-cols-4">
+                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                             {group.tokens.map((token) => (
                                 <div
                                     key={token}
-                                    className="flex flex-col gap-4px"
+                                    className="flex flex-col gap-1"
                                 >
                                     <div
-                                        className="h-48px rounded border border-border"
+                                        className="h-12 rounded border border-border"
                                         style={{
                                             background: `var(--color-${token})`,
                                         }}
                                     />
-                                    <span className="truncate font-mono text-12px text-foreground-soft">
+                                    <span className="truncate font-mono text-xs text-foreground-soft">
                                         {token}
                                     </span>
                                 </div>
@@ -310,10 +310,10 @@ function ThemePage() {
                     variant="outlined"
                     title="Sizes"
                     description="The closed text scale, in Outfit. Apps use the roles below day to day."
-                    meta="text-12px … text-60px"
+                    meta="text-xs … text-6xl"
                     collapsible
                 >
-                    <div className="flex flex-col gap-8px">
+                    <div className="flex flex-col gap-2">
                         {textSizes.map((size) => (
                             <p key={size} className={size}>
                                 {size} Lorem ipsum
@@ -328,7 +328,7 @@ function ThemePage() {
                     meta="ui-page-title · ui-item-title · ui-note · ui-label · ui-prompt · ui-display · ui-hero"
                     collapsible
                 >
-                    <div className="flex flex-col gap-8px">
+                    <div className="flex flex-col gap-2">
                         {textRoles.map((role) => (
                             <p key={role} className={role}>
                                 {role}
@@ -343,7 +343,7 @@ function ThemePage() {
                     meta="font-normal · font-medium · font-semibold · font-bold"
                     collapsible
                 >
-                    <div className="flex flex-wrap gap-12px">
+                    <div className="flex flex-wrap gap-3">
                         {weights.map((weight) => (
                             <span key={weight} className={weight}>
                                 {weight}
@@ -364,7 +364,7 @@ function ThemePage() {
                     meta="padding + font size + border"
                     collapsible
                 >
-                    <span className="font-mono text-12px text-foreground-muted">
+                    <span className="font-mono text-xs text-foreground-muted">
                         md
                     </span>
                     <div className={heightRowClass}>
@@ -385,7 +385,7 @@ function ThemePage() {
                             </TabsList>
                         </Tabs>
                     </div>
-                    <span className="font-mono text-12px text-foreground-muted">
+                    <span className="font-mono text-xs text-foreground-muted">
                         sm
                     </span>
                     <div className={heightRowClass}>
@@ -402,12 +402,12 @@ function ThemePage() {
                         <Badge size="md">Badge md</Badge>
                         <Badge>Badge sm</Badge>
                     </div>
-                    <span className="font-mono text-12px text-foreground-muted">
+                    <span className="font-mono text-xs text-foreground-muted">
                         big icon and wrapping text
                     </span>
                     <div className={heightRowClass}>
                         <Button>
-                            <Plus className="size-40px" />
+                            <Plus className="size-10" />
                             Big icon
                         </Button>
                         <Button className="max-w-[160px] whitespace-normal">
@@ -425,18 +425,15 @@ function ThemePage() {
                     meta="gap-{px} · m-{px} · size-{px}"
                     collapsible
                 >
-                    <div className="flex flex-col gap-8px">
+                    <div className="flex flex-col gap-2">
                         {gaps.map((gap) => (
-                            <div
-                                key={gap}
-                                className="flex items-center gap-12px"
-                            >
-                                <span className="w-[64px] font-mono text-12px text-foreground-soft">
+                            <div key={gap} className="flex items-center gap-3">
+                                <span className="w-[64px] font-mono text-xs text-foreground-soft">
                                     {gap}
                                 </span>
                                 <div className={`${gap} flex`}>
-                                    <div className="h-16px w-24px rounded bg-primary" />
-                                    <div className="h-16px w-24px rounded bg-primary" />
+                                    <div className="h-4 w-6 rounded bg-primary" />
+                                    <div className="h-4 w-6 rounded bg-primary" />
                                 </div>
                             </div>
                         ))}
@@ -449,18 +446,18 @@ function ThemePage() {
                     meta="p-{px} · px-{px} · py-{px}"
                     collapsible
                 >
-                    <div className="flex flex-wrap items-end gap-20px">
+                    <div className="flex flex-wrap items-end gap-5">
                         {paddings.map((padding) => (
                             <div
                                 key={padding}
-                                className="flex flex-col items-center gap-4px"
+                                className="flex flex-col items-center gap-1"
                             >
                                 <div
                                     className={`${padding} rounded border border-border bg-surface-raised`}
                                 >
-                                    <div className="size-24px rounded bg-primary" />
+                                    <div className="size-6 rounded bg-primary" />
                                 </div>
-                                <span className="font-mono text-12px text-foreground-soft">
+                                <span className="font-mono text-xs text-foreground-soft">
                                     {padding}
                                 </span>
                             </div>
@@ -473,22 +470,22 @@ function ThemePage() {
                     variant="outlined"
                     title="Icons and touch"
                     description="Icon sizes, and the minimum touch area of small controls."
-                    meta="size-icon-{px} · size-touch"
+                    meta="size-3.5 · size-4 · size-5 · size-6 · size-8 · size-touch"
                     collapsible
                 >
-                    <div className="flex flex-wrap items-end gap-20px">
+                    <div className="flex flex-wrap items-end gap-5">
                         {sizes.map((size) => (
                             <div
                                 key={size.className}
-                                className="flex flex-col items-center gap-4px"
+                                className="flex flex-col items-center gap-1"
                             >
                                 <div
                                     className={`${size.className} ${size.shape}`}
                                 />
-                                <span className="font-mono text-12px text-foreground-soft">
+                                <span className="font-mono text-xs text-foreground-soft">
                                     {size.className.replace('size-', '')}
                                 </span>
-                                <span className="text-12px text-foreground-faint">
+                                <span className="text-xs text-foreground-faint">
                                     {size.px} px
                                 </span>
                             </div>
@@ -504,11 +501,11 @@ function ThemePage() {
                     meta="rounded · bg-surface · bg-surface-raised · bg-control"
                     collapsible
                 >
-                    <div className="grid grid-cols-3 gap-8px">
+                    <div className="grid grid-cols-3 gap-2">
                         {surfaces.map((surface) => (
                             <div
                                 key={surface.label}
-                                className={`rounded p-12px font-mono text-12px ${surface.className}`}
+                                className={`rounded p-3 font-mono text-xs ${surface.className}`}
                             >
                                 {surface.label}
                             </div>
@@ -522,11 +519,11 @@ function ThemePage() {
                     meta="shadow-control · shadow-floating · shadow-overlay"
                     collapsible
                 >
-                    <div className="grid grid-cols-3 gap-8px">
+                    <div className="grid grid-cols-3 gap-2">
                         {shadows.map((shadow) => (
                             <div
                                 key={shadow}
-                                className={`rounded bg-surface p-12px font-mono text-12px ${shadow}`}
+                                className={`rounded bg-surface p-3 font-mono text-xs ${shadow}`}
                             >
                                 {shadow.replace('shadow-', '')}
                             </div>
@@ -542,7 +539,7 @@ function ThemePage() {
                     meta="animate-{name}"
                     collapsible
                 >
-                    <div className="grid grid-cols-2 gap-8px sm:grid-cols-3">
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                         {animations.map((animation) => (
                             <button
                                 key={animation}
@@ -557,7 +554,7 @@ function ThemePage() {
                             >
                                 <span
                                     key={runs[animation] ?? 0}
-                                    className={`${animation} rounded-full bg-primary px-8px py-4px text-12px text-primary-foreground`}
+                                    className={`${animation} rounded-full bg-primary px-2 py-1 text-xs text-primary-foreground`}
                                 >
                                     {animation.replace('animate-', '')}
                                 </span>

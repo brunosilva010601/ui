@@ -97,7 +97,7 @@ function ModalPanel(props: ModalProps) {
                     backdropClass,
                     small.overlay,
                     wide.overlay,
-                    props.bare && 'backdrop-blur-md lg:p-32px',
+                    props.bare && 'backdrop-blur-md lg:p-8',
                 )}
             >
                 <DialogPrimitive.Content
@@ -209,9 +209,9 @@ function FramedBody(props: ModalProps) {
                 <div
                     data-drawer-drag
                     data-drawer-handle
-                    className="flex shrink-0 cursor-pointer touch-none justify-center py-12px sm:hidden"
+                    className="flex shrink-0 cursor-pointer touch-none justify-center py-3 sm:hidden"
                 >
-                    <span className="h-6px w-40px rounded-full bg-border" />
+                    <span className="h-1.5 w-10 rounded-full bg-border" />
                 </div>
             )}
             {props.title && (
@@ -219,15 +219,15 @@ function FramedBody(props: ModalProps) {
                     data-drawer-drag={isDrawer || undefined}
                     className={cn(
                         headingClass,
-                        'shrink-0 px-(--modal-padding) py-12px',
+                        'shrink-0 px-(--modal-padding) py-3',
                         isDrawer && 'touch-none max-sm:pt-0',
                     )}
                 >
-                    <div className="flex items-start justify-between gap-12px">
+                    <div className="flex items-start justify-between gap-3">
                         <HeadingTitle as={DialogPrimitive.Title}>
                             {props.title}
                         </HeadingTitle>
-                        <div className="flex h-lh shrink-0 items-center gap-12px">
+                        <div className="flex h-lh shrink-0 items-center gap-3">
                             {props.actions}
                             {close}
                         </div>
@@ -242,14 +242,14 @@ function FramedBody(props: ModalProps) {
             <div
                 data-drawer-body={isDrawer || undefined}
                 className={cn(
-                    'relative flex min-h-0 flex-1 flex-col gap-12px overflow-x-hidden overflow-y-auto overscroll-contain p-(--modal-padding) [&:not(:has(>:not(:empty)))]:hidden',
+                    'relative flex min-h-0 flex-1 flex-col gap-3 overflow-x-hidden overflow-y-auto overscroll-contain p-(--modal-padding) [&:not(:has(>:not(:empty)))]:hidden',
                     isDrawer && [
                         'pb-[max(var(--modal-padding),var(--spacing-safe-bottom))]',
                         '[&:has(+*:not(:empty))]:pb-(--modal-padding)',
                     ],
                     props.title
                         ? 'border-t border-border'
-                        : isDrawer && 'max-sm:pt-8px',
+                        : isDrawer && 'max-sm:pt-2',
                 )}
             >
                 <FooterSlot.Provider value={footer}>
@@ -264,9 +264,9 @@ function FramedBody(props: ModalProps) {
             <div
                 ref={setFooter}
                 className={cn(
-                    'flex shrink-0 gap-8px border-t border-border px-(--modal-padding) py-12px empty:hidden',
+                    'flex shrink-0 gap-2 border-t border-border px-(--modal-padding) py-3 empty:hidden',
                     isDrawer &&
-                        'pb-[max(var(--spacing-12px),var(--spacing-safe-bottom))]',
+                        'pb-[max(var(--spacing-3),var(--spacing-safe-bottom))]',
                 )}
             />
         </>
@@ -290,7 +290,7 @@ export function ModalFooter(props: ModalFooterProps) {
     return createPortal(
         <>
             {props.aside}
-            <div className="flex flex-1 justify-end gap-8px">
+            <div className="flex flex-1 justify-end gap-2">
                 {props.children}
             </div>
         </>,

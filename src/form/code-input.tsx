@@ -48,14 +48,14 @@ export function CodeInput(props: Props) {
                     input.current?.form?.requestSubmit()
                 }
                 aria-invalid={props.error ? true : undefined}
-                containerClassName="flex items-center justify-center gap-8px has-[:disabled]:opacity-50"
+                containerClassName="flex items-center justify-center gap-2 has-[:disabled]:opacity-50"
                 render={({ slots }) => (
                     <>
                         {slots.map((slot, index) => (
                             <div
                                 key={index}
                                 className={cn(
-                                    'relative flex w-[44px] items-center justify-center rounded border border-border bg-control py-8px font-bold transition-shadow',
+                                    'relative flex w-[44px] items-center justify-center rounded border border-border bg-control py-2 font-bold transition-shadow',
                                     slot.isActive &&
                                         'border-primary ring-1 ring-primary',
                                     props.error && 'border-danger',

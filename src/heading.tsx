@@ -1,7 +1,7 @@
 import type { ElementType, ReactNode } from 'react';
 import { cn } from './lib/utils';
 
-export const headingClass = 'flex min-w-0 flex-col gap-2px';
+export const headingClass = 'flex min-w-0 flex-col gap-0.5';
 
 type TitleProps = {
     as?: ElementType;
@@ -28,7 +28,7 @@ export function HeadingMeta(props: TitleProps) {
     const Meta = props.as ?? 'p';
 
     return (
-        <Meta className="font-mono text-12px text-foreground-faint">
+        <Meta className="font-mono text-xs text-foreground-faint">
             {props.children}
         </Meta>
     );

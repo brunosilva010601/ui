@@ -20,9 +20,9 @@ export function Hint(props: Props) {
                 type="button"
                 className="inline-flex cursor-pointer rounded-full align-middle text-foreground-muted transition-colors hover:text-foreground active:text-foreground"
             >
-                <Info className="size-icon-16px" />
+                <Info className="size-4" />
             </PopoverTrigger>
-            <PopoverContent align="end" className="ui-note max-w-xs p-12px">
+            <PopoverContent align="end" className="ui-note max-w-xs p-3">
                 {props.children}
             </PopoverContent>
         </Popover>

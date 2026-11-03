@@ -162,7 +162,7 @@ export function CarouselFrame(props: CarouselFrameProps) {
                     <Button
                         variant="outline"
                         square
-                        className={`${arrowClass} start-8px`}
+                        className={`${arrowClass} start-2`}
                         onClick={() => go(-1)}
                     >
                         <ArrowLeft />
@@ -170,7 +170,7 @@ export function CarouselFrame(props: CarouselFrameProps) {
                     <Button
                         variant="outline"
                         square
-                        className={`${arrowClass} end-8px`}
+                        className={`${arrowClass} end-2`}
                         onClick={() => go(1)}
                     >
                         <ArrowRight />

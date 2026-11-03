@@ -37,7 +37,7 @@ const variants = {
 
 const shapes = {
     box: 'inline-flex shrink-0 items-center justify-center rounded-full whitespace-nowrap select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
-    link: 'has-[svg]:inline-flex has-[svg]:shrink-0 has-[svg]:items-center has-[svg]:gap-8px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+    link: 'has-[svg]:inline-flex has-[svg]:shrink-0 has-[svg]:items-center has-[svg]:gap-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
 };
 
 const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
@@ -49,23 +49,23 @@ const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
 };
 
 const bleedSides =
-    'px-6px -mx-[calc(var(--spacing-6px)_+_1px)] -my-[calc(var(--pad-y)_+_1px)]';
+    'px-1.5 -mx-[calc(var(--spacing-1_5)_+_1px)] -my-[calc(var(--pad-y)_+_1px)]';
 
 const bleedBackdrop =
-    'relative isolate before:absolute before:inset-y-0 before:-inset-x-[calc(var(--pad)_-_var(--spacing-6px))] before:-z-10 before:rounded-full before:transition-colors hover:bg-transparent active:bg-transparent data-[state=open]:bg-transparent hover:before:bg-foreground/5 active:before:bg-foreground/5 data-[state=open]:before:bg-foreground/5';
+    'relative isolate before:absolute before:inset-y-0 before:-inset-x-[calc(var(--pad)_-_var(--spacing-1_5))] before:-z-10 before:rounded-full before:transition-colors hover:bg-transparent active:bg-transparent data-[state=open]:bg-transparent hover:before:bg-foreground/5 active:before:bg-foreground/5 data-[state=open]:before:bg-foreground/5';
 
 const sizes = {
     md: {
-        text: '[--pad:var(--spacing-16px)] [--pad-y:var(--spacing-10px)] px-(--pad) py-(--pad-y) text-14px',
-        square: "[--pad:var(--spacing-10px)] [--pad-y:var(--spacing-10px)] p-(--pad) [&_svg:not([class*='size-'])]:size-icon-20px",
-        link: 'text-14px',
-        icon: "gap-8px [&_svg:not([class*='size-'])]:size-icon-16px",
+        text: '[--pad:var(--spacing-4)] [--pad-y:var(--spacing-2_5)] px-(--pad) py-(--pad-y) text-sm',
+        square: "[--pad:var(--spacing-2_5)] [--pad-y:var(--spacing-2_5)] p-(--pad) [&_svg:not([class*='size-'])]:size-5",
+        link: 'text-sm',
+        icon: "gap-2 [&_svg:not([class*='size-'])]:size-4",
     },
     sm: {
-        text: '[--pad:var(--spacing-12px)] [--pad-y:var(--spacing-6px)] px-(--pad) py-(--pad-y) text-12px',
-        square: "[--pad:var(--spacing-6px)] [--pad-y:var(--spacing-6px)] p-(--pad) [&_svg:not([class*='size-'])]:size-icon-16px",
-        link: 'text-12px',
-        icon: "gap-4px [&_svg:not([class*='size-'])]:size-icon-14px",
+        text: '[--pad:var(--spacing-3)] [--pad-y:var(--spacing-1_5)] px-(--pad) py-(--pad-y) text-xs',
+        square: "[--pad:var(--spacing-1_5)] [--pad-y:var(--spacing-1_5)] p-(--pad) [&_svg:not([class*='size-'])]:size-4",
+        link: 'text-xs',
+        icon: "gap-1 [&_svg:not([class*='size-'])]:size-3.5",
     },
 };
 
@@ -178,7 +178,7 @@ export function FloatingButton(props: ButtonProps) {
         <Button
             square
             className={cn(
-                "p-12px shadow-floating [&_svg:not([class*='size-'])]:size-icon-24px",
+                "p-3 shadow-floating [&_svg:not([class*='size-'])]:size-6",
                 className,
             )}
             {...rest}

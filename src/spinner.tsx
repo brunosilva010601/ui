@@ -1,7 +1,5 @@
 import { LoaderCircle } from 'lucide-react';
 
 export function Spinner() {
-    return (
-        <LoaderCircle role="status" className="size-icon-16px animate-spin" />
-    );
+    return <LoaderCircle role="status" className="size-4 animate-spin" />;
 }

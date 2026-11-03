@@ -31,7 +31,7 @@ export function Surface(props: Props) {
     const shared = cn(
         surfaceClass,
         '[--row-surface:var(--color-surface)]',
-        !props.flush && 'p-12px [--bleed:var(--spacing-12px)]',
+        !props.flush && 'p-3 [--bleed:var(--spacing-3)]',
         props.flush && 'overflow-clip',
         props.selected && 'bg-foreground/10',
         props.disabled && 'opacity-50',

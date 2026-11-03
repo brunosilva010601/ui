@@ -185,7 +185,7 @@ export function SortHandle() {
                     : 'hidden [@media(hover:hover)]:group-hover/sort:flex',
             )}
         >
-            <GripVertical className="size-icon-14px" />
+            <GripVertical className="size-3.5" />
         </span>
     );
 }

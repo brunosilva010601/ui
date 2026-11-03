@@ -31,10 +31,10 @@ export function SectionBand(props: Props) {
     const Chevron = props.open ? ChevronDown : ChevronRight;
 
     return (
-        <div className="group/header group/sort relative -mx-(--row-inset) flex items-center gap-8px px-12px py-8px">
+        <div className="group/header group/sort relative -mx-(--row-inset) flex items-center gap-2 px-3 py-2">
             <Cover aria-expanded={props.open} onClick={props.onToggle} />
             {props.sortable && <SortHandle />}
-            <Chevron className="pointer-events-none relative size-icon-16px shrink-0 text-foreground-muted" />
+            <Chevron className="pointer-events-none relative size-4 shrink-0 text-foreground-muted" />
             {props.title ? (
                 <h2 className="pointer-events-none relative min-w-0 truncate font-semibold">
                     {props.title}
@@ -52,7 +52,7 @@ export function SectionBand(props: Props) {
             {(props.action || props.menu) && (
                 <IconGroup
                     className={cn(
-                        'relative ml-auto -my-[calc(var(--spacing-10px)_+_1px)]',
+                        'relative ml-auto -my-[calc(var(--spacing-2_5)_+_1px)]',
                         props.hover && hoverClass,
                     )}
                 >

@@ -3,9 +3,9 @@ import { cn } from './lib/utils';
 import { useUi } from './provider';
 
 const sizes = {
-    sm: { link: 'gap-8px text-18px', logo: 'h-20px w-auto' },
-    md: { link: 'gap-8px px-12px pt-4px text-18px', logo: 'h-24px w-auto' },
-    lg: { link: 'flex-col gap-12px text-48px', logo: 'h-[64px] w-auto' },
+    sm: { link: 'gap-2 text-lg', logo: 'h-5 w-auto' },
+    md: { link: 'gap-2 px-3 pt-1 text-lg', logo: 'h-6 w-auto' },
+    lg: { link: 'flex-col gap-3 text-5xl', logo: 'h-[64px] w-auto' },
 };
 
 type Props = {

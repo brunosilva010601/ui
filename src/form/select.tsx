@@ -27,7 +27,7 @@ type OptionTextProps<T extends string> = {
 function OptionText<T extends string>(props: OptionTextProps<T>) {
     return (
         <span
-            className="flex min-w-0 flex-1 items-center gap-8px"
+            className="flex min-w-0 flex-1 items-center gap-2"
             lang={props.option.lang}
         >
             {props.option.content ?? (
@@ -65,10 +65,10 @@ export function Select<T extends string>(props: Props<T>) {
                         type="button"
                         disabled={props.disabled}
                         aria-invalid={props.error ? true : undefined}
-                        className={`${fieldClass} flex cursor-pointer items-center gap-8px text-left`}
+                        className={`${fieldClass} flex cursor-pointer items-center gap-2 text-left`}
                     >
                         {current && <OptionText option={current} />}
-                        <ChevronDown className="size-icon-16px shrink-0 text-foreground-muted" />
+                        <ChevronDown className="size-4 shrink-0 text-foreground-muted" />
                     </button>
                 }
             >

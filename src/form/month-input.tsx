@@ -99,7 +99,7 @@ function YearPicker(props: YearPickerProps) {
     );
 
     return (
-        <div className="grid max-h-[288px] w-[256px] grid-cols-4 gap-4px overflow-y-auto p-8px">
+        <div className="grid max-h-[288px] w-[256px] grid-cols-4 gap-1 overflow-y-auto p-2">
             {years.map((year) => (
                 <button
                     key={year}
@@ -111,7 +111,7 @@ function YearPicker(props: YearPickerProps) {
                     }}
                     onClick={() => props.onChange(year)}
                     className={cn(
-                        'cursor-pointer rounded py-8px text-14px transition-colors hover:bg-control-hover',
+                        'cursor-pointer rounded py-2 text-sm transition-colors hover:bg-control-hover',
                         year === props.value &&
                             'bg-foreground text-background hover:bg-foreground',
                     )}
@@ -207,7 +207,7 @@ export function MonthInput(props: Props) {
                             aria-invalid={props.error ? true : undefined}
                             disabled={props.disabled}
                             onKeyDown={arrowKeys}
-                            className="cursor-pointer py-8px text-center font-semibold text-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                            className="cursor-pointer py-2 text-center font-semibold text-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             {text}
                         </button>

@@ -44,12 +44,7 @@ function ActionButton(props: EmptyAction & { size?: 'sm' }) {
 export function EmptyState(props: EmptyStateProps) {
     if (props.compact) {
         return (
-            <div
-                className={cn(
-                    'flex items-center gap-12px p-12px',
-                    props.className,
-                )}
-            >
+            <div className={cn('flex items-center gap-3 p-3', props.className)}>
                 <p className="ui-note min-w-0 flex-1">
                     {props.title}
                     {props.description && ` ${props.description}`}
@@ -62,7 +57,7 @@ export function EmptyState(props: EmptyStateProps) {
     return (
         <div
             className={cn(
-                'flex flex-col items-center gap-12px py-32px text-center',
+                'flex flex-col items-center gap-3 py-8 text-center',
                 props.className,
             )}
         >

@@ -5,9 +5,10 @@
 - `theme.css`: entrada do tema. Junta os arquivos de `css/` e registra `src/` para o Tailwind gerar as classes dos componentes.
 - `css/`: escalas e tamanhos (`tokens.css`), cores do claro e do escuro (`palettes.css`), animações, fonte e estilos base. Em `css/fonts/` ficam os arquivos da Noto Color Emoji, copiados do que o Google Fonts serve, porque a versão do `@fontsource` carrega e não desenha nada: o texto some e o espaço fica. A Outfit continua vindo do `@fontsource`.
 - `src/`: os componentes. `src/index.ts` lista o que é público. `Section` e `Modal` são divididas em arquivos pelo assunto: histórico do navegador, gestos e formatos (`modal-*`), faixa recolhível e estado aberto (`section-*`).
+- `lint/`: regras de lint que conferem nos apps o uso do tema e dos componentes (`index.js`) e a configuração que liga todas elas (`oxlintrc.json`). É JavaScript, e não TypeScript, porque o Node não tira os tipos de arquivos dentro de `node_modules`.
 - `gallery/`: página de consulta do tema e dos componentes. Não vai para os apps.
 
-O pacote se chama `@brunosilva010601/ui` e vai como código TypeScript, sem etapa de build, com duas entradas: `@brunosilva010601/ui` (componentes) e `@brunosilva010601/ui/theme.css` (tema).
+O pacote se chama `@brunosilva010601/ui` e vai como código TypeScript, sem etapa de build, com três entradas: `@brunosilva010601/ui` (componentes), `@brunosilva010601/ui/theme.css` (tema) e `@brunosilva010601/ui/lint` (regras de lint).
 
 ## Publicar
 
@@ -18,7 +19,7 @@ O repositório `brunosilva010601/ui` é público, e os apps instalam direto dele
 O pacote entra no `package.json` do app apontando para a tag:
 
 ```json
-"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.7.3"
+"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.8.0"
 ```
 
 A tag `v0.1.0` aponta para um commit de antes do nome atual e não serve para instalar.
@@ -46,6 +47,7 @@ Regras da adoção:
 4. Envolver o app com `UiProvider`, que recebe o componente de link do roteador, os textos internos, o idioma, o início da semana, o aviso de saída de página (`onLeave`) e o aviso de fim de navegação (`onSettle`). Sem ele, tudo funciona com textos em português e links comuns.
 5. Montar o `Toaster` uma vez na raiz, passando claro ou escuro. Mensagens vindas do servidor ficam no app, chamando `notify`. O aviso sobe sozinho acima de um `PageBottom` ou `PageFooter` montado, que declaram a altura em `--page-bottom`.
 6. A escolha entre claro, escuro e sistema usa o `AppearancePicker`, mas guardar a escolha e aplicar a classe `dark` ficam no app.
+7. Na configuração do oxlint, estender a do pacote, para cada versão nova trazer as regras atualizadas sem mexer no app: `"extends": ["./node_modules/@brunosilva010601/ui/lint/oxlintrc.json"]` no `.oxlintrc.json`, ou o mesmo arquivo importado e passado em `extends` no bloco `lint` do `vite.config.ts`. As regras de fora no oxlint ainda estão em alfa, então uma versão nova dele pode pedir ajuste nelas.
 
 No Inertia, duas ligações ficam no app:
 

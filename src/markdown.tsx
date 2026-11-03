@@ -60,7 +60,7 @@ function TaskBox(props: { done: boolean; line: number | undefined }) {
     const icon = (
         <Icon
             className={cn(
-                'size-icon-20px',
+                'size-5',
                 props.done ? 'text-primary-text' : 'text-foreground-muted',
             )}
         />
@@ -86,17 +86,17 @@ function TaskBox(props: { done: boolean; line: number | undefined }) {
 }
 
 const components: Components = {
-    h1: (props) => <h2 className="text-18px font-bold">{props.children}</h2>,
-    h2: (props) => <h3 className="text-16px font-bold">{props.children}</h3>,
-    h3: (props) => <h4 className="text-14px font-bold">{props.children}</h4>,
+    h1: (props) => <h2 className="text-lg font-bold">{props.children}</h2>,
+    h2: (props) => <h3 className="text-base font-bold">{props.children}</h3>,
+    h3: (props) => <h4 className="text-sm font-bold">{props.children}</h4>,
     p: (props) => <p>{props.children}</p>,
     ul: (props) => (
         <ul
             className={cn(
-                'flex flex-col gap-4px',
+                'flex flex-col gap-1',
                 props.className?.includes('contains-task-list')
                     ? 'list-none'
-                    : 'list-disc ps-20px',
+                    : 'list-disc ps-5',
             )}
         >
             {props.children}
@@ -110,11 +110,11 @@ const components: Components = {
         }
 
         return (
-            <li className="flex items-start gap-8px">
+            <li className="flex items-start gap-2">
                 <TaskBox done={done} line={props.node?.position?.start.line} />
                 <div
                     className={cn(
-                        'flex min-w-0 flex-1 flex-col gap-4px',
+                        'flex min-w-0 flex-1 flex-col gap-1',
                         done && 'text-foreground-muted line-through',
                     )}
                 >
@@ -125,7 +125,7 @@ const components: Components = {
     },
     input: () => null,
     ol: (props) => (
-        <ol className="flex list-decimal flex-col gap-4px ps-20px">
+        <ol className="flex list-decimal flex-col gap-1 ps-5">
             {props.children}
         </ol>
     ),
@@ -141,14 +141,12 @@ const components: Components = {
         </a>
     ),
     blockquote: (props) => (
-        <blockquote className="border-s-2 border-border ps-12px text-foreground-soft">
+        <blockquote className="border-s-2 border-border ps-3 text-foreground-soft">
             {props.children}
         </blockquote>
     ),
     code: (props) => (
-        <code className="rounded bg-surface-raised px-4px">
-            {props.children}
-        </code>
+        <code className="rounded bg-surface-raised px-1">{props.children}</code>
     ),
     pre: (props) => {
         const code = props.node?.children[0];
@@ -178,20 +176,20 @@ const components: Components = {
         </div>
     ),
     th: (props) => (
-        <th className="border-b border-border bg-surface px-12px py-8px font-semibold whitespace-nowrap">
+        <th className="border-b border-border bg-surface px-3 py-2 font-semibold whitespace-nowrap">
             {props.children}
         </th>
     ),
     td: (props) => (
-        <td className="border-t border-border px-12px py-8px whitespace-nowrap">
+        <td className="border-t border-border px-3 py-2 whitespace-nowrap">
             {props.children}
         </td>
     ),
 };
 
 const sizes = {
-    sm: 'text-14px',
-    md: 'text-16px',
+    sm: 'text-sm',
+    md: 'text-base',
 };
 
 type Props = {
@@ -204,7 +202,7 @@ export function Markdown(props: Props) {
     return (
         <div
             className={cn(
-                'flex flex-col gap-12px [overflow-wrap:anywhere] select-text',
+                'flex flex-col gap-3 [overflow-wrap:anywhere] select-text',
                 sizes[props.size ?? 'sm'],
             )}
         >

@@ -193,11 +193,11 @@ const snippet = `function greet(name: string) {
     return \`Hello, \${name}!\`;
 }`;
 
-const caption = 'font-mono text-12px text-foreground-faint';
+const caption = 'font-mono text-xs text-foreground-faint';
 
 export function ComponentsPage() {
     return (
-        <div className="flex flex-col gap-20px">
+        <div className="flex flex-col gap-5">
             <Section title="Actions" collapsible remember="docs:actions">
                 <ButtonDemo />
                 <MarkedButtonDemo />
@@ -294,7 +294,7 @@ function ButtonDemo() {
             {sizes.map((size) => (
                 <div
                     key={size}
-                    className="flex flex-col gap-12px sm:grid sm:grid-cols-4 sm:items-center sm:justify-items-center"
+                    className="flex flex-col gap-3 sm:grid sm:grid-cols-4 sm:items-center sm:justify-items-center"
                 >
                     <div className="sm:contents">
                         <span className={caption}>size="{size}"</span>
@@ -311,7 +311,7 @@ function ButtonDemo() {
                     {buttonVariants.map((variant) => (
                         <div
                             key={variant}
-                            className="flex flex-wrap items-center gap-8px sm:contents"
+                            className="flex flex-wrap items-center gap-2 sm:contents"
                         >
                             <Button variant={variant} size={size}>
                                 {variant}
@@ -334,18 +334,18 @@ function ButtonDemo() {
                     ))}
                 </div>
             ))}
-            <div className="flex flex-col gap-8px">
+            <div className="flex flex-col gap-2">
                 <span className={caption}>bleed, in a row with text</span>
-                <div className="flex items-center justify-between rounded border border-border px-12px py-12px">
+                <div className="flex items-center justify-between rounded border border-border px-3 py-3">
                     <span>Label</span>
                     <Button variant="ghost" square bleed>
                         <Settings />
                     </Button>
                 </div>
             </div>
-            <div className="flex flex-col gap-8px">
+            <div className="flex flex-col gap-2">
                 <span className={caption}>busy</span>
-                <div className="flex flex-wrap items-center gap-8px">
+                <div className="flex flex-wrap items-center gap-2">
                     <Button busy>Sending</Button>
                     <Button busy>
                         <Plus />
@@ -362,11 +362,11 @@ function ButtonDemo() {
                     </Button>
                 </div>
             </div>
-            <div className="flex flex-col gap-8px">
+            <div className="flex flex-col gap-2">
                 <span className={caption}>edge cases</span>
-                <div className="flex flex-wrap items-start gap-8px">
+                <div className="flex flex-wrap items-start gap-2">
                     <Button>
-                        <Plus className="size-40px" />
+                        <Plus className="size-10" />
                         Big icon
                     </Button>
                     <Button className="max-w-[160px] whitespace-normal">
@@ -375,7 +375,7 @@ function ButtonDemo() {
                     <Button>Normal</Button>
                 </div>
             </div>
-            <p className="text-14px">
+            <p className="text-sm">
                 A link inside a sentence:{' '}
                 <Button variant="link" asChild>
                     <a href="#components">a source with a fairly long name</a>
@@ -400,7 +400,7 @@ function BadgeDemo() {
             {sizes.map((size) => (
                 <div
                     key={size}
-                    className="flex flex-col gap-12px sm:grid sm:grid-cols-3 sm:items-center sm:justify-items-start"
+                    className="flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:items-center sm:justify-items-start"
                 >
                     <div className="sm:contents">
                         <span className={caption}>size="{size}"</span>
@@ -414,7 +414,7 @@ function BadgeDemo() {
                     {badgeTones.map((tone) => (
                         <div
                             key={tone}
-                            className="flex flex-wrap items-center gap-8px sm:contents"
+                            className="flex flex-wrap items-center gap-2 sm:contents"
                         >
                             <Badge tone={tone} size={size}>
                                 {tone}
@@ -453,7 +453,7 @@ function ButtonGroupDemo() {
             remember="docs:button-group"
         >
             {sizes.map((size) => (
-                <div key={size} className="flex flex-col gap-8px">
+                <div key={size} className="flex flex-col gap-2">
                     <span className={caption}>size="{size}"</span>
                     <ButtonGroup
                         size={size}
@@ -476,7 +476,7 @@ function ButtonGroupDemo() {
                     />
                 </div>
             ))}
-            <div className="flex flex-col gap-8px">
+            <div className="flex flex-col gap-2">
                 <span className={caption}>variant="ghost"</span>
                 <ButtonGroup
                     variant="ghost"
@@ -487,7 +487,7 @@ function ButtonGroupDemo() {
                     onChange={choose('ghost')}
                 />
             </div>
-            <div className="flex flex-col gap-8px">
+            <div className="flex flex-col gap-2">
                 <span className={caption}>multiple</span>
                 <ButtonGroup
                     multiple
@@ -496,7 +496,7 @@ function ButtonGroupDemo() {
                     onChange={setMany}
                 />
             </div>
-            <div className="flex flex-col gap-8px">
+            <div className="flex flex-col gap-2">
                 <span className={caption}>layout="fill"</span>
                 <ButtonGroup
                     layout="fill"
@@ -505,7 +505,7 @@ function ButtonGroupDemo() {
                     onChange={choose('fill')}
                 />
             </div>
-            <div className="flex flex-col gap-8px">
+            <div className="flex flex-col gap-2">
                 <span className={caption}>layout="segmented"</span>
                 <ButtonGroup
                     layout="segmented"
@@ -537,7 +537,7 @@ function ButtonGroupDemo() {
                     </ButtonGroupItem>
                 </ButtonGroup>
             </div>
-            <div className="flex flex-col gap-8px">
+            <div className="flex flex-col gap-2">
                 <span className={caption}>ButtonGroupItem</span>
                 <ButtonGroup value={view} onChange={setView}>
                     <ButtonGroupItem value="list">
@@ -733,7 +733,7 @@ function NumberInputDemo() {
             collapsed
             remember="docs:number-input"
         >
-            <div className="grid gap-12px sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-3">
                 <NumberInput
                     label="min · max"
                     value={plain}
@@ -778,7 +778,7 @@ function MonthInputDemo() {
             collapsed
             remember="docs:month-input"
         >
-            <div className="grid gap-12px sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
                 <MonthInput
                     label="Month"
                     value={month}
@@ -915,7 +915,7 @@ function FormDemo() {
             <Form onSubmit={submit}>
                 <FormActions inline>
                     <Button type="submit">Submit</Button>
-                    <span className="text-14px text-foreground-muted">
+                    <span className="text-sm text-foreground-muted">
                         Submitted {sent} times
                     </span>
                 </FormActions>
@@ -935,7 +935,7 @@ function AvatarDemo() {
             collapsed
             remember="docs:avatar"
         >
-            <div className="grid grid-cols-5 items-center justify-items-start gap-12px">
+            <div className="grid grid-cols-5 items-center justify-items-start gap-3">
                 <span />
                 {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
                     <span key={size} className={caption}>
@@ -971,7 +971,7 @@ function ColorDotDemo() {
             collapsed
             remember="docs:color-dot"
         >
-            <div className="flex flex-wrap items-center gap-12px">
+            <div className="flex flex-wrap items-center gap-3">
                 {paletteSample.map((color) => (
                     <ColorDot key={color} color={color} />
                 ))}
@@ -992,7 +992,7 @@ function IconBadgeDemo() {
             collapsed
             remember="docs:icon-badge"
         >
-            <div className="grid grid-cols-4 items-center justify-items-start gap-12px">
+            <div className="grid grid-cols-4 items-center justify-items-start gap-3">
                 <span />
                 <span className={caption}>sm</span>
                 <span className={caption}>md</span>
@@ -1066,7 +1066,7 @@ function DetailDemo() {
             collapsed
             remember="docs:detail"
         >
-            <dl className="grid grid-cols-2 gap-12px">
+            <dl className="grid grid-cols-2 gap-3">
                 <Detail label="Label">Value</Detail>
                 <Detail label="Copyable">
                     <Copyable>
@@ -1089,7 +1089,7 @@ function DetailDemo() {
                     Value
                 </Detail>
             </dl>
-            <dl className="grid grid-cols-[auto_1fr] gap-x-20px gap-y-8px">
+            <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2">
                 <Detail label="Label" inline>
                     Value
                 </Detail>
@@ -1097,7 +1097,7 @@ function DetailDemo() {
                     Other value
                 </Detail>
             </dl>
-            <dl className="flex flex-col gap-8px">
+            <dl className="flex flex-col gap-2">
                 <Detail label="Label" side>
                     Value
                 </Detail>
@@ -1158,7 +1158,7 @@ function BrandDemo() {
             collapsed
             remember="docs:brand"
         >
-            <div className="flex flex-wrap items-end gap-20px">
+            <div className="flex flex-wrap items-end gap-5">
                 {(['sm', 'md', 'lg'] as const).map((size) => (
                     <Brand
                         key={size}
@@ -1184,7 +1184,7 @@ function EmptyStateDemo() {
             collapsed
             remember="docs:empty-state"
         >
-            <div className="grid gap-12px sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
                 <EmptyState
                     icon={FolderOpen}
                     title="Title"
@@ -1239,7 +1239,7 @@ function BannerDemo() {
             >
                 With an action beside the text
             </Banner>
-            <div className="flex flex-col gap-8px rounded border border-border bg-surface p-12px [--bleed:var(--spacing-12px)]">
+            <div className="flex flex-col gap-2 rounded border border-border bg-surface p-3 [--bleed:var(--spacing-3)]">
                 <span className={caption}>bleed inside a card</span>
                 <Banner tone="danger" bleed>
                     Edge to edge, up to the padding of the area
@@ -1298,7 +1298,7 @@ function CodeBlockDemo() {
             <CodeBlock code={snippet} />
             <CodeBlock
                 language="css"
-                code={'.card {\n    padding: var(--spacing-12px);\n}'}
+                code={'.card {\n    padding: var(--spacing-3);\n}'}
             />
         </Section>
     );
@@ -1316,9 +1316,9 @@ function LoadingDemo() {
             remember="docs:loading"
         >
             <Spinner />
-            <div className="flex items-center gap-12px">
+            <div className="flex items-center gap-3">
                 <Skeleton shape="avatar" />
-                <div className="flex flex-1 flex-col gap-8px">
+                <div className="flex flex-1 flex-col gap-2">
                     <Skeleton shape="title" className="w-1/2" />
                     <Skeleton shape="line" />
                     <Skeleton shape="line" className="w-3/4" />
@@ -1345,7 +1345,7 @@ function SectionDemo() {
                 title="Flat"
                 description="No border, on the page background."
             >
-                <p className="text-14px">Content.</p>
+                <p className="text-sm">Content.</p>
             </Section>
             <Section
                 variant="outlined"
@@ -1373,16 +1373,16 @@ function SectionDemo() {
                     ),
                 }}
             >
-                <p className="text-14px">Content.</p>
+                <p className="text-sm">Content.</p>
             </Section>
             <Section variant="outlined" title="Collapsed" collapsible collapsed>
-                <p className="text-14px">Content.</p>
+                <p className="text-sm">Content.</p>
             </Section>
             <Section title="Flat collapsible" note={2} collapsible>
-                <p className="text-14px">Content.</p>
+                <p className="text-sm">Content.</p>
             </Section>
             <Section description="Collapsible with a quiet label" collapsible>
-                <p className="text-14px">Content.</p>
+                <p className="text-sm">Content.</p>
             </Section>
             <Section
                 title="Action on hover"
@@ -1400,7 +1400,7 @@ function SectionDemo() {
                     </Button>
                 }
             >
-                <p className="text-14px">Content.</p>
+                <p className="text-sm">Content.</p>
             </Section>
             <Section
                 variant="outlined"
@@ -1446,11 +1446,11 @@ function ListDemo() {
             <div className="overflow-hidden rounded border border-border bg-surface">
                 <List>
                     <ListItem>
-                        <span className="text-14px">Static item</span>
+                        <span className="text-sm">Static item</span>
                     </ListItem>
                     <ListItem onClick={() => notify({ title: 'Item clicked' })}>
                         <IconBadge icon={Inbox} size="sm" />
-                        <span className="flex-1 text-14px">Clickable item</span>
+                        <span className="flex-1 text-sm">Clickable item</span>
                         <Badge>3</Badge>
                     </ListItem>
                     <ListItem
@@ -1458,7 +1458,7 @@ function ListDemo() {
                         menu={{ label: 'Options', items: menuItems }}
                     >
                         <Avatar name="Example" size="sm" />
-                        <span className="flex-1 text-14px">With a menu</span>
+                        <span className="flex-1 text-sm">With a menu</span>
                         <Button
                             variant="ghost"
                             size="sm"
@@ -1477,19 +1477,19 @@ function ListDemo() {
                             hover: true,
                         }}
                     >
-                        <span className="flex-1 text-14px">Menu on hover</span>
+                        <span className="flex-1 text-sm">Menu on hover</span>
                     </ListItem>
                     <ListItem
                         active
                         onClick={() => notify({ title: 'Item clicked' })}
                     >
-                        <span className="text-14px">Active item</span>
+                        <span className="text-sm">Active item</span>
                     </ListItem>
                     <ListItem
                         selected
                         onClick={() => notify({ title: 'Item clicked' })}
                     >
-                        <span className="text-14px">Selected item</span>
+                        <span className="text-sm">Selected item</span>
                     </ListItem>
                 </List>
             </div>
@@ -1507,7 +1507,7 @@ function ListDemo() {
                 <List organizing={organizing} onReorder={setSorted}>
                     {sorted.map((item) => (
                         <ListItem key={item} sortId={item}>
-                            <span className="text-14px">{item}</span>
+                            <span className="text-sm">{item}</span>
                         </ListItem>
                     ))}
                 </List>
@@ -1519,7 +1519,7 @@ function ListDemo() {
                         key={item}
                         onClick={() => notify({ title: item })}
                     >
-                        <span className="text-14px">{item}</span>
+                        <span className="text-sm">{item}</span>
                     </ListItem>
                 ))}
             </List>
@@ -1527,7 +1527,7 @@ function ListDemo() {
             <List variant="bare">
                 {items.slice(0, 2).map((item) => (
                     <ListItem key={item}>
-                        <span className="text-14px">{item}</span>
+                        <span className="text-sm">{item}</span>
                     </ListItem>
                 ))}
             </List>
@@ -1535,7 +1535,7 @@ function ListDemo() {
                 <List columns>
                     {items.map((item) => (
                         <ListItem key={item}>
-                            <span className="text-14px">{item}</span>
+                            <span className="text-sm">{item}</span>
                         </ListItem>
                     ))}
                 </List>
@@ -1544,7 +1544,7 @@ function ListDemo() {
                 <List horizontal>
                     {items.slice(0, 3).map((item) => (
                         <ListItem key={item}>
-                            <span className="text-14px">{item}</span>
+                            <span className="text-sm">{item}</span>
                         </ListItem>
                     ))}
                 </List>
@@ -1624,7 +1624,7 @@ function CarouselDemo() {
                 key={index}
                 className="flex h-[112px] w-[160px] items-center justify-center rounded border border-border bg-control"
             >
-                <Image className="size-icon-24px text-foreground-faint" />
+                <Image className="size-6 text-foreground-faint" />
             </div>
         ));
 
@@ -1639,19 +1639,19 @@ function CarouselDemo() {
             remember="docs:carousel"
         >
             <CarouselFrame control={many} arrows={manyOverflowing}>
-                <CarouselTrack control={many} className="gap-8px">
+                <CarouselTrack control={many} className="gap-2">
                     {slides(10)}
                 </CarouselTrack>
             </CarouselFrame>
-            <div className="rounded bg-surface-raised p-12px">
+            <div className="rounded bg-surface-raised p-3">
                 <CarouselFrame control={raised} arrows={raisedOverflowing}>
-                    <CarouselTrack control={raised} className="gap-8px">
+                    <CarouselTrack control={raised} className="gap-2">
                         {slides(10)}
                     </CarouselTrack>
                 </CarouselFrame>
             </div>
             <CarouselFrame control={few} arrows={fewOverflowing}>
-                <CarouselTrack control={few} className="gap-8px">
+                <CarouselTrack control={few} className="gap-2">
                     {slides(2)}
                 </CarouselTrack>
             </CarouselFrame>
@@ -1690,7 +1690,7 @@ function ModalDemo() {
             collapsed
             remember="docs:modal"
         >
-            <div className="flex flex-wrap gap-12px">
+            <div className="flex flex-wrap gap-3">
                 {modalCases.map((each) => (
                     <Button
                         key={each.label}
@@ -1714,7 +1714,7 @@ function ModalDemo() {
                     title="Title"
                     description={each.label}
                 >
-                    <p className="text-14px">Content.</p>
+                    <p className="text-sm">Content.</p>
                     <ModalFooter>
                         <Button onClick={close}>Ok</Button>
                     </ModalFooter>
@@ -1726,7 +1726,7 @@ function ModalDemo() {
                 className="max-w-4xl"
                 title="Title"
             >
-                <p className="text-14px">Content.</p>
+                <p className="text-sm">Content.</p>
             </Modal>
         </Section>
     );
@@ -1786,7 +1786,7 @@ function DropdownMenuDemo() {
             collapsed
             remember="docs:dropdown-menu"
         >
-            <div className="flex flex-wrap items-center gap-12px">
+            <div className="flex flex-wrap items-center gap-3">
                 <DropdownMenu
                     label="Options"
                     trigger={
@@ -1961,7 +1961,7 @@ function NotifyDemo() {
             collapsed
             remember="docs:notify"
         >
-            <div className="flex flex-wrap gap-12px">
+            <div className="flex flex-wrap gap-3">
                 {(['success', 'primary', 'warning', 'danger'] as const).map(
                     (tone) => (
                         <Button
@@ -1974,7 +1974,7 @@ function NotifyDemo() {
                     ),
                 )}
             </div>
-            <div className="flex flex-wrap gap-12px">
+            <div className="flex flex-wrap gap-3">
                 <Button
                     variant="outline"
                     onClick={() =>
@@ -2030,7 +2030,7 @@ function UseHoldDemo() {
             collapsed
             remember="docs:use-hold"
         >
-            <div className="flex items-center gap-12px">
+            <div className="flex items-center gap-3">
                 <img
                     src={sample}
                     alt="Example"
@@ -2038,7 +2038,7 @@ function UseHoldDemo() {
                     className="h-[96px] w-[144px] rounded object-cover select-none"
                     {...hold}
                 />
-                <span className="text-14px text-foreground-muted">
+                <span className="text-sm text-foreground-muted">
                     Held {count} times
                 </span>
             </div>
@@ -2060,13 +2060,13 @@ function UseFilePickerDemo() {
             collapsed
             remember="docs:use-file-picker"
         >
-            <div className="flex flex-wrap items-center gap-12px">
+            <div className="flex flex-wrap items-center gap-3">
                 <Button variant="outline" onClick={filePicker.open}>
                     Choose files
                 </Button>
                 {filePicker.picker}
                 {files.length > 0 && (
-                    <span className="text-14px text-foreground-muted">
+                    <span className="text-sm text-foreground-muted">
                         {files.map((file) => file.name).join(', ')}
                     </span>
                 )}
@@ -2089,7 +2089,7 @@ function MarkedButtonDemo() {
             collapsed
             remember="docs:marked-button"
         >
-            <div className="flex flex-wrap gap-8px">
+            <div className="flex flex-wrap gap-2">
                 {marks.map((mark) => (
                     <Button
                         key={mark}
@@ -2117,7 +2117,7 @@ function IconGroupDemo() {
             collapsed
             remember="docs:icon-group"
         >
-            <div className="flex items-center rounded border border-border px-12px py-4px">
+            <div className="flex items-center rounded border border-border px-3 py-1">
                 <span className="min-w-0 flex-1 truncate">Label</span>
                 <IconGroup>
                     <Button variant="ghost" square>
@@ -2304,12 +2304,12 @@ function PaletteDemo() {
             collapsed
             remember="docs:palette"
         >
-            <div className="grid grid-cols-3 gap-4px sm:grid-cols-6">
+            <div className="grid grid-cols-3 gap-1 sm:grid-cols-6">
                 {paletteColors.map((color) => (
-                    <div key={color} className={cn('flex flex-col gap-4px')}>
+                    <div key={color} className={cn('flex flex-col gap-1')}>
                         <span
                             className={cn(
-                                'truncate text-12px',
+                                'truncate text-xs',
                                 paletteText(color),
                             )}
                         >
@@ -2317,12 +2317,12 @@ function PaletteDemo() {
                         </span>
                         <span
                             className={cn(
-                                'h-16px rounded border',
+                                'h-4 rounded border',
                                 paletteBorder(color),
                             )}
                         />
                         <span
-                            className={cn('h-16px rounded', paletteFill(color))}
+                            className={cn('h-4 rounded', paletteFill(color))}
                         />
                     </div>
                 ))}
@@ -2345,7 +2345,7 @@ function PageDemo() {
             collapsed
             remember="docs:page"
         >
-            <div className="flex flex-wrap gap-8px">
+            <div className="flex flex-wrap gap-2">
                 <Button variant="outline" onClick={() => setFooter(!footer)}>
                     Toggle PageFooter
                 </Button>
@@ -2359,7 +2359,7 @@ function PageDemo() {
                         className="min-h-0"
                         width="column"
                         header={
-                            <div className="flex w-full items-center border-b border-border px-(--gutter) py-4px">
+                            <div className="flex w-full items-center border-b border-border px-(--gutter) py-1">
                                 <h3 className="ui-page-title min-w-0 flex-1 truncate">
                                     Header of the app
                                 </h3>
@@ -2377,7 +2377,7 @@ function PageDemo() {
                                 </PageFooter>
                             ) : (
                                 bottom && (
-                                    <PageBottom className="flex justify-end px-(--gutter) pb-12px">
+                                    <PageBottom className="flex justify-end px-(--gutter) pb-3">
                                         <FloatingButton>
                                             <Plus />
                                         </FloatingButton>
@@ -2408,7 +2408,7 @@ function ScreensDemo() {
             <div className="overflow-clip rounded border border-border">
                 <AuthScreen
                     className="min-h-0"
-                    brand={<span className="text-48px font-bold">Brand</span>}
+                    brand={<span className="text-5xl font-bold">Brand</span>}
                     title="Title"
                     description="Description."
                 >
@@ -2417,7 +2417,7 @@ function ScreensDemo() {
             </div>
             <div className="overflow-clip rounded border border-border">
                 <ErrorScreen
-                    className="min-h-0 py-32px"
+                    className="min-h-0 py-8"
                     status={404}
                     title="Title"
                     description="Description."
@@ -2440,7 +2440,7 @@ function NavItemDemo() {
             collapsed
             remember="docs:nav-item"
         >
-            <div className="flex max-w-xs flex-col gap-4px">
+            <div className="flex max-w-xs flex-col gap-1">
                 <NavItem href="#components" active>
                     <Inbox />
                     Active
@@ -2520,7 +2520,7 @@ function ControlStrutDemo() {
             collapsed
             remember="docs:control-strut"
         >
-            <div className="flex items-center gap-8px rounded border border-border px-12px">
+            <div className="flex items-center gap-2 rounded border border-border px-3">
                 <ControlStrut />
                 <span>Row with the height of a control</span>
             </div>
@@ -2574,7 +2574,7 @@ function CoverDemo() {
             collapsed
             remember="docs:cover"
         >
-            <div className="relative rounded border border-border p-12px hover:bg-surface-hover">
+            <div className="relative rounded border border-border p-3 hover:bg-surface-hover">
                 <Cover onClick={() => notify({ title: 'Clicked' })} />
                 <span className="pointer-events-none relative">
                     Click anywhere
@@ -2649,7 +2649,7 @@ function LockedModalDemo() {
             collapsed
             remember="docs:locked-modal"
         >
-            <div className="flex flex-wrap items-center gap-12px">
+            <div className="flex flex-wrap items-center gap-3">
                 <Button variant="outline" onClick={() => setOpen(true)}>
                     Open
                 </Button>
@@ -2659,7 +2659,7 @@ function LockedModalDemo() {
                     }
                     hideClose
                 >
-                    <div className="flex items-center justify-between gap-12px">
+                    <div className="flex items-center justify-between gap-3">
                         <ModalTitle>Custom header</ModalTitle>
                         <ModalHiddenDescription>
                             Read only by screen readers.
@@ -2669,7 +2669,7 @@ function LockedModalDemo() {
                 </Modal>
             </div>
             <Modal open={open} dismissible={false} title="Title">
-                <p className="text-14px">Content.</p>
+                <p className="text-sm">Content.</p>
                 <ModalFooter>
                     <Button onClick={() => setOpen(false)}>Answer</Button>
                 </ModalFooter>
@@ -2760,10 +2760,7 @@ function PopoverDemo() {
                         Open
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent
-                    align="start"
-                    className="ui-note max-w-xs p-12px"
-                >
+                <PopoverContent align="start" className="ui-note max-w-xs p-3">
                     Content.
                 </PopoverContent>
             </Popover>

@@ -95,8 +95,8 @@ export function TabsList(props: TabsListProps) {
                 ref={setList}
                 onClick={reveal}
                 className={cn(
-                    'relative flex w-full [scrollbar-width:none] items-center gap-4px overflow-x-auto rounded-full',
-                    fit && 'sm:*:flex-none sm:*:px-16px',
+                    'relative flex w-full [scrollbar-width:none] items-center gap-1 overflow-x-auto rounded-full',
+                    fit && 'sm:*:flex-none sm:*:px-4',
                     fade,
                 )}
                 {...rest}
@@ -115,7 +115,7 @@ export function TabsTrigger(props: TabsTriggerProps) {
     return (
         <TabsPrimitive.Trigger
             className={cn(
-                'inline-flex cursor-pointer items-center justify-center gap-8px rounded-full border text-14px whitespace-nowrap transition-colors hover:text-foreground focus-visible:-outline-offset-2 active:text-foreground disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-icon-16px [&_svg]:shrink-0',
+                'inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border text-sm whitespace-nowrap transition-colors hover:text-foreground focus-visible:-outline-offset-2 active:text-foreground disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0',
                 ghostHoverClass,
                 trackItemClass,
             )}
