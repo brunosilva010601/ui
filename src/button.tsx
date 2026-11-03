@@ -2,6 +2,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { LoaderCircle } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import { useFormId } from './form/form';
+import { useHydrated } from './lib/device';
 import { cn } from './lib/utils';
 import { palette } from './palette';
 import type { PaletteColor } from './palette';
@@ -131,6 +132,7 @@ export function Button(props: ButtonProps) {
     } = props;
     const Component = asChild ? Slot : 'button';
     const formId = useFormId();
+    const hydrated = useHydrated();
     const submit = !asChild && type === 'submit';
     const working = !asChild && busy;
 
@@ -151,7 +153,9 @@ export function Button(props: ButtonProps) {
                 ),
             })}
             {...rest}
-            disabled={rest.disabled || working || undefined}
+            disabled={
+                rest.disabled || working || (submit && !hydrated) || undefined
+            }
         >
             {working ? (
                 <>

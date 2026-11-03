@@ -5,7 +5,7 @@ import { createContext, useContext, useState } from 'react';
 import type { ComponentProps, ReactElement, ReactNode } from 'react';
 import { Backdrop } from './backdrop';
 import { IconBadge } from './icon-badge';
-import { touch } from './lib/device';
+import { useTouch } from './lib/device';
 import { cn } from './lib/utils';
 import { Modal, ModalClose } from './modal';
 import { useCloseOnBack } from './modal-history';
@@ -39,6 +39,8 @@ type DropdownMenuProps = {
 const MenuClose = createContext<typeof PopoverClose>(PopoverClose);
 
 export function DropdownMenu(props: DropdownMenuProps) {
+    const touch = useTouch();
+
     return props.choice && touch ? (
         <ChoiceModal {...props} />
     ) : (

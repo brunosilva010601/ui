@@ -29,6 +29,7 @@ type UiConfig = {
     locale: string;
     weekStart: number;
     onLeave: (listener: () => void) => () => void;
+    onSettle: (listener: () => void) => () => void;
 };
 
 const defaults: UiConfig = {
@@ -46,6 +47,7 @@ const defaults: UiConfig = {
     locale: 'pt-BR',
     weekStart: 0,
     onLeave: () => () => {},
+    onSettle: () => () => {},
 };
 
 const UiContext = createContext<UiConfig>(defaults);

@@ -3,7 +3,7 @@ import type { FormEvent, ReactNode } from 'react';
 import { Button } from './button';
 import { Form } from './form/form';
 import { Modal, ModalClose, ModalFooter } from './modal';
-import { useUiLabels } from './provider';
+import { useUi, useUiLabels } from './provider';
 
 type Props = {
     open: boolean;
@@ -21,16 +21,28 @@ type Props = {
 
 export function ConfirmDialog(props: Props) {
     const labels = useUiLabels();
+    const { onSettle } = useUi();
     const [sending, setSending] = useState(false);
+
+    if (!props.open && sending) {
+        setSending(false);
+    }
 
     const submit = (event: FormEvent) => {
         event.preventDefault();
+        setSending(true);
         const result = props.onConfirm();
 
         if (result instanceof Promise) {
-            setSending(true);
             result.finally(() => setSending(false));
+
+            return;
         }
+
+        const stop = onSettle(() => {
+            stop();
+            setSending(false);
+        });
     };
 
     return (

@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import type { ChangeEvent, FocusEvent, KeyboardEvent, Ref } from 'react';
-import { touch } from '../lib/device';
+import { useTouch } from '../lib/device';
 import { cn } from '../lib/utils';
 import { bareFieldClass, Field, fieldClass } from './field';
 import type { FieldProps } from './field';
@@ -37,14 +37,16 @@ type Props = FieldProps & {
     onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
-export const plainTextField = touch
-    ? ({
-          type: 'search',
-          role: 'textbox',
-          enterKeyHint: 'done',
-          autoCapitalize: 'sentences',
-      } as const)
-    : {};
+const touchTextField = {
+    type: 'search',
+    role: 'textbox',
+    enterKeyHint: 'done',
+    autoCapitalize: 'sentences',
+} as const;
+
+export function usePlainTextField() {
+    return useTouch() ? touchTextField : {};
+}
 
 export function Input(props: Props) {
     const {
@@ -59,6 +61,7 @@ export function Input(props: Props) {
         ...rest
     } = props;
     const inputId = useId();
+    const plainTextField = usePlainTextField();
     const plain = props.type === undefined && props.autoComplete === undefined;
 
     return (

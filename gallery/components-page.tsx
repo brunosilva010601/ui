@@ -1739,7 +1739,7 @@ function ConfirmDialogDemo() {
         <Section
             variant="outlined"
             title="ConfirmDialog"
-            description="Asks before a destructive action. Keeps the button disabled while the promise returned by onConfirm runs."
+            description="Asks before a destructive action. Keeps the button disabled while the promise returned by onConfirm runs, or, without a promise, until the next navigation settles or the dialog closes."
             meta="title · description · confirmLabel · onConfirm · blocked"
             collapsible
             collapsed

@@ -5,7 +5,6 @@
 - Quando o Loremy adotar: remover os nomes antigos (`gap-md`, `text-sm`, `size-icon-sm`, `--gap-*`, `--padding-*`, `--margin-*`) e o multiplicador `--spacing`, fechar `--text-*` e acrescentar um lint contra número puro. Mylo e Salalas já estão sem eles.
 - Escolher o nome definitivo do pacote, hoje `ui`.
 - Renomear a pasta `gallery`, provavelmente para `docs`.
-- A modal e a detecção de toque já carregam onde não existe janela, mas o toque sai como falso nesse caso e só acerta quando a página revive no navegador, o que a renderização no servidor do Loremy ainda precisa resolver.
 - Ideia: configurar o tema do app num bloco no CSS (`@plugin`), com só as chaves que o projeto pode mudar, como a cor principal.
 - A modal escuta o voltar do navegador assim que o arquivo carrega e empurra uma entrada de histórico por janela aberta (`src/modal-history.ts`), o que ainda não foi testado contra um roteador que não seja o do Inertia, como o do Salalas.
 - `Section` ainda tem quatro formas de clique (`onClick`, `href`, `headerHref`, `onHeaderClick`), e `Banner`, `EmptyState` e `notify` recebem a ação em três formatos.

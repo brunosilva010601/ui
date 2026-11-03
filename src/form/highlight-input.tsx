@@ -3,7 +3,7 @@ import type { KeyboardEvent } from 'react';
 import { cn } from '../lib/utils';
 import { Field, fieldClass } from './field';
 import type { FieldProps } from './field';
-import { plainTextField } from './input';
+import { usePlainTextField } from './input';
 
 const bareClass =
     'w-full min-w-0 border border-transparent bg-transparent py-4px text-foreground outline-none placeholder:text-foreground-muted';
@@ -40,6 +40,7 @@ function pieces(value: string, ranges: [number, number][]) {
 export function HighlightInput(props: Props) {
     const id = useId();
     const [scroll, setScroll] = useState(0);
+    const plainTextField = usePlainTextField();
     const surface = props.bare ? bareClass : fieldClass;
 
     return (

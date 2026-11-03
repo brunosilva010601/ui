@@ -6,7 +6,7 @@ import { cn } from '../lib/utils';
 import { useUiLabels } from '../provider';
 import { Field } from './field';
 import type { FieldProps } from './field';
-import { plainTextField } from './input';
+import { usePlainTextField } from './input';
 
 export const stepperClass =
     'grid grid-cols-[auto_1fr_auto] rounded border border-border bg-control transition-shadow focus-within:border-primary focus-within:ring-1 focus-within:ring-primary has-aria-invalid:border-danger has-aria-invalid:focus-within:ring-danger';
@@ -51,6 +51,7 @@ type Props = FieldProps & {
 export function NumberInput(props: Props) {
     const inputId = useId();
     const labels = useUiLabels();
+    const plainTextField = usePlainTextField();
     const timer = useRef<number | undefined>(undefined);
     const current = useRef(0);
     const ticks = useRef(0);
