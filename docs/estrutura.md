@@ -19,7 +19,7 @@ O repositório `brunosilva010601/ui` é público, e os apps instalam direto dele
 O pacote entra no `package.json` do app apontando para a tag:
 
 ```json
-"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.9.0"
+"@brunosilva010601/ui": "github:brunosilva010601/ui#v0.10.0"
 ```
 
 A tag `v0.1.0` aponta para um commit de antes do nome atual e não serve para instalar.
@@ -59,7 +59,8 @@ Regras da adoção:
 4. Envolver o app com `UiProvider`, que recebe o componente de link do roteador, os textos internos, o idioma, o início da semana, o aviso de saída de página (`onLeave`) e o aviso de fim de navegação (`onSettle`). Sem ele, tudo funciona com textos em português e links comuns.
 5. Montar o `Toaster` uma vez na raiz, passando claro ou escuro. Mensagens vindas do servidor ficam no app, chamando `notify`. O aviso sobe sozinho acima de um `PageBottom` ou `PageFooter` montado, que declaram a altura em `--page-bottom`.
 6. A escolha entre claro, escuro e sistema usa o `AppearancePicker`, mas guardar a escolha e aplicar a classe `dark` ficam no app.
-7. Na configuração do oxlint, estender a do pacote, para cada versão nova trazer as regras atualizadas sem mexer no app. As regras de fora no oxlint ainda estão em alfa, então uma versão nova dele pode pedir ajuste nelas.
+7. Na configuração do oxlint, estender a do pacote, para cada versão nova trazer as regras atualizadas sem mexer no app. A do pacote declara `plugins` vazio, porque sem isso o oxlint soma os plugins padrão dele (`unicorn`, `typescript`, `oxc`) aos que o app escolheu: os plugins nativos são só do app. As regras de fora no oxlint ainda estão em alfa, então uma versão nova dele pode pedir ajuste nelas.
+8. O histórico das modais não pede ligação com nenhum roteador. Com uma modal, menu ou popover aberto, o pacote troca a entrada que ele empurrou pela navegação seguinte (`pushState` vira `replaceState`), então navegar de dentro da janela não deixa entrada sobrando e o voltar sai da página em vez de reabrir a janela.
 
 No `.oxlintrc.json`:
 
@@ -75,7 +76,7 @@ import ui from '@brunosilva010601/ui/lint/oxlintrc.json' with { type: 'json' };
 lint: { extends: [ui], ... }
 ```
 
-No Inertia, duas ligações ficam no app:
+No Inertia, a ligação com o roteador fica assim:
 
 ```tsx
 <UiProvider
@@ -91,17 +92,9 @@ No Inertia, duas ligações ficam no app:
 >
 ```
 
-```ts
-router.on('before', (event) => {
-    const visit = event.detail.visit;
+Num roteador sem aviso de fim de navegação, como o react-router, `onSettle` fica no padrão: o `ConfirmDialog` que não recebe Promise fica ocupado até a janela fechar.
 
-    if (!visit.prefetch && visitReplacesModalEntry({ url: visit.url.href, method: visit.method })) {
-        visit.replace = true;
-    }
-});
-```
-
-A segunda evita que modais abertas deixem entradas sobrando no histórico do navegador.
+O `router.on('before')` com `visitReplacesModalEntry`, que o Mylo e o Loremy ainda têm, ficou desnecessário e não atrapalha: o Inertia passa a trocar a entrada ele mesmo, e a função continua exportada até os dois apagarem a ligação.
 
 ## Galeria
 

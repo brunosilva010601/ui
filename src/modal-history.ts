@@ -67,7 +67,7 @@ function closeOnBack(event: PopStateEvent) {
     top();
     window.setTimeout(() => {
         if (openModals.includes(top)) {
-            window.history.pushState(window.history.state, '');
+            pushEntry(window.history.state, '');
             backHistory.depth++;
         }
     });
@@ -94,7 +94,34 @@ export function visitReplacesModalEntry(visit: {
     return false;
 }
 
+const pushEntry =
+    typeof window !== 'undefined'
+        ? window.history.pushState.bind(window.history)
+        : () => {};
+
+function replaceModalEntry(
+    state: unknown,
+    unused: string,
+    url?: string | URL | null,
+) {
+    if (!backHistory.depth) {
+        pushEntry(state, unused, url);
+
+        return;
+    }
+
+    if (
+        url != null &&
+        new URL(url, window.location.href).href !== backHistory.url
+    ) {
+        backHistory.depth = 0;
+    }
+
+    window.history.replaceState(state, unused, url);
+}
+
 if (typeof window !== 'undefined') {
+    window.history.pushState = replaceModalEntry;
     window.addEventListener('popstate', closeOnBack, { capture: true });
     document.addEventListener('focusin', rememberFocus);
     document.addEventListener('pointerdown', rememberFocus, { capture: true });
@@ -125,7 +152,7 @@ export function useCloseOnBack(
             backHistory.url = window.location.href;
         }
 
-        window.history.pushState(window.history.state, '');
+        pushEntry(window.history.state, '');
         backHistory.depth++;
 
         return () => {

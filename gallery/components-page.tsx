@@ -13,7 +13,7 @@ import {
     Star,
     Trash2,
 } from 'lucide-react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import {
     AppearancePicker,
     Avatar,
@@ -1057,8 +1057,8 @@ function ProgressBarDemo() {
         <Section
             variant="outlined"
             title="ProgressBar"
-            description="Empty, in progress and complete, green when the value reaches the maximum."
-            meta="value · max"
+            description="Empty, in progress and complete, green when the value reaches the maximum. A tone fixes the color, and linear makes a bar driven by time advance at a steady pace."
+            meta="value · max · tone · linear · className"
             collapsible
             collapsed
             remember="docs:progress-bar"
@@ -1066,7 +1066,33 @@ function ProgressBarDemo() {
             <ProgressBar value={0} max={10} />
             <ProgressBar value={3} max={10} />
             <ProgressBar value={10} max={10} />
+            {badgeTones.map((tone) => (
+                <ProgressBar key={tone} value={6} max={10} tone={tone} />
+            ))}
+            <ProgressBarCountdown />
         </Section>
+    );
+}
+
+function ProgressBarCountdown() {
+    const [left, setLeft] = useState(10);
+
+    useEffect(() => {
+        const timer = window.setInterval(
+            () => setLeft((value) => (value <= 0 ? 10 : value - 0.25)),
+            250,
+        );
+
+        return () => window.clearInterval(timer);
+    }, []);
+
+    return (
+        <ProgressBar
+            value={left}
+            max={10}
+            tone={left <= 3 ? 'danger' : 'neutral'}
+            linear
+        />
     );
 }
 

@@ -1,4 +1,5 @@
 {
+    "plugins": [],
     "jsPlugins": ["@brunosilva010601/ui/lint"],
     "rules": {
         "ui/fixed-color": "error",

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import { Button } from './button';
 import { Form } from './form/form';
@@ -23,6 +23,18 @@ export function ConfirmDialog(props: Props) {
     const labels = useUiLabels();
     const { onSettle } = useUi();
     const [sending, setSending] = useState(false);
+    const stopSettle = useRef<(() => void) | null>(null);
+
+    const release = () => {
+        stopSettle.current?.();
+        stopSettle.current = null;
+    };
+
+    useEffect(() => {
+        if (props.open) {
+            return release;
+        }
+    }, [props.open]);
 
     if (!props.open && sending) {
         setSending(false);
@@ -39,8 +51,9 @@ export function ConfirmDialog(props: Props) {
             return;
         }
 
-        const stop = onSettle(() => {
-            stop();
+        release();
+        stopSettle.current = onSettle(() => {
+            release();
             setSending(false);
         });
     };
