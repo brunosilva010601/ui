@@ -1,6 +1,7 @@
 import { Circle, CircleCheck } from 'lucide-react';
 import type { Root, RootContent } from 'mdast';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useId } from 'react';
+import type { ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import type { Components, ExtraProps } from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
@@ -54,7 +55,11 @@ function boxOf(node: Node): boolean | null {
     return null;
 }
 
-function TaskBox(props: { done: boolean; line: number | undefined }) {
+function TaskBox(props: {
+    done: boolean;
+    line: number | undefined;
+    labelledBy: string;
+}) {
     const toggle = useContext(TaskToggle);
     const Icon = props.done ? CircleCheck : Circle;
     const icon = (
@@ -77,11 +82,35 @@ function TaskBox(props: { done: boolean; line: number | undefined }) {
             type="button"
             role="checkbox"
             aria-checked={props.done}
+            aria-labelledby={props.labelledBy}
             className="flex h-lh shrink-0 cursor-pointer items-center"
             onClick={() => toggle(line)}
         >
             {icon}
         </button>
+    );
+}
+
+function TaskItem(props: {
+    done: boolean;
+    line: number | undefined;
+    children?: ReactNode;
+}) {
+    const id = useId();
+
+    return (
+        <li className="flex items-start gap-2">
+            <TaskBox done={props.done} line={props.line} labelledBy={id} />
+            <div
+                id={id}
+                className={cn(
+                    'flex min-w-0 flex-1 flex-col gap-1',
+                    props.done && 'text-foreground-muted line-through',
+                )}
+            >
+                {props.children}
+            </div>
+        </li>
     );
 }
 
@@ -110,17 +139,9 @@ const components: Components = {
         }
 
         return (
-            <li className="flex items-start gap-2">
-                <TaskBox done={done} line={props.node?.position?.start.line} />
-                <div
-                    className={cn(
-                        'flex min-w-0 flex-1 flex-col gap-1',
-                        done && 'text-foreground-muted line-through',
-                    )}
-                >
-                    {props.children}
-                </div>
-            </li>
+            <TaskItem done={done} line={props.node?.position?.start.line}>
+                {props.children}
+            </TaskItem>
         );
     },
     input: () => null,
