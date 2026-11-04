@@ -1,7 +1,13 @@
 import { useId, useState } from 'react';
 import type { ChangeEvent, FocusEvent, KeyboardEvent, Ref } from 'react';
 import { cn } from '../lib/utils';
-import { bareFieldClass, describedBy, Field, fieldClass } from './field';
+import {
+    bareFieldClass,
+    describedBy,
+    Field,
+    fieldClass,
+    fieldPlaceholder,
+} from './field';
 import type { FieldProps } from './field';
 
 const sizes = {
@@ -79,6 +85,7 @@ export function Textarea(props: Props) {
                     className,
                 )}
                 {...rest}
+                placeholder={fieldPlaceholder(props)}
                 onChange={(event) => {
                     setTyped(event.target.value.length);
                     props.onChange?.(event);

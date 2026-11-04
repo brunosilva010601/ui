@@ -37,7 +37,7 @@ export { useFilePicker } from './file-picker';
 export { Calendar } from './form/calendar';
 export { CodeInput } from './form/code-input';
 export { ColorPicker } from './form/color-picker';
-export { Field, FieldError } from './form/field';
+export { Field, FieldError, HIDDEN_SECRET } from './form/field';
 export type { FieldProps } from './form/field';
 export { FileInput } from './form/file-input';
 export { Form, FormActions } from './form/form';

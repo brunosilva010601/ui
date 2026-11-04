@@ -2,7 +2,14 @@ import { useId } from 'react';
 import type { ChangeEvent, FocusEvent, KeyboardEvent, Ref } from 'react';
 import { useTouch } from '../lib/device';
 import { cn } from '../lib/utils';
-import { bareFieldClass, describedBy, Field, fieldClass } from './field';
+import {
+    bareFieldClass,
+    describedBy,
+    Field,
+    fieldClass,
+    fieldPlaceholder,
+    HIDDEN_SECRET,
+} from './field';
 import type { FieldProps } from './field';
 
 type Props = FieldProps & {
@@ -58,6 +65,7 @@ export function Input(props: Props) {
         error,
         className,
         bare,
+        placeholder,
         ...rest
     } = props;
     const inputId = useId();
@@ -81,6 +89,13 @@ export function Input(props: Props) {
                 autoComplete="off"
                 {...(plain ? plainTextField : {})}
                 className={cn(bare ? bareFieldClass : fieldClass, className)}
+                placeholder={fieldPlaceholder({
+                    label,
+                    hideLabel,
+                    placeholder:
+                        placeholder ??
+                        (props.type === 'password' ? HIDDEN_SECRET : undefined),
+                })}
                 {...rest}
             />
         </Field>

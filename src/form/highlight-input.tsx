@@ -1,7 +1,7 @@
 import { useId, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { cn } from '../lib/utils';
-import { describedBy, Field, fieldClass } from './field';
+import { describedBy, Field, fieldClass, fieldPlaceholder } from './field';
 import type { FieldProps } from './field';
 import { usePlainTextField } from './input';
 
@@ -92,7 +92,7 @@ export function HighlightInput(props: Props) {
                     {...(props.enterKeyHint
                         ? { enterKeyHint: props.enterKeyHint }
                         : {})}
-                    placeholder={props.placeholder}
+                    placeholder={fieldPlaceholder(props)}
                     maxLength={props.maxLength}
                     value={props.value}
                     onChange={(event) => props.onChange(event.target.value)}

@@ -9,6 +9,24 @@ export const fieldClass =
 export const bareFieldClass =
     'w-full min-w-0 bg-transparent outline-none [text-decoration:inherit] placeholder:text-foreground-muted disabled:cursor-not-allowed disabled:opacity-50';
 
+export const HIDDEN_SECRET = '••••••••••';
+
+type PlaceholderSource = {
+    label?: ReactNode;
+    hideLabel?: boolean;
+    placeholder?: string;
+};
+
+export function fieldPlaceholder(props: PlaceholderSource) {
+    if (props.placeholder !== undefined) {
+        return props.placeholder;
+    }
+
+    return props.hideLabel && typeof props.label === 'string'
+        ? props.label
+        : undefined;
+}
+
 export type FieldProps = {
     label?: ReactNode;
     hideLabel?: boolean;
