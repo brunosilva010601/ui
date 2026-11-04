@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import type { Ref } from 'react';
+import type { ReactNode, Ref } from 'react';
 import { cn } from './lib/utils';
 import { Markdown } from './markdown';
 
@@ -28,6 +28,17 @@ export type MarkdownEditorHandle = {
     blur: () => void;
 };
 
+export type MarkdownMenuItem = {
+    command: MarkdownCommand;
+    label: string;
+    icon?: ReactNode;
+};
+
+export type MarkdownMenu = {
+    label: string;
+    items: MarkdownMenuItem[];
+};
+
 export const editorSizes = {
     sm: 'text-sm',
     md: 'text-base',
@@ -39,6 +50,7 @@ export type MarkdownEditorProps = {
     label: string;
     placeholder?: string;
     size?: keyof typeof editorSizes;
+    menu?: MarkdownMenu;
     onToggle?: (task: number) => void;
     onLink?: (current: string | null) => void;
     onFocusChange?: (focused: boolean) => void;

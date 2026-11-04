@@ -50,7 +50,7 @@ export const PopoverAnchor = PopoverPrimitive.Anchor;
 
 export const PopoverClose = PopoverPrimitive.Close;
 
-const floatingClass =
+export const floatingClass =
     'border border-border rounded bg-surface text-foreground shadow-overlay data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in z-50 outline-none';
 
 type Props = {

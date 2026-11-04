@@ -60,7 +60,12 @@ export { List, ListItem } from './list';
 export type { ListItemMenu } from './list';
 export { Markdown } from './markdown';
 export { MarkdownEditor, markdownShortcut } from './markdown-editor';
-export type { MarkdownCommand, MarkdownEditorHandle } from './markdown-editor';
+export type {
+    MarkdownCommand,
+    MarkdownEditorHandle,
+    MarkdownMenu,
+    MarkdownMenuItem,
+} from './markdown-editor';
 export {
     Modal,
     ModalClose,

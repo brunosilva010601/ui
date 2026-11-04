@@ -1,25 +1,25 @@
 import { TableKit } from '@tiptap/extension-table';
-import { TaskItem, TaskList } from '@tiptap/extension-list';
-import type { TaskItemOptions } from '@tiptap/extension-list';
+import { TaskList } from '@tiptap/extension-list';
 import { Placeholder } from '@tiptap/extensions';
-import {
-    EditorContent,
-    Extension,
-    NodeViewContent,
-    NodeViewWrapper,
-    ReactNodeViewRenderer,
-    useEditor,
-} from '@tiptap/react';
-import type { Editor, ReactNodeViewProps } from '@tiptap/react';
+import { EditorContent, Extension, useEditor } from '@tiptap/react';
+import type { Editor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
-import { Circle, CircleCheck } from 'lucide-react';
-import { useEffect, useId, useImperativeHandle, useRef } from 'react';
+import { useEffect, useImperativeHandle, useRef } from 'react';
 import type { RefObject } from 'react';
 import { buttonClass } from './button';
 import { docToMarkdown, markdownToDoc } from './lib/markdown-doc';
 import { cn } from './lib/utils';
 import { EditorFallback, editorSizes } from './markdown-editor';
 import type { MarkdownCommand, MarkdownEditorProps } from './markdown-editor';
+import { SlashMenu, slashMenu, useSlashState } from './markdown-editor-menu';
+import type { SlashListener } from './markdown-editor-menu';
+import {
+    listItem,
+    taskAtCursor,
+    taskItem,
+    toggleTask,
+} from './markdown-editor-nodes';
+import type { Toggle } from './markdown-editor-nodes';
 
 const HEADING_LEVEL = 2;
 
@@ -93,84 +93,10 @@ function run(editor: Editor, command: MarkdownCommand): void {
     }
 }
 
-type Toggle = RefObject<((task: number) => void) | undefined>;
-
-function taskIndex(editor: Editor, position: number): number {
-    let index = 0;
-
-    editor.state.doc.nodesBetween(0, position, (node, at) => {
-        if (node.type.name === 'taskItem' && at < position) {
-            index++;
-        }
-    });
-
-    return index;
-}
-
-function TaskView(props: ReactNodeViewProps) {
-    const id = useId();
-    const done = props.node.attrs.checked === true;
-    const toggle = (props.extension.options as { toggle: Toggle }).toggle;
-    const Icon = done ? CircleCheck : Circle;
-
-    const change = () => {
-        const position = props.getPos();
-
-        if (typeof position !== 'number') {
-            return;
-        }
-
-        if (toggle.current) {
-            toggle.current(taskIndex(props.editor, position));
-
-            return;
-        }
-
-        props.updateAttributes({ checked: !done });
-    };
-
-    return (
-        <NodeViewWrapper className="flex items-start gap-2">
-            <button
-                type="button"
-                role="checkbox"
-                aria-checked={done}
-                aria-labelledby={id}
-                contentEditable={false}
-                className="flex h-lh shrink-0 cursor-pointer items-center"
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={change}
-            >
-                <Icon
-                    className={cn(
-                        'size-5',
-                        done ? 'text-primary-text' : 'text-foreground-muted',
-                    )}
-                />
-            </button>
-            <NodeViewContent
-                id={id}
-                className={cn(
-                    'min-w-0 flex-1',
-                    done && 'text-foreground-muted line-through',
-                )}
-            />
-        </NodeViewWrapper>
-    );
-}
-
-function taskItem(toggle: Toggle) {
-    return TaskItem.extend<TaskItemOptions & { toggle: Toggle }>({
-        addOptions() {
-            return { ...(this.parent?.() as TaskItemOptions), toggle };
-        },
-        addNodeView() {
-            return ReactNodeViewRenderer(TaskView, { as: 'li' });
-        },
-    }).configure({ nested: true });
-}
-
-function shortcuts(onLink: RefObject<(() => void) | undefined>) {
+function shortcuts(
+    onLink: RefObject<(() => void) | undefined>,
+    toggle: Toggle,
+) {
     return Extension.create({
         name: 'markdownShortcuts',
         addKeyboardShortcuts() {
@@ -180,6 +106,17 @@ function shortcuts(onLink: RefObject<(() => void) | undefined>) {
                 'Mod-Alt--': () => this.editor.commands.setHorizontalRule(),
                 'Mod-l': () => {
                     onLink.current?.();
+
+                    return true;
+                },
+                'Mod-Enter': () => {
+                    const task = taskAtCursor(this.editor);
+
+                    if (task === null) {
+                        return false;
+                    }
+
+                    toggleTask(this.editor, task, toggle);
 
                     return true;
                 },
@@ -209,11 +146,25 @@ export default function MarkdownEditorView(props: MarkdownEditorProps) {
     const toggle = useRef(props.onToggle);
     const change = useRef(props.onChange);
     const focusChange = useRef(props.onFocusChange);
+    const menu = useRef(props.menu);
     const link = useRef<(() => void) | undefined>(undefined);
+    const listen: SlashListener = useRef(undefined);
+    const slash = useSlashState(listen);
 
     toggle.current = props.onToggle;
     change.current = props.onChange;
     focusChange.current = props.onFocusChange;
+    menu.current = props.menu;
+
+    const runCommand = (editor: Editor, command: MarkdownCommand) => {
+        if (command === 'link') {
+            link.current?.();
+
+            return;
+        }
+
+        run(editor, command);
+    };
 
     const editor = useEditor({
         immediatelyRender: false,
@@ -222,6 +173,7 @@ export default function MarkdownEditorView(props: MarkdownEditorProps) {
             StarterKit.configure({
                 heading: { levels: [1, 2, 3] },
                 underline: false,
+                listItem: false,
                 link: {
                     openOnClick: false,
                     autolink: true,
@@ -233,11 +185,13 @@ export default function MarkdownEditorView(props: MarkdownEditorProps) {
                     },
                 },
             }),
+            listItem,
             TaskList,
             taskItem(toggle),
             TableKit.configure({ table: { resizable: false } }),
             Placeholder.configure({ placeholder: props.placeholder ?? '' }),
-            shortcuts(link),
+            shortcuts(link, toggle),
+            ...(props.menu ? [slashMenu(menu, runCommand, listen)] : []),
         ],
         editorProps: {
             attributes: {
@@ -288,17 +242,9 @@ export default function MarkdownEditorView(props: MarkdownEditorProps) {
         props.ref,
         () => ({
             run: (command) => {
-                if (!editor) {
-                    return;
+                if (editor) {
+                    runCommand(editor, command);
                 }
-
-                if (command === 'link') {
-                    link.current?.();
-
-                    return;
-                }
-
-                run(editor, command);
             },
             setLink: (href) => {
                 if (!editor) {
@@ -334,5 +280,10 @@ export default function MarkdownEditorView(props: MarkdownEditorProps) {
         return <EditorFallback {...props} />;
     }
 
-    return <EditorContent editor={editor} />;
+    return (
+        <>
+            <EditorContent editor={editor} />
+            {props.menu && <SlashMenu state={slash} label={props.menu.label} />}
+        </>
+    );
 }

@@ -2,7 +2,7 @@
 
 ## Pacote
 
-- `MarkdownEditor`, segunda parte: o menu que abre ao digitar "/", o ⌘Enter que marca a caixinha da linha do cursor e arrastar itens de lista pela alça.
+- No `MarkdownEditor`, arrastar o item de lista para o lado ainda não muda o nível dele, como no Raycast; por ora o nível muda com Tab.
 - Ligar as regras de `lint/` no Mylo e instalar nele a versão com o tema limpo. Loremy e Salalas já estendem a configuração do pacote desde a 0.8.1. O Mylo, na 0.7.1, ainda usa os nomes em pixels (`gap-8px`, `text-12px`, `size-icon-16px`) em cerca de 150 lugares, que somem sem aviso na 0.8.0, e tem 4 ícones com tamanho dentro do botão.
 - Escolher o nome definitivo do pacote, hoje `ui`.
 - Renomear a pasta `gallery`, provavelmente para `docs`.

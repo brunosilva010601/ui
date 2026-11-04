@@ -1356,8 +1356,8 @@ function MarkdownEditorDemo() {
         <Section
             variant="outlined"
             title="Markdown editor"
-            description="Edits the formatted text and gives back Markdown. Typing # , - or [ ] at the start of a line turns it into a heading, list or checklist."
-            meta="value · onChange · onToggle · onLink · ref"
+            description="Edits the formatted text and gives back Markdown. Typing # , - or [ ] at the start of a line turns it into a heading, list or checklist, / opens the menu, ⌘Enter ticks the line and list items drag by the handle."
+            meta="value · onChange · menu · onToggle · onLink · ref"
             collapsible
             collapsed
             remember="docs:markdown-editor"
@@ -1368,6 +1368,16 @@ function MarkdownEditorDemo() {
                 size="md"
                 value={text}
                 onChange={setText}
+                menu={{
+                    label: 'Formatting',
+                    items: [
+                        { command: 'heading', label: 'Heading' },
+                        { command: 'task', label: 'Checklist' },
+                        { command: 'bullet', label: 'List' },
+                        { command: 'quote', label: 'Quote' },
+                        { command: 'divider', label: 'Divider' },
+                    ],
+                }}
             />
             <Markdown size="sm">{text}</Markdown>
         </Section>
