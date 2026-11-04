@@ -223,7 +223,7 @@ export function Markdown(props: Props) {
     return (
         <div
             className={cn(
-                'flex flex-col gap-3 [overflow-wrap:anywhere] select-text',
+                'ui-markdown flex flex-col gap-3 [overflow-wrap:anywhere] select-text',
                 sizes[props.size ?? 'sm'],
             )}
         >

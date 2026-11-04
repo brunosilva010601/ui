@@ -105,3 +105,21 @@
         @apply m-0;
     }
 }
+
+.ui-editor,
+.ui-markdown {
+    & li::marker {
+        @apply text-primary-text;
+    }
+
+    & :is(ul, ol) ul:not([data-type='taskList'], .contains-task-list) {
+        list-style-type: circle;
+    }
+
+    &
+        :is(ul, ol)
+        :is(ul, ol)
+        ul:not([data-type='taskList'], .contains-task-list) {
+        list-style-type: square;
+    }
+}
