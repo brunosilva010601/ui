@@ -1,0 +1,107 @@
+.ui-editor {
+    @apply min-h-lh [overflow-wrap:anywhere] outline-none select-text;
+    -webkit-user-select: text;
+
+    & > :not(p) + *,
+    & > * + :not(p),
+    & blockquote > :not(p) + *,
+    & blockquote > * + :not(p) {
+        @apply mt-3;
+    }
+
+    & p:empty,
+    & p:has(> br.ProseMirror-trailingBreak:only-child) {
+        @apply min-h-lh;
+    }
+
+    & p.is-editor-empty:first-child::before {
+        @apply pointer-events-none float-left h-0 text-foreground-muted;
+        content: attr(data-placeholder);
+    }
+
+    & h1 {
+        @apply text-lg font-bold;
+    }
+
+    & h2 {
+        @apply text-base font-bold;
+    }
+
+    & h3 {
+        @apply text-sm font-bold;
+    }
+
+    & strong {
+        @apply font-bold;
+    }
+
+    & ul,
+    & ol {
+        @apply flex flex-col gap-1;
+    }
+
+    & ul:not([data-type='taskList']) {
+        @apply list-disc ps-5;
+    }
+
+    & ol {
+        @apply list-decimal ps-5;
+    }
+
+    & ul[data-type='taskList'] {
+        @apply list-none;
+    }
+
+    & ul:not([data-type='taskList']) > li,
+    & ol > li,
+    & [data-node-view-content-react] {
+        & > * + * {
+            @apply mt-1;
+        }
+    }
+
+    & blockquote {
+        @apply border-s-2 border-border ps-3 text-foreground-soft;
+    }
+
+    & code {
+        @apply rounded bg-surface-raised px-1;
+    }
+
+    & pre {
+        @apply overflow-x-auto rounded border border-border bg-surface p-3 font-mono text-xs leading-[1.625] [overflow-wrap:normal];
+
+        & code {
+            @apply bg-transparent p-0;
+        }
+    }
+
+    & hr {
+        @apply border-border;
+    }
+
+    & hr.ProseMirror-selectednode {
+        @apply border-primary;
+    }
+
+    & .tableWrapper {
+        @apply overflow-x-auto rounded border border-border [overflow-wrap:normal];
+    }
+
+    & table {
+        @apply min-w-full text-left;
+    }
+
+    & th {
+        @apply border-b border-border bg-surface px-3 py-2 font-semibold whitespace-nowrap;
+    }
+
+    & td {
+        @apply border-t border-border px-3 py-2 whitespace-nowrap;
+    }
+
+    & th p,
+    & td p {
+        @apply m-0;
+    }
+}

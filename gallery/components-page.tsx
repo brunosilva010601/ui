@@ -50,6 +50,7 @@ import {
     List,
     ListItem,
     Markdown,
+    MarkdownEditor,
     Modal,
     ModalFooter,
     MonthInput,
@@ -240,6 +241,7 @@ export function ComponentsPage() {
                 <BannerDemo />
                 <EmptyStateDemo />
                 <MarkdownDemo />
+                <MarkdownEditorDemo />
                 <CodeBlockDemo />
                 <LoadingDemo />
             </Section>
@@ -1343,6 +1345,31 @@ function MarkdownDemo() {
                 {text}
             </Markdown>
             <Markdown size="sm">{markdown}</Markdown>
+        </Section>
+    );
+}
+
+function MarkdownEditorDemo() {
+    const [text, setText] = useState(markdown);
+
+    return (
+        <Section
+            variant="outlined"
+            title="Markdown editor"
+            description="Edits the formatted text and gives back Markdown. Typing # , - or [ ] at the start of a line turns it into a heading, list or checklist."
+            meta="value · onChange · onToggle · onLink · ref"
+            collapsible
+            collapsed
+            remember="docs:markdown-editor"
+        >
+            <MarkdownEditor
+                label="Notes"
+                placeholder="Write something"
+                size="md"
+                value={text}
+                onChange={setText}
+            />
+            <Markdown size="sm">{text}</Markdown>
         </Section>
     );
 }

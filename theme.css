@@ -3,6 +3,7 @@
 @import './css/palettes.css';
 @import './css/fonts.css';
 @import './css/base.css';
+@import './css/editor.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
