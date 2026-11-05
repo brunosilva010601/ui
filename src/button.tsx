@@ -76,6 +76,10 @@ export type ButtonVariant = keyof typeof variants;
 
 export type ButtonSize = keyof typeof sizes;
 
+export function buttonTextClass(size: ButtonSize = 'md') {
+    return sizes[size].text;
+}
+
 type ButtonProps = Omit<ComponentProps<'button'>, 'type'> & {
     variant?: ButtonVariant;
     size?: ButtonSize;

@@ -56,6 +56,7 @@ import {
     MonthInput,
     notify,
     NumberInput,
+    Pill,
     ProgressBar,
     RowTrigger,
     SearchInput,
@@ -208,6 +209,7 @@ export function ComponentsPage() {
             </Section>
             <Section title="Choices" collapsible remember="docs:choices">
                 <ButtonGroupDemo />
+                <PillDemo />
                 <BadgeDemo />
                 <SwitchDemo />
                 <AppearancePickerDemo />
@@ -414,6 +416,47 @@ function ButtonDemo() {
                 </Button>
                 , wrapping like text.
             </p>
+        </Section>
+    );
+}
+
+function PillDemo() {
+    const [picked, setPicked] = useState('2');
+
+    return (
+        <Section
+            variant="outlined"
+            title="Pill"
+            description="Static text in the same shape and size as an outline button, to sit beside buttons without looking clickable, like a word already revealed in a row of choices. Both sizes, marked, and mixed into a ButtonGroup."
+            meta="size · marked"
+            collapsible
+            collapsed
+            remember="docs:pill"
+        >
+            {sizes.map((size) => (
+                <div key={size} className="flex flex-col gap-2">
+                    <span className={caption}>size="{size}"</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Pill size={size}>Revealed</Pill>
+                        <Pill size={size} marked>
+                            Marked
+                        </Pill>
+                    </div>
+                </div>
+            ))}
+            <div className="flex flex-col gap-2">
+                <span className={caption}>inside a ButtonGroup</span>
+                <ButtonGroup value={picked} onChange={setPicked}>
+                    <Pill>Which</Pill>
+                    <ButtonGroupItem value="2" className="w-12">
+                        2
+                    </ButtonGroupItem>
+                    <Pill marked>sport</Pill>
+                    <ButtonGroupItem value="4" className="w-12">
+                        4
+                    </ButtonGroupItem>
+                </ButtonGroup>
+            </div>
         </Section>
     );
 }

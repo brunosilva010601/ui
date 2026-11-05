@@ -88,6 +88,7 @@ export {
     paletteText,
 } from './palette';
 export type { PaletteColor } from './palette';
+export { Pill } from './pill';
 export { Popover, PopoverContent, PopoverTrigger } from './popover';
 export { ProgressBar } from './progress-bar';
 export { UiProvider } from './provider';
