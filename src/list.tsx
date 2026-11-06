@@ -154,6 +154,7 @@ type ListProps = {
     horizontal?: boolean;
     organizing?: boolean;
     onReorder?: (ids: string[]) => void;
+    sortList?: string;
     children: ReactNode;
 };
 
@@ -165,9 +166,10 @@ export function List(props: ListProps) {
 
     return (
         <VariantContext value={variant}>
-            <SortProvider organizing={props.organizing ?? false}>
+            <SortProvider organizing={props.organizing}>
                 <ul
                     ref={props.onReorder ? sortable : undefined}
+                    data-sort-list={props.sortList}
                     className={cn(
                         props.bleed &&
                             '-mx-(--row-inset) [--row-inset:var(--bleed,var(--spacing-3))]',

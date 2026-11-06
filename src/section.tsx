@@ -11,7 +11,7 @@ import { cn } from './lib/utils';
 import { hoverClass, SectionBand } from './section-band';
 import type { SectionMenu } from './section-band';
 import { useOpen } from './section-open';
-import { sortItemClass } from './sortable';
+import { sectionDropClass, sortItemClass } from './sortable';
 import { surfaceClass } from './surface';
 
 const variants = {
@@ -35,6 +35,7 @@ type SectionProps = {
     remember?: string;
     menu?: SectionMenu;
     sortId?: string;
+    sortList?: string;
     flush?: boolean;
     hover?: boolean;
     onClick?: () => void;
@@ -136,6 +137,7 @@ export function Section(props: SectionProps) {
             action={props.action}
             menu={props.menu}
             sortable={props.sortId !== undefined}
+            droppable={props.sortList !== undefined}
             hover={props.hover ?? false}
         />
     ) : (
@@ -203,8 +205,10 @@ export function Section(props: SectionProps) {
     return (
         <section
             data-sort-id={props.sortId}
+            data-sort-list={props.sortList}
             className={cn(
                 band ? bandClass : variants[variant],
+                props.sortList !== undefined && sectionDropClass,
                 props.sortId !== undefined && [
                     sortItemClass,
                     'data-[dragging]:-mx-[var(--bleed,var(--spacing-3))] data-[dragging]:bg-background data-[dragging]:px-[var(--bleed,var(--spacing-3))]',

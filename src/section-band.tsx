@@ -6,7 +6,7 @@ import { Cover } from './cover';
 import { DropdownMenu } from './dropdown-menu';
 import { IconGroup } from './icon-group';
 import { cn } from './lib/utils';
-import { SortHandle } from './sortable';
+import { bandDropClass, SortHandle } from './sortable';
 
 export const hoverClass =
     'focus-within:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/header:opacity-100';
@@ -25,6 +25,7 @@ type Props = {
     action?: ReactNode;
     menu?: SectionMenu;
     sortable: boolean;
+    droppable: boolean;
     hover: boolean;
 };
 
@@ -33,7 +34,12 @@ export function SectionBand(props: Props) {
     const textId = useId();
 
     return (
-        <div className="group/header group/sort relative -mx-(--row-inset) flex items-center gap-2 px-3 py-2">
+        <div
+            className={cn(
+                'group/header group/sort relative -mx-(--row-inset) flex items-center gap-2 px-3 py-2',
+                props.droppable && bandDropClass,
+            )}
+        >
             <Cover
                 aria-expanded={props.open}
                 aria-labelledby={textId}

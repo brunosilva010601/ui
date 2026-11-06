@@ -38,6 +38,7 @@ import {
     DropdownCheckboxItem,
     DropdownItem,
     DropdownMenu,
+    DropZone,
     EmptyState,
     FileInput,
     Form,
@@ -102,6 +103,7 @@ import {
     PopoverTrigger,
     SideColumn,
     Sortable,
+    SortScope,
     Surface,
     touchClass,
     useCarousel,
@@ -115,6 +117,7 @@ import type {
     ModalDesktop,
     ModalMobile,
     PaletteColor,
+    SortMove,
 } from '../src';
 
 const today = new Date().toISOString().slice(0, 10);
@@ -258,6 +261,7 @@ export function ComponentsPage() {
                 <CoverDemo />
                 <SectionDemo />
                 <SortableDemo />
+                <SortScopeDemo />
                 <ListDemo />
                 <ListItemStatesDemo />
                 <TabsDemo />
@@ -2742,6 +2746,69 @@ function CoverDemo() {
                     Click anywhere
                 </span>
             </div>
+        </Section>
+    );
+}
+
+const SORT_SCOPE_START: Record<string, string[]> = {
+    today: ['Call the bank', 'Pay rent'],
+    later: ['Fix the shelf'],
+    empty: [],
+};
+
+function SortScopeDemo() {
+    const [lists, setLists] = useState(SORT_SCOPE_START);
+    const move = (move: SortMove) =>
+        setLists((current) => ({
+            ...Object.fromEntries(
+                Object.entries(current).map(([key, ids]) => [
+                    key,
+                    ids.filter((id) => id !== move.id),
+                ]),
+            ),
+            [move.to]:
+                move.ids.length === 1
+                    ? [
+                          move.id,
+                          ...current[move.to].filter((id) => id !== move.id),
+                      ]
+                    : move.ids,
+        }));
+
+    return (
+        <Section
+            variant="outlined"
+            title="SortScope"
+            description="Moves list items between the lists and drop zones inside the page, with a line where the item lands."
+            meta="onMove · organizing · List sortList · Section sortList · DropZone"
+            collapsible
+            collapsed
+            remember="docs:sort-scope"
+        >
+            <SortScope organizing onMove={move}>
+                <DropZone id="empty" className="p-3">
+                    <p className="ui-note">
+                        Drop here to put the item first in Empty.
+                    </p>
+                </DropZone>
+                {Object.entries(lists).map(([key, ids]) => (
+                    <Section
+                        key={key}
+                        title={key}
+                        note={ids.length}
+                        sortList={key}
+                        collapsible
+                    >
+                        <List bleed sortList={key}>
+                            {ids.map((id) => (
+                                <ListItem key={id} sortId={id}>
+                                    {id}
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Section>
+                ))}
+            </SortScope>
         </Section>
     );
 }
