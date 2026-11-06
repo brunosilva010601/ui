@@ -1,6 +1,7 @@
 import { GripVertical } from 'lucide-react';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
+import { HOLD_MS, HOLD_TOLERANCE } from './hold';
 import { cn } from './lib/utils';
 
 const SHIFT_MS = 150;
@@ -81,6 +82,45 @@ function handledItem(event: PointerEvent): HTMLElement | null {
     return handle?.closest<HTMLElement>('[data-sort-id]') ?? null;
 }
 
+function whenHeld(event: PointerEvent, begin: () => void) {
+    event.stopPropagation();
+
+    if (event.pointerType !== 'touch') {
+        event.preventDefault();
+        begin();
+
+        return;
+    }
+
+    let timer = 0;
+
+    const stop = () => {
+        window.clearTimeout(timer);
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', stop);
+        window.removeEventListener('pointercancel', stop);
+    };
+
+    const onMove = (move: PointerEvent) => {
+        if (
+            Math.hypot(
+                move.clientX - event.clientX,
+                move.clientY - event.clientY,
+            ) > HOLD_TOLERANCE
+        ) {
+            stop();
+        }
+    };
+
+    timer = window.setTimeout(() => {
+        stop();
+        begin();
+    }, HOLD_MS);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', stop);
+    window.addEventListener('pointercancel', stop);
+}
+
 export function useSortable(
     onReorder: (ids: string[]) => void,
 ): (element: HTMLElement | null) => void {
@@ -104,9 +144,14 @@ export function useSortable(
                 return;
             }
 
-            event.preventDefault();
-            event.stopPropagation();
+            whenHeld(event, () => start(event, items, dragged));
+        };
 
+        const start = (
+            event: PointerEvent,
+            items: HTMLElement[],
+            dragged: HTMLElement,
+        ) => {
             const measures = items.map((item) => {
                 const box = item.getBoundingClientRect();
 
@@ -311,9 +356,14 @@ export function useSortScope(
                 return;
             }
 
-            event.preventDefault();
-            event.stopPropagation();
+            whenHeld(event, () => start(event, dragged, origin));
+        };
 
+        const start = (
+            event: PointerEvent,
+            dragged: HTMLElement,
+            origin: HTMLElement,
+        ) => {
             const id = dragged.dataset.sortId ?? '';
             const from = origin.dataset.sortList ?? '';
             const fromIndex = sortables(origin).indexOf(dragged);
@@ -386,16 +436,18 @@ export function useSortScope(
                 frame = requestAnimationFrame(scroll);
             };
 
-            const onPointerMove = (move: PointerEvent) => {
-                pointer = { x: move.clientX, y: move.clientY };
-
+            const pickUp = () => {
                 if (!lifted) {
                     lifted = lift(dragged);
                     document.body.append(line);
                     dragged.dataset.lifted = '';
                     frame = requestAnimationFrame(scroll);
                 }
+            };
 
+            const onPointerMove = (move: PointerEvent) => {
+                pointer = { x: move.clientX, y: move.clientY };
+                pickUp();
                 update();
             };
 
@@ -438,6 +490,10 @@ export function useSortScope(
             window.addEventListener('pointercancel', onCancel);
             window.addEventListener('keydown', onKey);
             window.addEventListener('scroll', update, true);
+
+            if (event.pointerType === 'touch') {
+                pickUp();
+            }
         };
 
         scope.addEventListener('pointerdown', onDown);
@@ -514,21 +570,50 @@ export function DropZone(props: DropZoneProps) {
     );
 }
 
+function holdScroll(handle: HTMLElement | null) {
+    if (!handle) {
+        return;
+    }
+
+    const onTouchMove = (event: TouchEvent) => {
+        if (
+            handle
+                .closest('[data-sort-id]')
+                ?.matches('[data-lifted], [data-dragging]')
+        ) {
+            event.preventDefault();
+        }
+    };
+
+    handle.addEventListener('touchmove', onTouchMove, { passive: false });
+
+    return () => handle.removeEventListener('touchmove', onTouchMove);
+}
+
+function keepMenu(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+}
+
 export function SortHandle() {
     const organizing = useContext(Organizing);
 
     return (
         <span
+            ref={holdScroll}
             data-sort-handle
             aria-hidden
+            onContextMenu={keepMenu}
             className={cn(
-                'absolute inset-y-0 left-0 z-10 w-(--row-inset) cursor-grab touch-none items-center justify-center text-foreground-faint active:cursor-grabbing',
+                'absolute inset-y-0 left-0 z-10 cursor-grab items-center text-foreground-faint select-none [-webkit-touch-callout:none] active:cursor-grabbing',
                 organizing
-                    ? 'flex'
-                    : 'hidden [@media(hover:hover)]:group-hover/sort:flex',
+                    ? 'right-0 flex'
+                    : 'hidden w-(--row-inset) touch-none [@media(hover:hover)]:group-hover/sort:flex',
             )}
         >
-            <GripVertical className="size-3.5" />
+            <span className="flex w-(--row-inset) justify-center">
+                <GripVertical className="size-3.5" />
+            </span>
         </span>
     );
 }

@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import type { MouseEvent, PointerEvent } from 'react';
 
-const HOLD_MS = 500;
+export const HOLD_MS = 500;
 
-const HOLD_TOLERANCE = 8;
+export const HOLD_TOLERANCE = 8;
 
 export type HoldPointer = 'mouse' | 'touch' | 'pen';
 
