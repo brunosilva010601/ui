@@ -672,7 +672,7 @@ function AppearancePickerDemo() {
         <Section
             variant="outlined"
             title="AppearancePicker"
-            description="Light, dark or system, each card with a preview of the theme. Saving the choice and applying the class stay in the app."
+            description="Light, dark or system, each card with a preview of the theme, in one row when there is room. Saving the choice stays in the app; setAppearance applies it."
             meta="value · onChange"
             collapsible
             collapsed

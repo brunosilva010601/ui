@@ -1,5 +1,14 @@
+export {
+    appearances,
+    initializeAppearance,
+    isAppearance,
+    resolveAppearance,
+    setAppearance,
+    useAppearance,
+    useScheme,
+} from './appearance';
+export type { Appearance, Scheme } from './appearance';
 export { AppearancePicker } from './appearance-picker';
-export type { Appearance } from './appearance-picker';
 export { Avatar } from './avatar';
 export { Backdrop } from './backdrop';
 export { Badge } from './badge';

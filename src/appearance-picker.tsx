@@ -1,10 +1,8 @@
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
+import { appearances } from './appearance';
+import type { Appearance } from './appearance';
 import { cn } from './lib/utils';
 import { useUiLabels } from './provider';
-
-export type Appearance = 'light' | 'dark' | 'system';
-
-const appearances: Appearance[] = ['light', 'dark', 'system'];
 
 function Preview(props: { scheme: 'light' | 'dark' }) {
     return (
@@ -36,36 +34,39 @@ export function AppearancePicker(props: Props) {
     const labels = useUiLabels();
 
     return (
-        <ToggleGroupPrimitive.Root
-            type="single"
-            value={props.value}
-            onValueChange={(value) =>
-                value && props.onChange(value as Appearance)
-            }
-            className="grid grid-cols-[repeat(2,minmax(0,192px))] gap-3"
-        >
-            {appearances.map((appearance) => (
-                <ToggleGroupPrimitive.Item
-                    key={appearance}
-                    value={appearance}
-                    className={cn(
-                        'flex cursor-pointer flex-col gap-2 rounded border border-border bg-control p-2 text-left text-sm text-foreground transition hover:bg-control-hover active:bg-control-hover data-[state=on]:border-primary data-[state=on]:ring-1 data-[state=on]:ring-primary',
-                        appearance === 'system' && 'col-span-full',
-                    )}
-                >
-                    <span className="flex gap-1">
-                        {appearance === 'system' ? (
-                            <>
-                                <Preview scheme="light" />
-                                <Preview scheme="dark" />
-                            </>
-                        ) : (
-                            <Preview scheme={appearance} />
+        <div className="@container">
+            <ToggleGroupPrimitive.Root
+                type="single"
+                value={props.value}
+                onValueChange={(value) =>
+                    value && props.onChange(value as Appearance)
+                }
+                className="grid grid-cols-[repeat(2,minmax(0,192px))] gap-3 @min-[804px]:grid-cols-[192px_192px_396px]"
+            >
+                {appearances.map((appearance) => (
+                    <ToggleGroupPrimitive.Item
+                        key={appearance}
+                        value={appearance}
+                        className={cn(
+                            'flex cursor-pointer flex-col gap-2 rounded border border-border bg-control p-2 text-left text-sm text-foreground transition hover:bg-control-hover active:bg-control-hover data-[state=on]:border-primary data-[state=on]:ring-1 data-[state=on]:ring-primary',
+                            appearance === 'system' &&
+                                'col-span-full @min-[804px]:col-span-1',
                         )}
-                    </span>
-                    <span>{labels[appearance]}</span>
-                </ToggleGroupPrimitive.Item>
-            ))}
-        </ToggleGroupPrimitive.Root>
+                    >
+                        <span className="flex gap-1">
+                            {appearance === 'system' ? (
+                                <>
+                                    <Preview scheme="light" />
+                                    <Preview scheme="dark" />
+                                </>
+                            ) : (
+                                <Preview scheme={appearance} />
+                            )}
+                        </span>
+                        <span>{labels[appearance]}</span>
+                    </ToggleGroupPrimitive.Item>
+                ))}
+            </ToggleGroupPrimitive.Root>
+        </div>
     );
 }
