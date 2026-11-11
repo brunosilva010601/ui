@@ -3,11 +3,12 @@ import { useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import { Button } from './button';
 import { DropdownMenu } from './dropdown-menu';
+import type { MenuPlace } from './dropdown-menu';
 import { useHold } from './hold';
 import { cn } from './lib/utils';
 
 const besideClass = cn(
-    'grid grid-cols-[minmax(0,1fr)_auto] items-center bg-[var(--row-surface,var(--color-surface))] transition-colors',
+    'grid grid-cols-[minmax(0,1fr)_auto] items-center bg-[var(--row-surface,var(--color-surface))] transition-colors data-[state=open]:bg-surface-hover',
     '[@media(hover:hover)]:has-[>:last-child:hover]:bg-surface-hover',
     '[@media(hover:hover)]:has-[[data-layer]:hover]:bg-surface-hover',
     '[@media(hover:hover)]:not-has-[[data-layer]]:has-[>:first-child:hover]:bg-surface-hover',
@@ -30,12 +31,16 @@ type HeldMenuOptions = {
 
 export function useHeldMenu(options: HeldMenuOptions) {
     const [open, setOpen] = useState(false);
-    const hold = useHold((pointer) => {
+    const [place, setPlace] = useState<MenuPlace>({});
+    const hold = useHold((pointer, point) => {
         if (pointer !== 'mouse' && options.onHold) {
             options.onHold();
-        } else {
-            setOpen(true);
+
+            return;
         }
+
+        setPlace(pointer === 'mouse' ? { point } : { veil: true });
+        setOpen(true);
     });
     const more = (
         <Button
@@ -48,17 +53,20 @@ export function useHeldMenu(options: HeldMenuOptions) {
                     ? 'absolute top-1/2 right-(--row-inset) hidden -translate-y-1/2 [@media(hover:hover)]:group-hover:inline-flex'
                     : 'mr-(--row-inset) hidden shrink-0 [@media(hover:hover)]:inline-flex'
             }
-            onClick={() => setOpen(true)}
+            onClick={() => {
+                setPlace({});
+                setOpen(true);
+            }}
         >
             <Ellipsis />
         </Button>
     );
 
-    return { open, setOpen, hold, more };
+    return { open, setOpen, place, hold, more };
 }
 
 export function HeldMenu(props: Props) {
-    const { open, setOpen, hold, more: button } = useHeldMenu(props);
+    const { open, setOpen, place, hold, more: button } = useHeldMenu(props);
     const beside = !props.hover && !props.bare;
     const more = !props.bare && button;
 
@@ -78,6 +86,7 @@ export function HeldMenu(props: Props) {
                 }
                 open={open}
                 onOpenChange={setOpen}
+                {...place}
             >
                 {props.children}
             </DropdownMenu>

@@ -1,7 +1,7 @@
 import { Slot } from '@radix-ui/react-slot';
 import { Check, ChevronRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import type { ComponentProps, ReactElement, ReactNode } from 'react';
 import { Backdrop } from './backdrop';
 import { IconBadge } from './icon-badge';
@@ -24,7 +24,12 @@ import { useUi } from './provider';
 export const itemClass =
     "flex w-full cursor-pointer items-center gap-2 rounded border border-transparent px-(--row-inset) py-2.5 text-left text-sm text-foreground transition-colors select-none hover:bg-foreground/5 active:bg-foreground/5 data-[state=on]:bg-foreground/5 [&_svg]:shrink-0 [&_svg]:text-foreground-muted [&_svg:not([class*='size-'])]:size-4";
 
-type DropdownMenuProps = {
+export type MenuPlace = {
+    point?: { x: number; y: number };
+    veil?: boolean;
+};
+
+type DropdownMenuProps = MenuPlace & {
     trigger?: ReactElement;
     anchor?: ReactElement;
     label: string;
@@ -75,6 +80,18 @@ function PopoverMenu(props: DropdownMenuProps) {
     const open = props.open ?? ownOpen;
     const setOpen = props.onOpenChange ?? setOwnOpen;
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+    const point = props.point;
+    const place = useMemo(
+        () => ({
+            current: point
+                ? {
+                      getBoundingClientRect: () =>
+                          new DOMRect(point.x, point.y),
+                  }
+                : anchor,
+        }),
+        [anchor, point],
+    );
 
     useClosesOnLeave(props.open === true, () => setOpen(false));
     useCloseOnBack(() => setOpen(false), props.open === true);
@@ -84,24 +101,28 @@ function PopoverMenu(props: DropdownMenuProps) {
             <Backdrop
                 open={open}
                 onClose={() => setOpen(false)}
-                veil={Boolean(props.anchor)}
+                veil={props.veil}
                 hole={anchor}
             />
             {props.anchor ? (
-                <PopoverAnchor asChild ref={setAnchor}>
-                    {props.anchor}
-                </PopoverAnchor>
+                <>
+                    <Slot ref={setAnchor} data-state={open ? 'open' : 'closed'}>
+                        {props.anchor}
+                    </Slot>
+                    <PopoverAnchor virtualRef={place} />
+                </>
             ) : (
                 <PopoverTrigger asChild>{props.trigger}</PopoverTrigger>
             )}
             <PopoverContent
-                align={props.align ?? 'end'}
+                align={point ? 'start' : (props.align ?? 'end')}
                 onPointerDownOutside={keepOpenOnOutsidePress}
                 className={cn(
                     'flex max-h-(--radix-popover-content-available-height) flex-col gap-1 overflow-y-auto p-1',
                     props.wide
                         ? 'w-(--radix-popover-trigger-width)'
                         : 'w-[208px]',
+                    point && 'data-[side=bottom]:mt-1 data-[side=top]:mb-1',
                 )}
             >
                 {props.children}

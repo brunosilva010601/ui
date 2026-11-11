@@ -78,7 +78,7 @@ export function ListItem(props: ListItemProps) {
         hover: menu?.hover,
         onHold: menu?.onHold,
     });
-    const { open, setOpen, hold } = held;
+    const { open, setOpen, place, hold } = held;
     const layered = !blocked && Boolean(props.onClick || props.href);
     const more = menu && held.more;
     const body = (
@@ -94,7 +94,7 @@ export function ListItem(props: ListItemProps) {
                       ? 'bg-surface-hover'
                       : 'bg-[var(--row-surface,var(--color-surface))]',
                 (layered || menu) &&
-                    'has-[[data-layer]:active]:bg-surface-hover [@media(hover:hover)]:hover:bg-surface-hover',
+                    'has-[[data-layer]:active]:bg-surface-hover data-[state=open]:bg-surface-hover [@media(hover:hover)]:hover:bg-surface-hover',
                 blocked && 'opacity-50',
                 props.className,
             )}
@@ -137,6 +137,7 @@ export function ListItem(props: ListItemProps) {
                     anchor={body}
                     open={open}
                     onOpenChange={setOpen}
+                    {...place}
                 >
                     {menu.items}
                 </DropdownMenu>

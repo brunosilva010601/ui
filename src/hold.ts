@@ -7,6 +7,8 @@ export const HOLD_TOLERANCE = 8;
 
 export type HoldPointer = 'mouse' | 'touch' | 'pen';
 
+export type HoldPoint = { x: number; y: number };
+
 export type HoldHandlers = {
     onPointerDown: (event: PointerEvent) => void;
     onPointerMove: (event: PointerEvent) => void;
@@ -17,9 +19,11 @@ export type HoldHandlers = {
     onClickCapture: (event: MouseEvent) => void;
 };
 
-export function useHold(onHold: (pointer: HoldPointer) => void): HoldHandlers {
+export function useHold(
+    onHold: (pointer: HoldPointer, point: HoldPoint) => void,
+): HoldHandlers {
     const timer = useRef(0);
-    const origin = useRef<{ x: number; y: number } | null>(null);
+    const origin = useRef<HoldPoint | null>(null);
     const held = useRef(false);
     const pointer = useRef<HoldPointer>('mouse');
     const latest = useRef(onHold);
@@ -34,11 +38,12 @@ export function useHold(onHold: (pointer: HoldPointer) => void): HoldHandlers {
         onPointerDown: (event) => {
             pointer.current = event.pointerType as HoldPointer;
             held.current = false;
-            origin.current = { x: event.clientX, y: event.clientY };
+            const point = { x: event.clientX, y: event.clientY };
+            origin.current = point;
             timer.current = window.setTimeout(() => {
                 held.current = true;
                 origin.current = null;
-                latest.current(pointer.current);
+                latest.current(pointer.current, point);
             }, HOLD_MS);
         },
         onPointerMove: (event) => {
@@ -63,7 +68,10 @@ export function useHold(onHold: (pointer: HoldPointer) => void): HoldHandlers {
             }
 
             cancel();
-            latest.current(pointer.current);
+            latest.current(pointer.current, {
+                x: event.clientX,
+                y: event.clientY,
+            });
         },
         onClickCapture: (event) => {
             if (held.current) {

@@ -2084,7 +2084,7 @@ function BackdropDemo() {
         <Section
             variant="outlined"
             title="Backdrop"
-            description="Catches the first click outside floating content and closes it. With a veil, it dims and blurs the page, leaving a hole around one element."
+            description="Catches the first click outside floating content and closes it. With a veil, it dims the page, leaving a hole around one element."
             meta="open · onClose · veil · hole"
             collapsible
             collapsed

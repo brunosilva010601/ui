@@ -75,8 +75,7 @@ export function Backdrop(props: Props) {
                     <div
                         aria-hidden
                         className={cn(
-                            'pointer-events-none fixed inset-0 z-50',
-                            backdropClass,
+                            'pointer-events-none fixed inset-0 z-50 bg-overlay',
                             props.open ? 'animate-fade-in' : 'animate-fade-out',
                         )}
                         style={clip ? { clipPath: clip } : undefined}
