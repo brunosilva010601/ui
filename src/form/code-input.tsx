@@ -62,7 +62,7 @@ export function CodeInput(props: Props) {
                                     props.error && 'border-danger',
                                 )}
                             >
-                                {slot.char ?? ' '}
+                                {slot.char ?? ' '}
                             </div>
                         ))}
                     </>
