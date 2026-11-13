@@ -1,5 +1,5 @@
 import { CalendarSync, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { buttonClass } from '../button';
 import { ControlStrut } from '../control-strut';
 import { monthYear, weekdayName } from '../lib/dates';
@@ -10,12 +10,23 @@ const DAY_MS = 86_400_000;
 
 const CELLS = 42;
 
+export type CalendarTone = 'done' | 'skipped' | 'missed';
+
+const tones: Record<CalendarTone, string> = {
+    done: 'bg-primary font-semibold text-primary-foreground',
+    skipped: 'bg-foreground/10 text-foreground-muted line-through',
+    missed: 'border border-dashed border-danger text-danger',
+};
+
 type Props = {
-    value: string;
+    value?: string;
     today: string;
     min?: string;
     marked?: (date: string) => boolean;
-    onChange: (date: string) => void;
+    tone?: (date: string) => CalendarTone | undefined;
+    legend?: Partial<Record<CalendarTone, string>>;
+    onChange?: (date: string) => void;
+    onMonth?: (month: string) => void;
 };
 
 function iso(time: number): string {
@@ -28,6 +39,11 @@ export function Calendar(props: Props) {
     const [shown, setShown] = useState(
         (props.value || props.today).slice(0, 7),
     );
+    const onMonth = useRef(props.onMonth);
+
+    onMonth.current = props.onMonth;
+
+    useEffect(() => onMonth.current?.(shown), [shown]);
     const [year, month] = shown.split('-').map(Number);
     const first = Date.UTC(year, month - 1, 1);
     const start =
@@ -90,6 +106,26 @@ export function Calendar(props: Props) {
                 {days.map((day) => {
                     const selected = day === props.value;
                     const marked = !selected && props.marked?.(day);
+                    const tone = props.tone?.(day);
+                    const pick = props.onChange;
+
+                    if (!pick) {
+                        return (
+                            <span
+                                key={day}
+                                className={cn(
+                                    'mx-auto flex size-10 items-center justify-center rounded-full text-sm',
+                                    day.slice(0, 7) !== shown &&
+                                        'text-foreground-faint',
+                                    day === props.today &&
+                                        'font-semibold text-primary-text',
+                                    tone && tones[tone],
+                                )}
+                            >
+                                {Number(day.slice(8))}
+                            </span>
+                        );
+                    }
 
                     return (
                         <button
@@ -101,7 +137,7 @@ export function Calendar(props: Props) {
                             }
                             onClick={() => {
                                 setShown(day.slice(0, 7));
-                                props.onChange(day);
+                                pick(day);
                             }}
                             className={cn(
                                 'mx-auto size-10 cursor-pointer rounded-full text-sm transition-colors hover:bg-control-hover disabled:pointer-events-none disabled:opacity-40',
@@ -119,6 +155,26 @@ export function Calendar(props: Props) {
                     );
                 })}
             </div>
+            {props.legend && (
+                <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+                    {(Object.keys(tones) as CalendarTone[])
+                        .filter((tone) => props.legend?.[tone])
+                        .map((tone) => (
+                            <span
+                                key={tone}
+                                className="flex items-center gap-2 ui-note"
+                            >
+                                <span
+                                    className={cn(
+                                        'size-3 rounded-full',
+                                        tones[tone],
+                                    )}
+                                />
+                                {props.legend?.[tone]}
+                            </span>
+                        ))}
+                </div>
+            )}
         </div>
     );
 }

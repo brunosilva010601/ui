@@ -22,7 +22,10 @@ import {
 import { useUi } from './provider';
 
 export const itemClass =
-    "flex w-full cursor-pointer items-center gap-2 rounded border border-transparent px-(--row-inset) py-2.5 text-left text-sm text-foreground transition-colors select-none hover:bg-foreground/5 active:bg-foreground/5 data-[state=on]:bg-foreground/5 [&_svg]:shrink-0 [&_svg]:text-foreground-muted [&_svg:not([class*='size-'])]:size-4";
+    "ui-menu-item flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm text-foreground transition-colors select-none hover:bg-foreground/5 focus-visible:-outline-offset-2 active:bg-foreground/5 data-[state=on]:bg-foreground/5 pointer-coarse:gap-3 pointer-coarse:py-3 pointer-coarse:text-base [&_svg]:shrink-0 [&_svg]:text-foreground-muted [&_svg:not([class*='size-'])]:size-4 pointer-coarse:[&_svg:not([class*='size-'])]:size-5";
+
+export const menuPanelClass =
+    'flex flex-col overflow-y-auto border-0 py-2 [&>:not(.ui-menu-item)]:mx-2';
 
 export type MenuPlace = {
     point?: { x: number; y: number };
@@ -118,7 +121,8 @@ function PopoverMenu(props: DropdownMenuProps) {
                 align={point ? 'start' : (props.align ?? 'end')}
                 onPointerDownOutside={keepOpenOnOutsidePress}
                 className={cn(
-                    'flex max-h-(--radix-popover-content-available-height) flex-col gap-1 overflow-y-auto p-1',
+                    menuPanelClass,
+                    'max-h-(--radix-popover-content-available-height)',
                     props.wide
                         ? 'w-(--radix-popover-trigger-width)'
                         : 'w-[208px]',

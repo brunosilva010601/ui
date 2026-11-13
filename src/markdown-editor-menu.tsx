@@ -5,7 +5,7 @@ import type { SuggestionProps } from '@tiptap/suggestion';
 import { useState } from 'react';
 import type { RefObject } from 'react';
 import { createPortal } from 'react-dom';
-import { itemClass } from './dropdown-menu';
+import { itemClass, menuPanelClass } from './dropdown-menu';
 import { cn } from './lib/utils';
 import type {
     MarkdownCommand,
@@ -145,10 +145,7 @@ export function SlashMenu(props: { state: SlashState; label: string }) {
         <div
             role="listbox"
             aria-label={props.label}
-            className={cn(
-                floatingClass,
-                'flex max-h-80 w-[208px] flex-col gap-1 overflow-y-auto p-1',
-            )}
+            className={cn(floatingClass, menuPanelClass, 'max-h-80 w-[208px]')}
         >
             {open.items.map((item, at) => (
                 <button

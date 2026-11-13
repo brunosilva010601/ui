@@ -60,6 +60,8 @@ type Props = {
     children: ReactNode;
 };
 
+const EDGE_GAP = 12;
+
 export function PopoverContent(props: Props) {
     const { className, align = 'center', ...rest } = props;
 
@@ -67,6 +69,7 @@ export function PopoverContent(props: Props) {
         <PopoverPrimitive.Portal>
             <PopoverPrimitive.Content
                 align={align}
+                collisionPadding={EDGE_GAP}
                 className={cn(
                     floatingClass,
                     'origin-(--radix-popover-content-transform-origin) data-[side=bottom]:mt-2 data-[side=left]:me-2 data-[side=right]:ms-2 data-[side=top]:mb-2',

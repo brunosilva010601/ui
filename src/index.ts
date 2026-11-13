@@ -49,6 +49,7 @@ export { EmptyState } from './empty-state';
 export type { EmptyStateProps } from './empty-state';
 export { useFilePicker } from './file-picker';
 export { Calendar } from './form/calendar';
+export type { CalendarTone } from './form/calendar';
 export { CodeInput } from './form/code-input';
 export { ColorPicker } from './form/color-picker';
 export { Field, FieldError, HIDDEN_SECRET } from './form/field';
