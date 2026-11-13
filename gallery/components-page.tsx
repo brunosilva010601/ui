@@ -1,4 +1,5 @@
 import {
+    ArrowLeft,
     Bell,
     Copy,
     FolderOpen,
@@ -349,6 +350,18 @@ function ButtonDemo() {
                     <Button variant="ghost" square bleed>
                         <Settings />
                     </Button>
+                </div>
+            </div>
+            <div className="flex flex-col gap-2">
+                <span className={caption}>
+                    bleed="start", leading the row and keeping its gap to what
+                    follows
+                </span>
+                <div className="flex items-center gap-2 rounded border border-border px-3 py-3">
+                    <Button variant="ghost" square bleed="start">
+                        <ArrowLeft />
+                    </Button>
+                    <span className="font-semibold">Title</span>
                 </div>
             </div>
             <div className="flex flex-col gap-2">

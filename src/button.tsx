@@ -48,8 +48,15 @@ const variantShapes: Record<keyof typeof variants, keyof typeof shapes> = {
     link: 'link',
 };
 
-const bleedSides =
-    'px-1.5 -mx-[calc(var(--spacing-1_5)_+_1px)] -my-[calc(var(--pad-y)_+_1px)]';
+export type ButtonBleed = boolean | 'start' | 'end';
+
+const bleedBox = 'px-1.5 -my-[calc(var(--pad-y)_+_1px)]';
+
+const bleedSides = {
+    both: '-mx-[calc(var(--spacing-1_5)_+_1px)]',
+    start: '-ms-[calc(var(--spacing-1_5)_+_1px)]',
+    end: '-me-[calc(var(--spacing-1_5)_+_1px)]',
+};
 
 const bleedBackdrop =
     'relative isolate before:absolute before:inset-y-0 before:-inset-x-[calc(var(--pad)_-_var(--spacing-1_5))] before:-z-10 before:rounded-full before:transition-colors hover:bg-transparent active:bg-transparent data-[state=open]:bg-transparent hover:before:bg-foreground/5 active:before:bg-foreground/5 data-[state=open]:before:bg-foreground/5';
@@ -85,7 +92,7 @@ type ButtonProps = Omit<ComponentProps<'button'>, 'type'> & {
     size?: ButtonSize;
     square?: boolean;
     stacked?: boolean;
-    bleed?: boolean;
+    bleed?: ButtonBleed;
     busy?: boolean;
     mark?: ButtonMark;
     asChild?: boolean;
@@ -98,7 +105,7 @@ type ButtonClassOptions = {
     size?: keyof typeof sizes;
     square?: boolean;
     stacked?: boolean;
-    bleed?: boolean;
+    bleed?: ButtonBleed;
     className?: string;
 };
 
@@ -125,8 +132,12 @@ export function buttonClass({
                 : square
                   ? box.square
                   : box.text),
-        bleed && isBox && bleedSides,
-        bleed && isBox && bleedBackdrop,
+        bleed &&
+            isBox && [
+                bleedBox,
+                bleedSides[bleed === true ? 'both' : bleed],
+                bleedBackdrop,
+            ],
         className,
     );
 }

@@ -15,7 +15,12 @@ export { Badge } from './badge';
 export { Banner } from './banner';
 export { Brand } from './brand';
 export { Button, FloatingButton, touchClass } from './button';
-export type { ButtonMark, ButtonSize, ButtonVariant } from './button';
+export type {
+    ButtonBleed,
+    ButtonMark,
+    ButtonSize,
+    ButtonVariant,
+} from './button';
 export { ButtonGroup, ButtonGroupItem } from './button-group';
 export type { ButtonGroupOption } from './button-group';
 export {
