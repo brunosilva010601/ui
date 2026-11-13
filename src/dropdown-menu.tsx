@@ -25,7 +25,7 @@ export const itemClass =
     "ui-menu-item flex w-full cursor-pointer items-center gap-2 px-4 py-2.5 text-left text-sm text-foreground transition-colors select-none hover:bg-foreground/5 focus-visible:-outline-offset-2 active:bg-foreground/5 data-[state=on]:bg-foreground/5 [&_svg]:shrink-0 [&_svg]:text-foreground-muted [&_svg:not([class*='size-'])]:size-4";
 
 export const menuPanelClass =
-    'flex flex-col overflow-y-auto py-1 [&>:not(.ui-menu-item)]:mx-1';
+    'flex flex-col overflow-y-auto py-(--radius) [&>:not(.ui-menu-item)]:mx-1';
 
 export type MenuPlace = {
     point?: { x: number; y: number };
