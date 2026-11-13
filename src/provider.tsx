@@ -1,5 +1,6 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import type { ComponentType, ReactNode } from 'react';
+import { followThemeColor } from './theme-color';
 
 export type UiLabels = {
     optional: string;
@@ -74,6 +75,8 @@ type Props = Partial<Omit<UiConfig, 'labels'>> & {
 
 export function UiProvider(props: Props) {
     const { labels, children, ...rest } = props;
+
+    useEffect(followThemeColor, []);
 
     return (
         <UiContext

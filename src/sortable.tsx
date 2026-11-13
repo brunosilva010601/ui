@@ -23,10 +23,10 @@ const dropZoneClass =
     'rounded transition-colors data-[drop-over]:bg-primary/10';
 
 const liftedClass =
-    'pointer-events-none fixed z-50 overflow-clip rounded bg-[var(--row-surface,var(--color-surface))] shadow-floating';
+    'pointer-events-none fixed z-50 overflow-clip bg-[var(--row-surface,var(--color-surface))] shadow-floating';
 
 const slotClass =
-    'pointer-events-none absolute z-40 rounded border-2 border-dashed border-primary/40';
+    'pointer-events-none absolute z-40 border-2 border-dashed border-primary/40';
 
 export type SortMove = {
     id: string;
@@ -183,6 +183,18 @@ function zonesOf(zone: HTMLElement, key: string): HTMLElement[] {
     return zones;
 }
 
+function cornerOf(dragged: HTMLElement): string {
+    const frame =
+        dragged.querySelector<HTMLElement>('[data-sort-face]') ?? dragged;
+
+    return (
+        [frame, frame.firstElementChild]
+            .filter((element): element is Element => element !== null)
+            .map((element) => getComputedStyle(element).borderRadius)
+            .find((radius) => parseFloat(radius) > 0) ?? '0px'
+    );
+}
+
 function lift(dragged: HTMLElement, top: number, fold: boolean): HTMLElement {
     const box = dragged.getBoundingClientRect();
     const face =
@@ -203,6 +215,7 @@ function lift(dragged: HTMLElement, top: number, fold: boolean): HTMLElement {
     lifted.style.left = `${face.left}px`;
     lifted.style.top = `${top}px`;
     lifted.style.width = `${face.width}px`;
+    lifted.style.borderRadius = cornerOf(dragged);
     CARRIED_VARIABLES.forEach((name) =>
         lifted.style.setProperty(name, style.getPropertyValue(name)),
     );
@@ -417,6 +430,7 @@ function carry(setup: Carry) {
         height = dragged.getBoundingClientRect().height;
         size = height + gapOf(home, items);
         lifted = lift(dragged, top, setup.fold ?? false);
+        slot.style.borderRadius = lifted.style.borderRadius;
         dragged.dataset.lifted = '';
         document.body.append(slot);
         frame = requestAnimationFrame(scroll);

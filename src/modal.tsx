@@ -97,6 +97,7 @@ function ModalPanel(props: ModalProps) {
     return (
         <DialogPrimitive.Portal>
             <DialogPrimitive.Overlay
+                data-veil
                 className={cn(
                     'fixed inset-0 z-50 flex',
                     backdropClass,

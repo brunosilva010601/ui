@@ -74,6 +74,8 @@ export function Backdrop(props: Props) {
                 createPortal(
                     <div
                         aria-hidden
+                        data-veil
+                        data-state={props.open ? 'open' : 'closed'}
                         className={cn(
                             'pointer-events-none fixed inset-0 z-50 bg-overlay',
                             props.open ? 'animate-fade-in' : 'animate-fade-out',
