@@ -10,8 +10,9 @@ const CARRIED_VARIABLES = ['--row-inset', '--row-surface', '--bleed'];
 
 const Organizing = createContext(false);
 
-export const sortItemClass =
-    'data-[dragging]:relative data-[dragging]:z-10 data-[dragging]:shadow-floating data-[lifted]:opacity-40';
+export const sortItemClass = 'data-[lifted]:invisible';
+
+export const foldClass = 'in-data-[folding]:hidden';
 
 export const sectionDropClass = 'group/drop';
 
@@ -22,10 +23,10 @@ const dropZoneClass =
     'rounded transition-colors data-[drop-over]:bg-primary/10';
 
 const liftedClass =
-    'pointer-events-none fixed z-50 m-0 list-none overflow-clip rounded shadow-floating';
+    'pointer-events-none fixed z-50 overflow-clip rounded bg-[var(--row-surface,var(--color-surface))] shadow-floating';
 
-const lineClass =
-    'pointer-events-none fixed z-50 h-0.5 rounded-full bg-primary';
+const slotClass =
+    'pointer-events-none absolute z-40 rounded border-2 border-dashed border-primary/40';
 
 export type SortMove = {
     id: string;
@@ -34,16 +35,26 @@ export type SortMove = {
     ids: string[];
 };
 
-type Measure = {
+type Place = {
+    zone: HTMLElement;
+    key: string;
+    list: HTMLElement | null;
+};
+
+type Box = {
     top: number;
+    bottom: number;
+    left: number;
+    width: number;
     height: number;
 };
 
-type Target = {
-    zone: HTMLElement;
-    key: string;
-    list: HTMLElement;
-    index: number | null;
+type Carry = {
+    event: PointerEvent;
+    dragged: HTMLElement;
+    fold?: boolean;
+    placeAt: (element: Element | null) => Place | null;
+    drop: (place: Place, ids: string[]) => void;
 };
 
 function sortables(container: HTMLElement): HTMLElement[] {
@@ -54,11 +65,45 @@ function sortables(container: HTMLElement): HTMLElement[] {
     );
 }
 
-function targetIndex(measures: Measure[], from: number, center: number) {
-    return measures.filter(
-        (measure, index) =>
-            index !== from && measure.top + measure.height / 2 < center,
-    ).length;
+function idOf(item: HTMLElement): string {
+    return item.dataset.sortId ?? '';
+}
+
+function natural(element: HTMLElement): Box {
+    const box = element.getBoundingClientRect();
+    const transform = getComputedStyle(element).transform;
+    const shift =
+        transform === 'none' ? 0 : new DOMMatrixReadOnly(transform).m42;
+    const top = box.top - shift;
+
+    return {
+        top,
+        bottom: top + box.height,
+        left: box.left,
+        width: box.width,
+        height: box.height,
+    };
+}
+
+function indexAt(items: HTMLElement[], y: number): number {
+    return items.filter((item) => {
+        const box = natural(item);
+
+        return box.top + box.height / 2 < y;
+    }).length;
+}
+
+function gapOf(list: HTMLElement, items: HTMLElement[]): number {
+    if (items.length > 1) {
+        return Math.max(0, natural(items[1]).top - natural(items[0]).bottom);
+    }
+
+    const box =
+        getComputedStyle(list).display === 'contents'
+            ? list.parentElement
+            : list;
+
+    return box ? parseFloat(getComputedStyle(box).rowGap) || 0 : 0;
 }
 
 function shiftOf(index: number, from: number, to: number, size: number) {
@@ -121,14 +166,343 @@ function whenHeld(event: PointerEvent, begin: () => void) {
     window.addEventListener('pointercancel', stop);
 }
 
+function zonesOf(zone: HTMLElement, key: string): HTMLElement[] {
+    const zones: HTMLElement[] = [];
+    let current: HTMLElement | null = zone;
+
+    while (current) {
+        if (current.dataset.sortList === key) {
+            zones.push(current);
+        }
+
+        current =
+            current.parentElement?.closest<HTMLElement>('[data-sort-list]') ??
+            null;
+    }
+
+    return zones;
+}
+
+function lift(dragged: HTMLElement, top: number, fold: boolean): HTMLElement {
+    const box = dragged.getBoundingClientRect();
+    const face =
+        dragged
+            .querySelector<HTMLElement>('[data-sort-face]')
+            ?.getBoundingClientRect() ?? box;
+    const style = getComputedStyle(dragged);
+    const lifted = document.createElement('div');
+    const copy = dragged.cloneNode(true) as HTMLElement;
+
+    copy.removeAttribute('data-sort-id');
+    copy.removeAttribute('data-sort-list');
+    copy.style.margin = `0 0 0 ${box.left - face.left}px`;
+    copy.style.width = `${box.width}px`;
+    copy.style.listStyle = 'none';
+    lifted.setAttribute('aria-hidden', 'true');
+    lifted.className = liftedClass;
+    lifted.style.left = `${face.left}px`;
+    lifted.style.top = `${top}px`;
+    lifted.style.width = `${face.width}px`;
+    CARRIED_VARIABLES.forEach((name) =>
+        lifted.style.setProperty(name, style.getPropertyValue(name)),
+    );
+
+    if (fold) {
+        lifted.dataset.folding = '';
+    }
+
+    lifted.append(copy);
+    document.body.append(lifted);
+
+    return lifted;
+}
+
+function edgeStep(y: number, edge: number): number {
+    const bottom = window.innerHeight - y;
+
+    if (y < edge) {
+        return -(edge - y) * EDGE_SPEED;
+    }
+
+    return bottom < edge ? (edge - bottom) * EDGE_SPEED : 0;
+}
+
+function carry(setup: Carry) {
+    const { event, dragged } = setup;
+    const home = dragged.parentElement as HTMLElement;
+    const homePlace: Place = {
+        zone: home,
+        key: home.dataset.sortList ?? '',
+        list: home,
+    };
+    const slot = document.createElement('div');
+    let lifted: HTMLElement | null = null;
+    let items: HTMLElement[] = [];
+    let from = 0;
+    let top = 0;
+    let height = 0;
+    let size = 0;
+    let pointer = { x: event.clientX, y: event.clientY };
+    let place = homePlace;
+    let index = 0;
+    let moved = new Set<HTMLElement>();
+    const spaced = new Map<HTMLElement, { inline: string; base: number }>();
+    let lit: HTMLElement[] = [];
+    let frame = 0;
+
+    slot.className = slotClass;
+    slot.hidden = true;
+
+    const elementAt = (x: number, y: number) =>
+        document
+            .elementsFromPoint(x, y)
+            .find((element) => !lifted?.contains(element)) ?? null;
+
+    const light = (zones: HTMLElement[]) => {
+        lit.forEach((zone) => delete zone.dataset.dropOver);
+        zones.forEach((zone) => (zone.dataset.dropOver = ''));
+        lit = zones;
+    };
+
+    const shift = (others: HTMLElement[]) => {
+        const shifts = new Map<HTMLElement, number>();
+
+        if (place.list === home) {
+            items.forEach((item, position) => {
+                shifts.set(item, shiftOf(position, from, index, size));
+            });
+        } else {
+            items.slice(from + 1).forEach((item) => shifts.set(item, -size));
+
+            if (place.list) {
+                const room = height + gapOf(place.list, others);
+
+                others.slice(index).forEach((item) => shifts.set(item, room));
+            }
+        }
+
+        new Set([...moved, ...shifts.keys()]).forEach((item) => {
+            const amount = shifts.get(item) ?? 0;
+
+            item.style.transition = `transform ${SHIFT_MS}ms`;
+            item.style.transform = amount ? `translateY(${amount}px)` : '';
+        });
+        moved = new Set([...moved, ...shifts.keys()]);
+    };
+
+    const space = (others: HTMLElement[]) => {
+        const room = new Map<HTMLElement, number>();
+
+        if (place.list !== home) {
+            room.set(home, -size);
+
+            if (place.list) {
+                room.set(place.list, height + gapOf(place.list, others));
+            }
+        }
+
+        spaced.forEach((margin, list) => {
+            list.style.marginBottom = `${margin.base + (room.get(list) ?? 0)}px`;
+        });
+
+        room.forEach((amount, list) => {
+            if (spaced.has(list)) {
+                return;
+            }
+
+            spaced.set(list, {
+                inline: list.style.marginBottom,
+                base: parseFloat(getComputedStyle(list).marginBottom) || 0,
+            });
+            list.style.transition = `margin-bottom ${SHIFT_MS}ms`;
+            list.style.marginBottom = `${(spaced.get(list)?.base ?? 0) + amount}px`;
+        });
+    };
+
+    const slotBox = (others: HTMLElement[]): Box | null => {
+        if (!place.list) {
+            return null;
+        }
+
+        if (place.list === home) {
+            const own = natural(dragged);
+            const slotTop =
+                index > from
+                    ? natural(items[index]).bottom - height
+                    : index < from
+                      ? natural(items[index]).top
+                      : own.top;
+
+            return { ...own, top: slotTop, bottom: slotTop + height, height };
+        }
+
+        const next = others[index];
+        const last = others[others.length - 1];
+        const reference = natural(next ?? last);
+        const slotTop = next
+            ? reference.top
+            : reference.bottom + gapOf(place.list, others);
+
+        return { ...reference, top: slotTop, bottom: slotTop + height, height };
+    };
+
+    const placeSlot = (others: HTMLElement[]) => {
+        const box = slotBox(others);
+
+        if (!box) {
+            slot.hidden = true;
+
+            return;
+        }
+
+        slot.style.transition = slot.hidden
+            ? 'none'
+            : `top ${SHIFT_MS}ms, left ${SHIFT_MS}ms, width ${SHIFT_MS}ms`;
+        slot.hidden = false;
+        slot.style.top = `${box.top + window.scrollY}px`;
+        slot.style.left = `${box.left + window.scrollX}px`;
+        slot.style.width = `${box.width}px`;
+        slot.style.height = `${box.height}px`;
+    };
+
+    const update = () => {
+        if (!lifted) {
+            return;
+        }
+
+        const dx = pointer.x - event.clientX;
+        const dy = pointer.y - event.clientY;
+        const found = setup.placeAt(elementAt(pointer.x, pointer.y));
+
+        place = found ?? (place.list ? place : homePlace);
+
+        const others = place.list
+            ? sortables(place.list).filter((item) => item !== dragged)
+            : [];
+
+        index = place.list ? indexAt(others, top + dy + height / 2) : 0;
+        shift(others);
+        space(others);
+        placeSlot(others);
+        light(place.list === home ? [] : zonesOf(place.zone, place.key));
+        lifted.style.transform = place.list
+            ? `translate(${dx}px, ${dy}px)`
+            : `translate(${dx}px, ${place.zone.getBoundingClientRect().bottom - top}px)`;
+    };
+
+    const scroll = () => {
+        const step = edgeStep(pointer.y, height);
+
+        if (step !== 0) {
+            window.scrollBy(0, step);
+        }
+
+        frame = requestAnimationFrame(scroll);
+    };
+
+    const pickUp = () => {
+        if (lifted) {
+            return;
+        }
+
+        top = dragged.getBoundingClientRect().top;
+
+        if (setup.fold) {
+            home.dataset.folding = '';
+        }
+
+        items = sortables(home);
+        from = items.indexOf(dragged);
+        index = from;
+        height = dragged.getBoundingClientRect().height;
+        size = height + gapOf(home, items);
+        lifted = lift(dragged, top, setup.fold ?? false);
+        dragged.dataset.lifted = '';
+        document.body.append(slot);
+        frame = requestAnimationFrame(scroll);
+    };
+
+    const onPointerMove = (move: PointerEvent) => {
+        pointer = { x: move.clientX, y: move.clientY };
+        pickUp();
+        update();
+    };
+
+    const finish = (dropped: boolean) => {
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', onUp);
+        window.removeEventListener('pointercancel', onCancel);
+        window.removeEventListener('keydown', onKey);
+        window.removeEventListener('scroll', update, true);
+        cancelAnimationFrame(frame);
+        light([]);
+        slot.remove();
+        lifted?.remove();
+        moved.forEach((item) => {
+            item.style.transition = '';
+            item.style.transform = '';
+        });
+        spaced.forEach((margin, list) => {
+            list.style.transition = '';
+            list.style.marginBottom = margin.inline;
+        });
+        delete dragged.dataset.lifted;
+        delete home.dataset.folding;
+
+        if (!dropped || !lifted || (place.list === home && index === from)) {
+            return;
+        }
+
+        const ids = place.list
+            ? sortables(place.list)
+                  .filter((item) => item !== dragged)
+                  .map(idOf)
+                  .toSpliced(index, 0, idOf(dragged))
+            : [idOf(dragged)];
+
+        setup.drop(place, ids);
+    };
+
+    const onUp = () => finish(true);
+    const onCancel = () => finish(false);
+    const onKey = (key: KeyboardEvent) => {
+        if (key.key === 'Escape') {
+            finish(false);
+        }
+    };
+
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onCancel);
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', update, true);
+
+    if (event.pointerType === 'touch') {
+        pickUp();
+        update();
+    }
+}
+
+type SortableOptions = {
+    onReorder: (ids: string[]) => void;
+    onDrop?: (id: string, to: string) => void;
+    fold?: boolean;
+};
+
+function zoneAt(element: Element | null): Place | null {
+    const zone = element?.closest<HTMLElement>('[data-drop-zone]');
+
+    return zone ? { zone, key: zone.dataset.sortList ?? '', list: null } : null;
+}
+
 export function useSortable(
-    onReorder: (ids: string[]) => void,
+    options: SortableOptions,
 ): (element: HTMLElement | null) => void {
-    const latest = useRef(onReorder);
+    const latest = useRef(options);
     const [container, setContainer] = useState<HTMLElement | null>(null);
 
     useEffect(() => {
-        latest.current = onReorder;
+        latest.current = options;
     });
 
     useEffect(() => {
@@ -137,83 +511,25 @@ export function useSortable(
         }
 
         const onDown = (event: PointerEvent) => {
-            const items = sortables(container);
             const dragged = handledItem(event);
 
-            if (!dragged || !items.includes(dragged)) {
+            if (!dragged || dragged.parentElement !== container) {
                 return;
             }
 
-            whenHeld(event, () => start(event, items, dragged));
-        };
-
-        const start = (
-            event: PointerEvent,
-            items: HTMLElement[],
-            dragged: HTMLElement,
-        ) => {
-            const measures = items.map((item) => {
-                const box = item.getBoundingClientRect();
-
-                return { top: box.top, height: box.height };
-            });
-            const from = items.indexOf(dragged);
-            const next = measures[from + 1] ?? measures[from - 1];
-            const gap = next
-                ? Math.abs(next.top - measures[from].top) -
-                  (next.top > measures[from].top
-                      ? measures[from].height
-                      : next.height)
-                : 0;
-            const size = measures[from].height + gap;
-            let to = from;
-
-            dragged.dataset.dragging = '';
-            items.forEach((item) => {
-                item.style.transition =
-                    item === dragged ? 'none' : `transform ${SHIFT_MS}ms`;
-            });
-
-            const onMove = (move: PointerEvent) => {
-                const distance = move.clientY - event.clientY;
-                const center =
-                    measures[from].top + measures[from].height / 2 + distance;
-
-                to = targetIndex(measures, from, center);
-                dragged.style.transform = `translateY(${distance}px)`;
-                items.forEach((item, index) => {
-                    if (item !== dragged) {
-                        const shift = shiftOf(index, from, to, size);
-                        item.style.transform = shift
-                            ? `translateY(${shift}px)`
-                            : '';
-                    }
-                });
-            };
-
-            const onEnd = () => {
-                window.removeEventListener('pointermove', onMove);
-                window.removeEventListener('pointerup', onEnd);
-                window.removeEventListener('pointercancel', onEnd);
-                delete dragged.dataset.dragging;
-                items.forEach((item) => {
-                    item.style.transition = '';
-                    item.style.transform = '';
-                });
-
-                if (to === from) {
-                    return;
-                }
-
-                const ids = items.map((item) => item.dataset.sortId ?? '');
-                const [moved] = ids.splice(from, 1);
-                ids.splice(to, 0, moved);
-                latest.current(ids);
-            };
-
-            window.addEventListener('pointermove', onMove);
-            window.addEventListener('pointerup', onEnd);
-            window.addEventListener('pointercancel', onEnd);
+            whenHeld(event, () =>
+                carry({
+                    event,
+                    dragged,
+                    fold: latest.current.fold,
+                    placeAt: (element) =>
+                        latest.current.onDrop ? zoneAt(element) : null,
+                    drop: (place, ids) =>
+                        place.list
+                            ? latest.current.onReorder(ids)
+                            : latest.current.onDrop?.(idOf(dragged), place.key),
+                }),
+            );
         };
 
         container.addEventListener('pointerdown', onDown);
@@ -238,22 +554,8 @@ function innerList(zone: HTMLElement, key: string): HTMLElement {
     );
 }
 
-function others(list: HTMLElement, dragged: HTMLElement): HTMLElement[] {
-    return sortables(list).filter((item) => item !== dragged);
-}
-
-function insertionIndex(items: HTMLElement[], y: number): number {
-    return items.filter((item) => {
-        const box = item.getBoundingClientRect();
-
-        return box.top + box.height / 2 < y;
-    }).length;
-}
-
-function targetAt(x: number, y: number, dragged: HTMLElement): Target | null {
-    const zone = document
-        .elementFromPoint(x, y)
-        ?.closest<HTMLElement>('[data-sort-list]');
+function listAt(element: Element | null): Place | null {
+    const zone = element?.closest<HTMLElement>('[data-sort-list]');
 
     if (!zone) {
         return null;
@@ -261,76 +563,8 @@ function targetAt(x: number, y: number, dragged: HTMLElement): Target | null {
 
     const key = zone.dataset.sortList ?? '';
     const list = sortables(zone).length > 0 ? zone : innerList(zone, key);
-    const items = others(list, dragged);
 
-    if (sortables(list).length === 0) {
-        return { zone, key, list, index: null };
-    }
-
-    if (list === zone) {
-        return { zone, key, list, index: insertionIndex(items, y) };
-    }
-
-    const above = y < list.getBoundingClientRect().top;
-
-    return { zone, key, list, index: above ? 0 : items.length };
-}
-
-function boundary(items: HTMLElement[], index: number): number {
-    const previous = items[index - 1]?.getBoundingClientRect();
-    const next = items[index]?.getBoundingClientRect();
-
-    if (previous && next) {
-        return (previous.bottom + next.top) / 2;
-    }
-
-    return next?.top ?? previous?.bottom ?? 0;
-}
-
-function zonesOf(zone: HTMLElement, key: string): HTMLElement[] {
-    const zones: HTMLElement[] = [];
-    let current: HTMLElement | null = zone;
-
-    while (current) {
-        if (current.dataset.sortList === key) {
-            zones.push(current);
-        }
-
-        current =
-            current.parentElement?.closest<HTMLElement>('[data-sort-list]') ??
-            null;
-    }
-
-    return zones;
-}
-
-function lift(dragged: HTMLElement): HTMLElement {
-    const box = dragged.getBoundingClientRect();
-    const style = getComputedStyle(dragged);
-    const lifted = dragged.cloneNode(true) as HTMLElement;
-
-    lifted.removeAttribute('data-sort-id');
-    lifted.setAttribute('aria-hidden', 'true');
-    lifted.className = liftedClass;
-    lifted.style.left = `${box.left}px`;
-    lifted.style.top = `${box.top}px`;
-    lifted.style.width = `${box.width}px`;
-    CARRIED_VARIABLES.forEach((name) =>
-        lifted.style.setProperty(name, style.getPropertyValue(name)),
-    );
-    document.body.append(lifted);
-
-    return lifted;
-}
-
-function edgeStep(y: number, edge: number): number {
-    const bottom = window.innerHeight - y;
-
-    if (y < edge) {
-        return -(edge - y) * EDGE_SPEED;
-    }
-
-    return bottom < edge ? (edge - bottom) * EDGE_SPEED : 0;
+    return { zone, key, list: sortables(list).length > 0 ? list : null };
 }
 
 export function useSortScope(
@@ -356,144 +590,22 @@ export function useSortScope(
                 return;
             }
 
-            whenHeld(event, () => start(event, dragged, origin));
-        };
-
-        const start = (
-            event: PointerEvent,
-            dragged: HTMLElement,
-            origin: HTMLElement,
-        ) => {
-            const id = dragged.dataset.sortId ?? '';
             const from = origin.dataset.sortList ?? '';
-            const fromIndex = sortables(origin).indexOf(dragged);
-            const start = dragged.getBoundingClientRect();
-            const line = document.createElement('div');
-            let lifted: HTMLElement | null = null;
-            let pointer = { x: event.clientX, y: event.clientY };
-            let target: Target | null = null;
-            let lit: HTMLElement[] = [];
-            let frame = 0;
 
-            line.className = lineClass;
-            line.hidden = true;
-
-            const moves = (candidate: Target | null): candidate is Target =>
-                candidate !== null &&
-                !(candidate.key === from && candidate.index === fromIndex);
-
-            const light = (zones: HTMLElement[]) => {
-                lit.forEach((zone) => delete zone.dataset.dropOver);
-                zones.forEach((zone) => (zone.dataset.dropOver = ''));
-                lit = zones;
-            };
-
-            const update = () => {
-                if (!lifted) {
-                    return;
-                }
-
-                target = targetAt(pointer.x, pointer.y, dragged);
-
-                const dx = pointer.x - event.clientX;
-                const dy = pointer.y - event.clientY;
-
-                if (!moves(target)) {
-                    lifted.style.transform = `translate(${dx}px, ${dy}px)`;
-                    light([]);
-                    line.hidden = true;
-
-                    return;
-                }
-
-                light(zonesOf(target.zone, target.key));
-                line.hidden = target.index === null;
-
-                if (target.index === null) {
-                    const below =
-                        target.zone.getBoundingClientRect().bottom - start.top;
-                    lifted.style.transform = `translate(${dx}px, ${below}px)`;
-
-                    return;
-                }
-
-                const box = target.list.getBoundingClientRect();
-                const y = boundary(others(target.list, dragged), target.index);
-
-                line.style.left = `${box.left}px`;
-                line.style.width = `${box.width}px`;
-                line.style.top = `${y - line.offsetHeight / 2}px`;
-                lifted.style.transform = `translate(${dx}px, ${y + line.offsetHeight / 2 - start.top}px)`;
-            };
-
-            const scroll = () => {
-                const step = edgeStep(pointer.y, start.height);
-
-                if (step !== 0) {
-                    window.scrollBy(0, step);
-                }
-
-                frame = requestAnimationFrame(scroll);
-            };
-
-            const pickUp = () => {
-                if (!lifted) {
-                    lifted = lift(dragged);
-                    document.body.append(line);
-                    dragged.dataset.lifted = '';
-                    frame = requestAnimationFrame(scroll);
-                }
-            };
-
-            const onPointerMove = (move: PointerEvent) => {
-                pointer = { x: move.clientX, y: move.clientY };
-                pickUp();
-                update();
-            };
-
-            const finish = (drop: boolean) => {
-                window.removeEventListener('pointermove', onPointerMove);
-                window.removeEventListener('pointerup', onUp);
-                window.removeEventListener('pointercancel', onCancel);
-                window.removeEventListener('keydown', onKey);
-                window.removeEventListener('scroll', update, true);
-                cancelAnimationFrame(frame);
-                light([]);
-                line.remove();
-                lifted?.remove();
-                delete dragged.dataset.lifted;
-
-                if (!drop || !lifted || !moves(target)) {
-                    return;
-                }
-
-                const ids =
-                    target.index === null
-                        ? [id]
-                        : others(target.list, dragged)
-                              .map((item) => item.dataset.sortId ?? '')
-                              .toSpliced(target.index, 0, id);
-
-                latest.current({ id, from, to: target.key, ids });
-            };
-
-            const onUp = () => finish(true);
-            const onCancel = () => finish(false);
-            const onKey = (key: KeyboardEvent) => {
-                if (key.key === 'Escape') {
-                    finish(false);
-                }
-            };
-
-            window.addEventListener('pointermove', onPointerMove);
-            window.addEventListener('pointerup', onUp);
-            window.addEventListener('pointercancel', onCancel);
-            window.addEventListener('keydown', onKey);
-            window.addEventListener('scroll', update, true);
-
-            if (event.pointerType === 'touch') {
-                pickUp();
-            }
+            whenHeld(event, () =>
+                carry({
+                    event,
+                    dragged,
+                    placeAt: listAt,
+                    drop: (place, ids) =>
+                        latest.current({
+                            id: idOf(dragged),
+                            from,
+                            to: place.key,
+                            ids,
+                        }),
+                }),
+            );
         };
 
         scope.addEventListener('pointerdown', onDown);
@@ -520,11 +632,16 @@ export function SortProvider(props: {
 type SortableProps = {
     organizing?: boolean;
     onReorder: (ids: string[]) => void;
+    onDrop?: (id: string, to: string) => void;
     children: ReactNode;
 };
 
 export function Sortable(props: SortableProps) {
-    const ref = useSortable(props.onReorder);
+    const ref = useSortable({
+        onReorder: props.onReorder,
+        onDrop: props.onDrop,
+        fold: true,
+    });
 
     return (
         <SortProvider organizing={props.organizing}>
@@ -563,6 +680,7 @@ export function DropZone(props: DropZoneProps) {
     return (
         <div
             data-sort-list={props.id}
+            data-drop-zone
             className={cn(dropZoneClass, props.className)}
         >
             {props.children}
@@ -576,11 +694,7 @@ function holdScroll(handle: HTMLElement | null) {
     }
 
     const onTouchMove = (event: TouchEvent) => {
-        if (
-            handle
-                .closest('[data-sort-id]')
-                ?.matches('[data-lifted], [data-dragging]')
-        ) {
+        if (handle.closest('[data-sort-id]')?.matches('[data-lifted]')) {
             event.preventDefault();
         }
     };
@@ -611,9 +725,29 @@ export function SortHandle() {
                     : 'hidden w-(--row-inset) touch-none [@media(hover:hover)]:group-hover/sort:flex',
             )}
         >
-            <span className="flex w-(--row-inset) justify-center">
-                <GripVertical className="size-3.5" />
-            </span>
+            {!organizing && (
+                <span className="flex w-(--row-inset) justify-center">
+                    <GripVertical className="size-3.5" />
+                </span>
+            )}
+        </span>
+    );
+}
+
+export function useOrganizing(): boolean {
+    return useContext(Organizing);
+}
+
+export function SortGrip(props: { className?: string }) {
+    return (
+        <span
+            aria-hidden
+            className={cn(
+                'flex size-10 shrink-0 items-center justify-center text-foreground-muted',
+                props.className,
+            )}
+        >
+            <GripVertical className="size-5" />
         </span>
     );
 }

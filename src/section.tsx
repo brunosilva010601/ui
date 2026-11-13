@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useId } from 'react';
 import type { ReactNode } from 'react';
@@ -11,7 +11,7 @@ import { cn } from './lib/utils';
 import { hoverClass, SectionBand } from './section-band';
 import type { SectionMenu } from './section-band';
 import { useOpen } from './section-open';
-import { sectionDropClass, sortItemClass } from './sortable';
+import { foldClass, sectionDropClass, sortItemClass } from './sortable';
 import { surfaceClass } from './surface';
 
 const variants = {
@@ -191,12 +191,14 @@ export function Section(props: SectionProps) {
                         {action}
                     </div>
                 )}
-                {collapsible &&
-                    (open ? (
-                        <ChevronUp className={chevronClass} />
-                    ) : (
-                        <ChevronDown className={chevronClass} />
-                    ))}
+                {collapsible && (
+                    <ChevronDown
+                        className={cn(
+                            chevronClass,
+                            open && 'rotate-180 in-data-[folding]:rotate-0',
+                        )}
+                    />
+                )}
                 {headerLink && <ChevronRight className={chevronClass} />}
             </div>
         )
@@ -209,10 +211,7 @@ export function Section(props: SectionProps) {
             className={cn(
                 band ? bandClass : variants[variant],
                 props.sortList !== undefined && sectionDropClass,
-                props.sortId !== undefined && [
-                    sortItemClass,
-                    'data-[dragging]:-mx-[var(--bleed,var(--spacing-3))] data-[dragging]:bg-background data-[dragging]:px-[var(--bleed,var(--spacing-3))]',
-                ],
+                props.sortId !== undefined && sortItemClass,
                 isOutlined && props.flush && 'overflow-clip',
                 isClickable &&
                     'relative transition-colors hover:bg-surface-hover active:bg-surface-hover',
@@ -231,6 +230,7 @@ export function Section(props: SectionProps) {
                     id={contentId}
                     className={cn(
                         'flex flex-1 flex-col gap-3',
+                        foldClass,
                         isOutlined &&
                             !props.flush &&
                             'p-3 [--bleed:var(--spacing-3)]',

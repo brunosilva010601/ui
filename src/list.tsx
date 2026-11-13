@@ -5,9 +5,11 @@ import { DropdownMenu } from './dropdown-menu';
 import { useHeldMenu } from './held-menu';
 import { cn } from './lib/utils';
 import {
+    SortGrip,
     SortHandle,
     SortProvider,
     sortItemClass,
+    useOrganizing,
     useSortable,
 } from './sortable';
 import { Spinner } from './spinner';
@@ -72,6 +74,7 @@ export function ListItem(props: ListItemProps) {
     const contentId = useId();
     const variant = useContext(VariantContext);
     const blocked = props.disabled || props.busy;
+    const organizing = useOrganizing() && props.sortId !== undefined;
     const menu = blocked ? undefined : props.menu;
     const held = useHeldMenu({
         label: menu?.label ?? '',
@@ -122,7 +125,11 @@ export function ListItem(props: ListItemProps) {
                 {props.children}
                 {props.busy && <Spinner />}
             </div>
-            {more}
+            {organizing ? (
+                <SortGrip className="relative -ml-(--row-inset) mr-3" />
+            ) : (
+                more
+            )}
         </div>
     );
 
@@ -163,7 +170,7 @@ function keepOrder() {}
 
 export function List(props: ListProps) {
     const variant = props.variant ?? 'divided';
-    const sortable = useSortable(props.onReorder ?? keepOrder);
+    const sortable = useSortable({ onReorder: props.onReorder ?? keepOrder });
 
     return (
         <VariantContext value={variant}>

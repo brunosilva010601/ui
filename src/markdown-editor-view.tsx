@@ -1,6 +1,8 @@
 import { TableKit } from '@tiptap/extension-table';
 import { TaskList } from '@tiptap/extension-list';
 import { Placeholder } from '@tiptap/extensions';
+import type { ResolvedPos } from '@tiptap/pm/model';
+import { TextSelection } from '@tiptap/pm/state';
 import { EditorContent, Extension, useEditor } from '@tiptap/react';
 import type { Editor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
@@ -22,6 +24,7 @@ import {
 import type { Toggle } from './markdown-editor-nodes';
 
 const HEADING_LEVEL = 2;
+const COARSE = '(pointer: coarse)';
 
 function sink(editor: Editor): boolean {
     return (
@@ -35,6 +38,105 @@ function lift(editor: Editor): boolean {
         editor.commands.liftListItem('listItem') ||
         editor.commands.liftListItem('taskItem')
     );
+}
+
+const ITEMS = ['listItem', 'taskItem'];
+
+const STATES: [MarkdownCommand, string][] = [
+    ['bold', 'bold'],
+    ['italic', 'italic'],
+    ['strike', 'strike'],
+    ['code', 'code'],
+    ['link', 'link'],
+    ['heading', 'heading'],
+    ['task', 'taskList'],
+    ['bullet', 'bulletList'],
+    ['numbered', 'orderedList'],
+    ['quote', 'blockquote'],
+    ['codeBlock', 'codeBlock'],
+];
+
+function activeCommands(editor: Editor): MarkdownCommand[] {
+    return STATES.filter(([, name]) => editor.isActive(name)).map(
+        ([command]) => command,
+    );
+}
+
+function itemDepths($from: ResolvedPos): number[] {
+    return Array.from(
+        { length: $from.depth },
+        (_, index) => $from.depth - index,
+    ).filter((depth) => ITEMS.includes($from.node(depth).type.name));
+}
+
+function insertLine(editor: Editor, side: 'above' | 'below'): boolean {
+    const { $from } = editor.state.selection;
+    const [item] = itemDepths($from);
+    const depth = item ?? $from.depth;
+    const paragraph = editor.schema.nodes.paragraph.create();
+    const line =
+        item === undefined
+            ? paragraph
+            : $from.node(item).type.create(null, paragraph);
+    const at = side === 'above' ? $from.before(depth) : $from.after(depth);
+    const inside = at + (item === undefined ? 1 : 2);
+
+    return editor
+        .chain()
+        .focus()
+        .command(({ tr }) => {
+            tr.insert(at, line);
+            tr.setSelection(TextSelection.create(tr.doc, inside));
+
+            return true;
+        })
+        .run();
+}
+
+function clearLine(editor: Editor): boolean {
+    const { selection, doc } = editor.state;
+    const { $from } = selection;
+
+    if (editor.commands.undoInputRule()) {
+        return true;
+    }
+
+    if (
+        !selection.empty ||
+        !$from.parent.isTextblock ||
+        $from.parent.content.size > 0
+    ) {
+        return false;
+    }
+
+    const items = itemDepths($from);
+
+    if (items.length > 0) {
+        if ($from.node(items[0]).childCount > 1) {
+            return false;
+        }
+
+        return items
+            .reduce(
+                (chain, depth) => chain.liftListItem($from.node(depth).type),
+                editor.chain(),
+            )
+            .run();
+    }
+
+    if ($from.depth !== 1 || $from.index(0) !== 0 || doc.childCount < 2) {
+        return false;
+    }
+
+    return editor
+        .chain()
+        .command(({ tr }) => {
+            tr.delete($from.before(1), $from.after(1));
+            tr.setSelection(TextSelection.atStart(tr.doc));
+
+            return true;
+        })
+        .run();
 }
 
 function run(editor: Editor, command: MarkdownCommand): void {
@@ -74,6 +176,12 @@ function run(editor: Editor, command: MarkdownCommand): void {
         case 'divider':
             chain.setHorizontalRule().run();
             break;
+        case 'lineAbove':
+            insertLine(editor, 'above');
+            break;
+        case 'lineBelow':
+            insertLine(editor, 'below');
+            break;
         case 'undo':
             chain.undo().run();
             break;
@@ -99,8 +207,12 @@ function shortcuts(
 ) {
     return Extension.create({
         name: 'markdownShortcuts',
+        priority: 1000,
         addKeyboardShortcuts() {
             return {
+                Backspace: () => clearLine(this.editor),
+                'Mod-Shift-Enter': () => insertLine(this.editor, 'above'),
+                'Mod-Alt-Enter': () => insertLine(this.editor, 'below'),
                 'Mod-]': () => sink(this.editor),
                 'Mod-[': () => lift(this.editor),
                 'Mod-Alt--': () => this.editor.commands.setHorizontalRule(),
@@ -146,6 +258,8 @@ export default function MarkdownEditorView(props: MarkdownEditorProps) {
     const toggle = useRef(props.onToggle);
     const change = useRef(props.onChange);
     const focusChange = useRef(props.onFocusChange);
+    const activeChange = useRef(props.onActiveChange);
+    const reported = useRef('');
     const menu = useRef(props.menu);
     const link = useRef<(() => void) | undefined>(undefined);
     const listen: SlashListener = useRef(undefined);
@@ -154,6 +268,7 @@ export default function MarkdownEditorView(props: MarkdownEditorProps) {
     toggle.current = props.onToggle;
     change.current = props.onChange;
     focusChange.current = props.onFocusChange;
+    activeChange.current = props.onActiveChange;
     menu.current = props.menu;
 
     const runCommand = (editor: Editor, command: MarkdownCommand) => {
@@ -199,6 +314,7 @@ export default function MarkdownEditorView(props: MarkdownEditorProps) {
                 'aria-label': props.label,
                 'aria-multiline': 'true',
                 role: 'textbox',
+                spellcheck: String(!window.matchMedia(COARSE).matches),
             },
             handleDOMEvents: {
                 mousedown: (_, event) => openLink(event),
@@ -211,6 +327,14 @@ export default function MarkdownEditorView(props: MarkdownEditorProps) {
             if (next !== emitted.current) {
                 emitted.current = next;
                 change.current(next);
+            }
+        },
+        onTransaction: ({ editor: current }) => {
+            const next = activeCommands(current);
+
+            if (next.join() !== reported.current) {
+                reported.current = next.join();
+                activeChange.current?.(next);
             }
         },
         onFocus: () => focusChange.current?.(true),

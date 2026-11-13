@@ -30,13 +30,13 @@ export const mobileLayouts: Record<ModalMobile, Layout> = {
     },
     left: {
         overlay:
-            'max-sm:justify-start max-sm:p-(--drawer-gap) max-sm:pt-[max(var(--drawer-gap),var(--spacing-safe-top))] max-sm:pb-[max(var(--drawer-gap),var(--spacing-safe-bottom))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
-        panel: 'max-sm:h-full max-sm:w-full max-sm:max-w-xs max-sm:data-[state=closed]:animate-slide-out-left max-sm:data-[state=open]:animate-slide-in-left',
+            'max-sm:justify-start max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
+        panel: 'max-sm:h-full max-sm:w-full max-sm:max-w-xs max-sm:rounded-none max-sm:border-y-0 max-sm:border-l-0 max-sm:pt-safe-top max-sm:pb-safe-bottom max-sm:data-[state=closed]:animate-slide-out-left max-sm:data-[state=open]:animate-slide-in-left',
     },
     right: {
         overlay:
-            'max-sm:justify-end max-sm:p-(--drawer-gap) max-sm:pt-[max(var(--drawer-gap),var(--spacing-safe-top))] max-sm:pb-[max(var(--drawer-gap),var(--spacing-safe-bottom))] max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
-        panel: 'max-sm:h-full max-sm:w-full max-sm:max-w-xs max-sm:data-[state=closed]:animate-slide-out-right max-sm:data-[state=open]:animate-slide-in-right',
+            'max-sm:justify-end max-sm:data-[state=closed]:animate-drawer-overlay-out max-sm:data-[state=open]:animate-drawer-overlay-in',
+        panel: 'max-sm:h-full max-sm:w-full max-sm:max-w-xs max-sm:rounded-none max-sm:border-y-0 max-sm:border-r-0 max-sm:pt-safe-top max-sm:pb-safe-bottom max-sm:data-[state=closed]:animate-slide-out-right max-sm:data-[state=open]:animate-slide-in-right',
     },
     sheet: {
         overlay:

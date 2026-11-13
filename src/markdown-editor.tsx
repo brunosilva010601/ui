@@ -18,6 +18,8 @@ export type MarkdownCommand =
     | 'quote'
     | 'codeBlock'
     | 'divider'
+    | 'lineAbove'
+    | 'lineBelow'
     | 'undo'
     | 'redo';
 
@@ -54,6 +56,7 @@ export type MarkdownEditorProps = {
     onToggle?: (task: number) => void;
     onLink?: (current: string | null) => void;
     onFocusChange?: (focused: boolean) => void;
+    onActiveChange?: (active: MarkdownCommand[]) => void;
     ref?: Ref<MarkdownEditorHandle>;
 };
 
@@ -74,6 +77,8 @@ const keys: Record<MarkdownCommand, Keys> = {
     quote: { key: 'B', shift: true },
     codeBlock: { key: 'C', alt: true },
     divider: { key: '-', alt: true },
+    lineAbove: { key: 'Enter', shift: true },
+    lineBelow: { key: 'Enter', alt: true },
     undo: { key: 'Z' },
     redo: { key: 'Z', shift: true },
 };

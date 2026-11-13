@@ -1,12 +1,12 @@
-import { ChevronDown, ChevronRight, Ellipsis } from 'lucide-react';
+import { ChevronRight, Ellipsis } from 'lucide-react';
 import { useId } from 'react';
-import type { ReactNode } from 'react';
+import type { ReactNode, Ref } from 'react';
 import { Button } from './button';
 import { Cover } from './cover';
 import { DropdownMenu } from './dropdown-menu';
 import { IconGroup } from './icon-group';
 import { cn } from './lib/utils';
-import { bandDropClass, SortHandle } from './sortable';
+import { bandDropClass, SortGrip, SortHandle, useOrganizing } from './sortable';
 
 export const hoverClass =
     'focus-within:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/header:opacity-100';
@@ -27,16 +27,22 @@ type Props = {
     sortable: boolean;
     droppable: boolean;
     hover: boolean;
+    ref?: Ref<HTMLDivElement>;
+    'data-state'?: string;
 };
 
 export function SectionBand(props: Props) {
-    const Chevron = props.open ? ChevronDown : ChevronRight;
     const textId = useId();
+    const organizing = useOrganizing() && props.sortable;
 
     return (
         <div
+            ref={props.ref}
+            data-state={props['data-state']}
+            data-sort-face
             className={cn(
-                'group/header group/sort relative -mx-(--row-inset) flex items-center gap-2 px-3 py-2',
+                'group/header group/sort relative -mx-(--row-inset) flex items-center gap-2 rounded px-3 py-2 transition-colors data-[state=open]:bg-surface-hover',
+                props.menu && 'active:bg-surface-hover',
                 props.droppable && bandDropClass,
             )}
         >
@@ -46,7 +52,12 @@ export function SectionBand(props: Props) {
                 onClick={props.onToggle}
             />
             {props.sortable && <SortHandle />}
-            <Chevron className="pointer-events-none relative size-4 shrink-0 text-foreground-muted" />
+            <ChevronRight
+                className={cn(
+                    'pointer-events-none relative size-4 shrink-0 text-foreground-muted',
+                    props.open && 'rotate-90 in-data-[folding]:rotate-0',
+                )}
+            />
             {props.title ? (
                 <h2
                     id={textId}
@@ -67,31 +78,35 @@ export function SectionBand(props: Props) {
                     {props.note}
                 </span>
             )}
-            {(props.action || props.menu) && (
-                <IconGroup
-                    className={cn(
-                        'relative ml-auto -my-[calc(var(--spacing-2_5)_+_1px)]',
-                        props.hover && hoverClass,
-                    )}
-                >
-                    {props.action}
-                    {props.menu && (
-                        <DropdownMenu
-                            label={props.menu.label}
-                            trigger={
-                                <Button
-                                    variant="ghost"
-                                    square
-                                    title={props.menu.label}
-                                >
-                                    <Ellipsis />
-                                </Button>
-                            }
-                        >
-                            {props.menu.items}
-                        </DropdownMenu>
-                    )}
-                </IconGroup>
+            {organizing ? (
+                <SortGrip className="relative ml-auto -my-[calc(var(--spacing-2_5)_+_1px)]" />
+            ) : (
+                (props.action || props.menu) && (
+                    <IconGroup
+                        className={cn(
+                            'relative ml-auto -my-[calc(var(--spacing-2_5)_+_1px)]',
+                            props.hover && hoverClass,
+                        )}
+                    >
+                        {props.action}
+                        {props.menu && (
+                            <DropdownMenu
+                                label={props.menu.label}
+                                trigger={
+                                    <Button
+                                        variant="ghost"
+                                        square
+                                        title={props.menu.label}
+                                    >
+                                        <Ellipsis />
+                                    </Button>
+                                }
+                            >
+                                {props.menu.items}
+                            </DropdownMenu>
+                        )}
+                    </IconGroup>
+                )
             )}
         </div>
     );

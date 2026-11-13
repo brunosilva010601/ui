@@ -1416,7 +1416,7 @@ function MarkdownEditorDemo() {
         <Section
             variant="outlined"
             title="Markdown editor"
-            description="Edits the formatted text and gives back Markdown. Typing # , - or [ ] at the start of a line turns it into a heading, list or checklist, / opens the menu, ⌘Enter ticks the line and list items drag by the handle."
+            description="Edits the formatted text and gives back Markdown. Typing # , - or [ ] at the start of a line turns it into a heading, list or checklist, / opens the menu, ⌘Enter ticks the line and list items drag by the handle. ⇧⌘Enter and ⌥⌘Enter add a line above or below, and Backspace on an empty first line or empty list item removes the line or takes it out of the list at once."
             meta="value · onChange · menu · onToggle · onLink · ref"
             collapsible
             collapsed
@@ -1436,6 +1436,8 @@ function MarkdownEditorDemo() {
                         { command: 'bullet', label: 'List' },
                         { command: 'quote', label: 'Quote' },
                         { command: 'divider', label: 'Divider' },
+                        { command: 'lineAbove', label: 'Line above' },
+                        { command: 'lineBelow', label: 'Line below' },
                     ],
                 }}
             />
@@ -2792,7 +2794,7 @@ function SortScopeDemo() {
         <Section
             variant="outlined"
             title="SortScope"
-            description="Moves list items between the lists and drop zones inside the page, with a line where the item lands."
+            description="Moves list items between the lists and drop zones inside the page. The other items make room, with an outline where the item lands."
             meta="onMove · organizing · List sortList · Section sortList · DropZone"
             collapsible
             collapsed
@@ -2828,18 +2830,30 @@ function SortScopeDemo() {
 
 function SortableDemo() {
     const [order, setOrder] = useState(['Section 1', 'Section 2', 'Section 3']);
+    const [away, setAway] = useState<string[]>([]);
+    const drop = (id: string) => {
+        setOrder((current) => current.filter((title) => title !== id));
+        setAway((current) => [...current, id]);
+    };
 
     return (
         <Section
             variant="outlined"
             title="Sortable"
-            description="Reorders the sections inside it by the handle in their left inset."
-            meta="onReorder · organizing"
+            description="Reorders the sections inside it by the handle in their left inset. While one is carried, all of them fold to their titles, and onDrop takes it to a drop zone."
+            meta="onReorder · onDrop · organizing · DropZone"
             collapsible
             collapsed
             remember="docs:sortable"
         >
-            <Sortable organizing onReorder={setOrder}>
+            <DropZone id="elsewhere" className="p-3">
+                <p className="ui-note">
+                    {away.length > 0
+                        ? `Moved here: ${away.join(', ')}.`
+                        : 'Drop a section here to move it elsewhere.'}
+                </p>
+            </DropZone>
+            <Sortable organizing onReorder={setOrder} onDrop={drop}>
                 {order.map((title) => (
                     <Section
                         key={title}
