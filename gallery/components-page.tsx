@@ -904,7 +904,7 @@ function CalendarDemo() {
             variant="outlined"
             title="Calendar"
             description="Month grid to pick a day, in the locale and week start of UiProvider. Days before min are disabled, marked days get a tint. Without onChange it only shows: tone marks each day as done, skipped or missed, and onMonth tells which month is on screen, to load it."
-            meta="value · today · min · marked · onChange · tone · legend · onMonth"
+            meta="value · today · min · marked · onChange · tone · legend · onMonth · dayMenu"
             collapsible
             collapsed
             remember="docs:calendar"
@@ -919,6 +919,20 @@ function CalendarDemo() {
             <Calendar
                 today={today}
                 legend={{ done: 'Done', skipped: 'Skipped', missed: 'Missed' }}
+                dayMenu={{
+                    label: 'Day',
+                    items: (day) =>
+                        day <= today && (
+                            <>
+                                <DropdownItem onSelect={() => {}}>
+                                    Done
+                                </DropdownItem>
+                                <DropdownItem onSelect={() => {}}>
+                                    Skipped
+                                </DropdownItem>
+                            </>
+                        ),
+                }}
                 tone={(day) =>
                     day >= today
                         ? undefined

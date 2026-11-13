@@ -1,7 +1,9 @@
 import { CalendarSync, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import { buttonClass } from '../button';
 import { ControlStrut } from '../control-strut';
+import { DropdownMenu } from '../dropdown-menu';
 import { monthYear, weekdayName } from '../lib/dates';
 import { cn } from '../lib/utils';
 import { useUi, useUiLabels } from '../provider';
@@ -27,6 +29,10 @@ type Props = {
     legend?: Partial<Record<CalendarTone, string>>;
     onChange?: (date: string) => void;
     onMonth?: (month: string) => void;
+    dayMenu?: {
+        label: string;
+        items: (date: string) => ReactNode;
+    };
 };
 
 function iso(time: number): string {
@@ -110,18 +116,43 @@ export function Calendar(props: Props) {
                     const pick = props.onChange;
 
                     if (!pick) {
+                        const items = props.dayMenu?.items(day);
+                        const cellClass = cn(
+                            'mx-auto flex size-10 items-center justify-center rounded-full text-sm',
+                            day.slice(0, 7) !== shown &&
+                                'text-foreground-faint',
+                            day === props.today &&
+                                'font-semibold text-primary-text',
+                            tone && tones[tone],
+                        );
+
+                        if (props.dayMenu && items) {
+                            return (
+                                <DropdownMenu
+                                    key={day}
+                                    label={props.dayMenu.label}
+                                    align="center"
+                                    trigger={
+                                        <button
+                                            type="button"
+                                            className={cn(
+                                                cellClass,
+                                                'cursor-pointer transition-colors data-[state=open]:outline-2 data-[state=open]:outline-offset-2 data-[state=open]:outline-foreground/30',
+                                                !tone &&
+                                                    'hover:bg-control-hover',
+                                            )}
+                                        >
+                                            {Number(day.slice(8))}
+                                        </button>
+                                    }
+                                >
+                                    {items}
+                                </DropdownMenu>
+                            );
+                        }
+
                         return (
-                            <span
-                                key={day}
-                                className={cn(
-                                    'mx-auto flex size-10 items-center justify-center rounded-full text-sm',
-                                    day.slice(0, 7) !== shown &&
-                                        'text-foreground-faint',
-                                    day === props.today &&
-                                        'font-semibold text-primary-text',
-                                    tone && tones[tone],
-                                )}
-                            >
+                            <span key={day} className={cellClass}>
                                 {Number(day.slice(8))}
                             </span>
                         );
