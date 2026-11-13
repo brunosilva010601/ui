@@ -1,4 +1,7 @@
 const VEIL = '[data-veil]:not([data-state="closed"])';
+const FLOATING_VEIL =
+    '[data-veil]:not([data-veil="side"]):not([data-state="closed"])';
+const PHONE = '(width < 40rem)';
 
 let started = false;
 let painting = '';
@@ -57,7 +60,10 @@ function meta(): HTMLMetaElement {
 
 function paint(): void {
     const root = document.documentElement;
-    const veiled = document.querySelector(VEIL) !== null;
+    const veiled =
+        document.querySelector(
+            window.matchMedia(PHONE).matches ? FLOATING_VEIL : VEIL,
+        ) !== null;
     const key = `${root.className}|${root.style.colorScheme}|${veiled}`;
 
     if (key === painting) {

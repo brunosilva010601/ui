@@ -97,7 +97,9 @@ function ModalPanel(props: ModalProps) {
     return (
         <DialogPrimitive.Portal>
             <DialogPrimitive.Overlay
-                data-veil
+                data-veil={
+                    mobile === 'left' || mobile === 'right' ? 'side' : ''
+                }
                 className={cn(
                     'fixed inset-0 z-50 flex',
                     backdropClass,
