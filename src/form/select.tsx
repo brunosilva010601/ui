@@ -8,6 +8,7 @@ import type { FieldProps } from './field';
 type Option<T extends string> = {
     value: T;
     label: string;
+    description?: string;
     lang?: string;
     content?: ReactNode;
 };
@@ -79,7 +80,14 @@ export function Select<T extends string>(props: Props<T>) {
                         selected={option.value === props.value}
                         onSelect={() => props.onChange(option.value)}
                     >
-                        <OptionText option={option} />
+                        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                            <OptionText option={option} />
+                            {option.description && (
+                                <span className="ui-note">
+                                    {option.description}
+                                </span>
+                            )}
+                        </span>
                         {option.value === props.value && <Check />}
                     </DropdownItem>
                 ))}

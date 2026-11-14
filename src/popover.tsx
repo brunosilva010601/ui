@@ -57,6 +57,8 @@ type Props = {
     align?: 'start' | 'center' | 'end';
     className?: string;
     onPointerDownOutside?: (event: Event) => void;
+    onOpenAutoFocus?: (event: Event) => void;
+    onInteractOutside?: (event: Event) => void;
     children: ReactNode;
 };
 

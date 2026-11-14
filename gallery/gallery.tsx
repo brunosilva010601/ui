@@ -198,6 +198,7 @@ const labels: UiLabels = {
     clear: 'Clear',
     loading: 'Loading',
     moreInfo: 'More information',
+    suggestions: 'Suggestions',
 };
 
 const schemes: { value: Scheme; label: string }[] = [

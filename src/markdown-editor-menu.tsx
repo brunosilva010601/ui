@@ -6,7 +6,7 @@ import { useState } from 'react';
 import type { RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { itemClass, menuPanelClass } from './dropdown-menu';
-import { cn } from './lib/utils';
+import { cn, folded } from './lib/utils';
 import type {
     MarkdownCommand,
     MarkdownMenu,
@@ -29,13 +29,6 @@ export type SlashListener = RefObject<
 >;
 
 const CLOSED: SlashState = { open: null, index: 0, element: null };
-
-function folded(text: string): string {
-    return text
-        .normalize('NFD')
-        .replace(/\p{Diacritic}/gu, '')
-        .toLowerCase();
-}
 
 function moved(state: SlashState, step: number): SlashState {
     const count = state.open?.items.length ?? 0;

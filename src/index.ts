@@ -62,6 +62,7 @@ export { MonthInput } from './form/month-input';
 export { NumberInput } from './form/number-input';
 export { SearchInput } from './form/search-input';
 export { Select } from './form/select';
+export { SuggestInput } from './form/suggest-input';
 export { Switch } from './form/switch';
 export { Textarea } from './form/textarea';
 export { Heading, ItemText } from './heading';

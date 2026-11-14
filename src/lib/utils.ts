@@ -17,3 +17,10 @@ const twMerge = extendTailwindMerge({
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
+
+export function folded(text: string): string {
+    return text
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .toLowerCase();
+}

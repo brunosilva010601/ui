@@ -62,6 +62,7 @@ import {
     ProgressBar,
     RowTrigger,
     SearchInput,
+    SuggestInput,
     Section,
     SectionSkeleton,
     Select,
@@ -223,6 +224,7 @@ export function ComponentsPage() {
                 <TextareaDemo />
                 <SelectDemo />
                 <SearchInputDemo />
+                <SuggestInputDemo />
                 <NumberInputDemo />
                 <MonthInputDemo />
                 <CalendarDemo />
@@ -744,8 +746,8 @@ function SelectDemo() {
         <Section
             variant="outlined"
             title="Select"
-            description="Pick one option from a menu, or a sheet on touch screens: plain, with free content, and with description, hint and error."
-            meta="options · options[].content · description · hint · optional · error · disabled"
+            description="Pick one option from a menu, or a sheet on touch screens: plain, with free content, with option descriptions shown only in the list, and with description, hint and error."
+            meta="options · options[].content · options[].description · description · hint · optional · error · disabled"
             collapsible
             collapsed
             remember="docs:select"
@@ -769,6 +771,18 @@ function SelectDemo() {
                 value={valueOf('disabled')}
                 options={options}
                 onChange={choose('disabled')}
+            />
+            <Select
+                label="Label"
+                value={valueOf('option-description')}
+                options={options.map((option, index) => ({
+                    ...option,
+                    description:
+                        index === 0
+                            ? 'Description of what comes with this option'
+                            : undefined,
+                }))}
+                onChange={choose('option-description')}
             />
             <Select
                 label="Label"
@@ -812,6 +826,40 @@ function SearchInputDemo() {
                 placeholder="Search"
                 onChange={setFilled}
                 onClear={() => notify({ title: 'Cleared' })}
+            />
+        </Section>
+    );
+}
+
+function SuggestInputDemo() {
+    const [value, setValue] = useState('');
+
+    return (
+        <Section
+            variant="outlined"
+            title="SuggestInput"
+            description="Free text field with a list of earlier values below it. The arrow shows them all, and typing part of one shows the matches, ignoring accents; picking a value closes the list, and a value the list does not have is just typed."
+            meta="value · suggestions · onChange · onPick"
+            collapsible
+            collapsed
+            remember="docs:suggest-input"
+        >
+            <SuggestInput
+                label="Name"
+                value={value}
+                suggestions={[
+                    'Option A',
+                    'Option B',
+                    'Option C with a long name that does not fit on one line',
+                    'Option D',
+                    'Option E',
+                    'Option F',
+                    'Option G',
+                    'Option H',
+                    'Option I',
+                    'Option J',
+                ]}
+                onChange={setValue}
             />
         </Section>
     );
@@ -903,7 +951,7 @@ function CalendarDemo() {
         <Section
             variant="outlined"
             title="Calendar"
-            description="Month grid to pick a day, in the locale and week start of UiProvider. Days before min are disabled, marked days get a tint. Without onChange it only shows: tone marks each day as done, skipped or missed, and onMonth tells which month is on screen, to load it."
+            description="Month grid to pick a day, in the locale and week start of UiProvider. The title opens the twelve months of the year, with the arrows moving by year. Days before min are disabled, marked days get a tint. Without onChange it only shows: tone marks each day as done, skipped or missed, and onMonth tells which month is on screen, to load it."
             meta="value · today · min · marked · onChange · tone · legend · onMonth · dayMenu"
             collapsible
             collapsed

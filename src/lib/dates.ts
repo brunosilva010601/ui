@@ -16,6 +16,15 @@ export function monthYear(locale: string, month: number, year: number): string {
     );
 }
 
+export function monthName(locale: string, month: number): string {
+    return capitalize(
+        new Intl.DateTimeFormat(locale, {
+            month: 'short',
+            timeZone: 'UTC',
+        }).format(Date.UTC(2000, month - 1, 1)),
+    );
+}
+
 export function weekdayName(
     locale: string,
     day: number,

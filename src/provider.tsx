@@ -18,6 +18,7 @@ export type UiLabels = {
     clear: string;
     loading: string;
     moreInfo: string;
+    suggestions: string;
 };
 
 export type UiLinkProps = {
@@ -58,6 +59,7 @@ const defaults: UiConfig = {
         clear: 'Limpar',
         loading: 'Carregando',
         moreInfo: 'Mais informações',
+        suggestions: 'Sugestões',
     },
     link: (props) => <a {...props} />,
     locale: 'pt-BR',
